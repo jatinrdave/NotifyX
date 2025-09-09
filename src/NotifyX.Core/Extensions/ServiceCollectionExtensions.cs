@@ -25,9 +25,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IRuleEngine, RuleEngine>();
         services.AddScoped<ITemplateService, TemplateService>();
+        services.AddScoped<IBulkOperationsService, BulkOperationsService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuditService, AuditService>();
 
         // Register configuration
         services.Configure<NotifyXOptions>(configuration.GetSection("NotifyX"));
+        services.Configure<AuthenticationOptions>(configuration.GetSection("NotifyX:Authentication"));
+        services.Configure<AuditOptions>(configuration.GetSection("NotifyX:Audit"));
 
         // Register health checks
         services.AddHealthChecks()
@@ -50,6 +55,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IRuleEngine, RuleEngine>();
         services.AddScoped<ITemplateService, TemplateService>();
+        services.AddScoped<IBulkOperationsService, BulkOperationsService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuditService, AuditService>();
 
         // Register configuration
         services.Configure(configureOptions);

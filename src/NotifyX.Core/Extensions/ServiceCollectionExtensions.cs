@@ -1,7 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NotifyX.Core.Interfaces;
 using NotifyX.Core.Services;
+using NotifyX.Core.HealthChecks;
 using NotifyX.Core.Models;
 
 namespace NotifyX.Core.Extensions;

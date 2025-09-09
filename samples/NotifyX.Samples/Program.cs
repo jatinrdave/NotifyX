@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotifyX.Core.Extensions;
 using NotifyX.Core.Models;
+using NotifyX.Core.Interfaces;
 using NotifyX.SDK;
 using NotifyX.SDK.Extensions;
 using NotifyX.Providers.Email;

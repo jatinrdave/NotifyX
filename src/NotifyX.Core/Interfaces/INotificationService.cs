@@ -267,52 +267,52 @@ public sealed class NotificationStatus
     /// <summary>
     /// The notification ID.
     /// </summary>
-    public string NotificationId { get; init; } = string.Empty;
+    public string NotificationId { get; set; } = string.Empty;
 
     /// <summary>
     /// Current status of the notification.
     /// </summary>
-    public NotificationState State { get; init; }
+    public NotificationState State { get; set; }
 
     /// <summary>
     /// Progress percentage (0-100).
     /// </summary>
-    public int Progress { get; init; }
+    public int Progress { get; set; }
 
     /// <summary>
     /// Number of delivery attempts made.
     /// </summary>
-    public int AttemptCount { get; init; }
+    public int AttemptCount { get; set; }
 
     /// <summary>
     /// Number of successful deliveries.
     /// </summary>
-    public int SuccessCount { get; init; }
+    public int SuccessCount { get; set; }
 
     /// <summary>
     /// Number of failed deliveries.
     /// </summary>
-    public int FailureCount { get; init; }
+    public int FailureCount { get; set; }
 
     /// <summary>
     /// Timestamp when the notification was created.
     /// </summary>
-    public DateTime CreatedAt { get; init; }
+    public DateTime CreatedAt { get; set; }
 
     /// <summary>
     /// Timestamp when the notification was last updated.
     /// </summary>
-    public DateTime LastUpdatedAt { get; init; }
+    public DateTime LastUpdatedAt { get; set; }
 
     /// <summary>
     /// Timestamp when the notification was completed.
     /// </summary>
-    public DateTime? CompletedAt { get; init; }
+    public DateTime? CompletedAt { get; set; }
 
     /// <summary>
     /// Current error message if any.
     /// </summary>
-    public string? ErrorMessage { get; init; }
+    public string? ErrorMessage { get; set; }
 }
 
 /// <summary>

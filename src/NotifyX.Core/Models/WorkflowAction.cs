@@ -35,32 +35,37 @@ public sealed class WorkflowAction
     /// <summary>
     /// Whether this action was executed successfully.
     /// </summary>
-    public bool IsExecuted { get; init; } = false;
+    public bool IsExecuted { get; set; } = false;
 
     /// <summary>
     /// Whether this action was successful.
     /// </summary>
-    public bool IsSuccess { get; init; } = false;
+    public bool IsSuccess { get; set; } = false;
 
     /// <summary>
     /// Error message if the action failed.
     /// </summary>
-    public string? ErrorMessage { get; init; }
+    public string? ErrorMessage { get; set; }
 
     /// <summary>
     /// Timestamp when the action was executed.
     /// </summary>
-    public DateTime? ExecutedAt { get; init; }
+    public DateTime? ExecutedAt { get; set; }
+
+    /// <summary>
+    /// Timestamp when the action was completed.
+    /// </summary>
+    public DateTime? CompletedAt { get; set; }
 
     /// <summary>
     /// Duration of the action execution.
     /// </summary>
-    public TimeSpan? Duration { get; init; }
+    public TimeSpan? Duration { get; set; }
 
     /// <summary>
     /// Result data from the action execution.
     /// </summary>
-    public Dictionary<string, object> Result { get; init; } = new();
+    public Dictionary<string, object> Result { get; set; } = new();
 
     /// <summary>
     /// Whether this action should be executed asynchronously.

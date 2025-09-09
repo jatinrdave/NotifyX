@@ -6,7 +6,7 @@ namespace NotifyX.Core.Models;
 /// Represents a notification event that can be processed by the notification system.
 /// This is the core entity that flows through the notification pipeline.
 /// </summary>
-public sealed class NotificationEvent
+public sealed record NotificationEvent
 {
     /// <summary>
     /// Unique identifier for this notification event.
@@ -175,7 +175,7 @@ public sealed class NotificationEventBuilder
 {
     private readonly NotificationEvent _event;
 
-    internal NotificationEventBuilder(NotificationEvent notificationEvent)
+    public NotificationEventBuilder(NotificationEvent notificationEvent)
     {
         _event = notificationEvent;
     }

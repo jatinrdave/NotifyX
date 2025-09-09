@@ -5,7 +5,7 @@ namespace NotifyX.Core.Models;
 /// <summary>
 /// Represents a notification template for rendering notifications across different channels.
 /// </summary>
-public sealed class NotificationTemplate
+public sealed record NotificationTemplate
 {
     /// <summary>
     /// Unique identifier for this template.
@@ -361,7 +361,7 @@ public sealed class NotificationTemplateBuilder
 {
     private readonly NotificationTemplate _template;
 
-    internal NotificationTemplateBuilder(NotificationTemplate template)
+    public NotificationTemplateBuilder(NotificationTemplate template)
     {
         _template = template;
     }

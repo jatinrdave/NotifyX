@@ -5,7 +5,7 @@ namespace NotifyX.Core.Models;
 /// <summary>
 /// Delivery options and constraints for notifications.
 /// </summary>
-public sealed class DeliveryOptions
+public sealed record DeliveryOptions
 {
     /// <summary>
     /// Delivery guarantee level.

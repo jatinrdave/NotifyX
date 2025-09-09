@@ -62,7 +62,7 @@ public enum NotificationChannel
 /// <summary>
 /// Channel-specific configuration and metadata.
 /// </summary>
-public sealed class ChannelConfiguration
+public sealed record ChannelConfiguration
 {
     /// <summary>
     /// The notification channel this configuration applies to.

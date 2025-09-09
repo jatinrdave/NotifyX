@@ -1095,12 +1095,14 @@ public sealed class RuleEngine : IRuleEngine
                 ? messageObj.ToString() 
                 : $"Workflow action executed for notification {notification.Id}";
 
-            var level = action.Parameters.TryGetValue("level", out var levelObj) && 
-                       Enum.TryParse<LogLevel>(levelObj.ToString(), out var logLevel)
-                ? logLevel 
-                : LogLevel.Information;
+            var level = LogLevel.Information;
+            if (action.Parameters.TryGetValue("level", out var levelObj) && 
+                Enum.TryParse<LogLevel>(levelObj.ToString(), out var parsedLevel))
+            {
+                level = parsedLevel;
+            }
 
-            _logger.Log(logLevel, message);
+            _logger.Log(level, message);
             
             return ActionExecutionResult.Success(new Dictionary<string, object>
             {

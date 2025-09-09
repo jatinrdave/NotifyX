@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NotifyX.Core.Interfaces;
+using NotifyX.Core.Models;
 
 namespace NotifyX.Core.HealthChecks;
 

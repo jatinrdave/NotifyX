@@ -6,7 +6,7 @@ namespace NotifyX.Core.Models;
 /// Represents a notification rule that defines when and how notifications should be processed.
 /// Rules can include conditions, actions, and workflow logic.
 /// </summary>
-public sealed class NotificationRule
+public sealed record NotificationRule
 {
     /// <summary>
     /// Unique identifier for this rule.
@@ -439,7 +439,7 @@ public sealed class NotificationRuleBuilder
 {
     private readonly NotificationRule _rule;
 
-    internal NotificationRuleBuilder(NotificationRule rule)
+    public NotificationRuleBuilder(NotificationRule rule)
     {
         _rule = rule;
     }

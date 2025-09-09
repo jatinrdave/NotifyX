@@ -5,7 +5,7 @@ namespace NotifyX.Core.Models;
 /// <summary>
 /// Represents a recipient of a notification with their contact information and preferences.
 /// </summary>
-public sealed class NotificationRecipient
+public sealed record NotificationRecipient
 {
     /// <summary>
     /// Unique identifier for this recipient.

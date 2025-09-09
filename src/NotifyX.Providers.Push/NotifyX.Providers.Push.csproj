@@ -5,11 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <PackageId>NotifyX.Core</PackageId>
+    <PackageId>NotifyX.Providers.Push</PackageId>
     <Version>1.0.0</Version>
     <Authors>NotifyX Team</Authors>
-    <Description>Core notification platform library for multi-channel delivery and workflow automation</Description>
-    <PackageTags>notifications;workflow;multi-channel;messaging</PackageTags>
+    <Description>Push notification provider for NotifyX platform</Description>
+    <PackageTags>notifications;push;fcm;apns;firebase</PackageTags>
     <RepositoryUrl>https://github.com/notifyx/notifyx</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -21,11 +21,11 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
-    <PackageReference Include="System.Text.Json" Version="9.0.0" />
-    <PackageReference Include="FluentValidation" Version="11.9.0" />
-    <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
+    <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotifyX.Core\NotifyX.Core.csproj" />
   </ItemGroup>
 
 </Project>

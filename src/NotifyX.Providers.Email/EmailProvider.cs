@@ -11,6 +11,10 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
+using SendGridContent = SendGrid.Helpers.Mail.Content;
+using AwsContent = Amazon.SimpleEmail.Model.Content;
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
+using MailSmtpClient = System.Net.Mail.SmtpClient;
 
 namespace NotifyX.Providers.Email;
 
@@ -399,18 +403,18 @@ public sealed class EmailProvider : INotificationProvider
                 },
                 Message = new Message
                 {
-                    Subject = new Content(notification.Subject),
+                    Subject = new AwsContent(notification.Subject),
                     Body = new Body()
                 }
             };
 
             if (IsHtmlContent(notification.Content))
             {
-                request.Message.Body.Html = new Content(notification.Content);
+                request.Message.Body.Html = new AwsContent(notification.Content);
             }
             else
             {
-                request.Message.Body.Text = new Content(notification.Content);
+                request.Message.Body.Text = new AwsContent(notification.Content);
             }
 
             var response = await _sesClient.SendEmailAsync(request, cancellationToken);

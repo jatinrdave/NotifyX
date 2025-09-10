@@ -1,0 +1,110 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "notifyx.sendNotification",
+  "name": "Send Notification",
+  "version": "1.0.0",
+  "type": "action",
+  "category": "Notification",
+  "description": "Send a notification through NotifyX across SMS, Email, Push, or Slack.",
+  "icon": "https://cdn.notifyx.dev/icons/send.svg",
+
+  "inputs": [
+    {
+      "name": "channel",
+      "type": "string",
+      "required": true,
+      "default": "email",
+      "description": "Channel to send the notification (email, sms, slack, push).",
+      "validation": {
+        "enum": ["email", "sms", "slack", "push"]
+      }
+    },
+    {
+      "name": "recipient",
+      "type": "string",
+      "required": true,
+      "description": "The recipient address, e.g., email ID or phone number."
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "required": true,
+      "description": "The message body to send."
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "required": false,
+      "default": "normal",
+      "description": "Message priority (low, normal, high).",
+      "validation": {
+        "enum": ["low", "normal", "high"]
+      }
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": false,
+      "description": "Subject line for email notifications."
+    },
+    {
+      "name": "template",
+      "type": "string",
+      "required": false,
+      "description": "Template ID to use for the notification."
+    },
+    {
+      "name": "metadata",
+      "type": "object",
+      "required": false,
+      "description": "Additional metadata to include with the notification."
+    }
+  ],
+
+  "outputs": [
+    {
+      "name": "status",
+      "type": "string",
+      "description": "Delivery status: success, failed, queued."
+    },
+    {
+      "name": "notificationId",
+      "type": "string",
+      "description": "Unique ID for tracking the notification."
+    },
+    {
+      "name": "deliveryStatus",
+      "type": "string",
+      "description": "Current delivery status of the notification."
+    },
+    {
+      "name": "channels",
+      "type": "array",
+      "description": "List of channels the notification was sent through."
+    },
+    {
+      "name": "sentAt",
+      "type": "string",
+      "description": "Timestamp when the notification was sent."
+    }
+  ],
+
+  "auth": {
+    "type": "apiKey",
+    "fields": {
+      "apiKey": "NOTIFYX_API_KEY"
+    }
+  },
+
+  "ui": {
+    "color": "#4F46E5",
+    "iconShape": "circle",
+    "group": "NotifyX"
+  },
+
+  "metadata": {
+    "tags": ["notifyx", "communication", "action"],
+    "documentationUrl": "https://docs.notifyx.dev/send-notification",
+    "createdBy": "NotifyX Team"
+  }
+}

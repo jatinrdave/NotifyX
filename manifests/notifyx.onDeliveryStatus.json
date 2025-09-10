@@ -1,0 +1,93 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "notifyx.onDeliveryStatus",
+  "name": "On Delivery Status",
+  "version": "1.0.0",
+  "type": "trigger",
+  "category": "Notification",
+  "description": "Trigger when a notification delivery status changes (success, failed, queued).",
+  "icon": "https://cdn.notifyx.dev/icons/status.svg",
+
+  "inputs": [
+    {
+      "name": "statuses",
+      "type": "array",
+      "required": false,
+      "default": ["success", "failed", "queued"],
+      "description": "List of statuses to trigger on.",
+      "validation": {
+        "items": {
+          "enum": ["success", "failed", "queued", "delivered", "bounced", "opened", "clicked"]
+        }
+      }
+    },
+    {
+      "name": "notificationIds",
+      "type": "array",
+      "required": false,
+      "description": "Specific notification IDs to monitor (empty = all)."
+    },
+    {
+      "name": "channels",
+      "type": "array",
+      "required": false,
+      "description": "Specific channels to monitor (empty = all).",
+      "validation": {
+        "items": {
+          "enum": ["email", "sms", "slack", "push"]
+        }
+      }
+    },
+    {
+      "name": "timeRange",
+      "type": "number",
+      "required": false,
+      "default": 3600,
+      "description": "Time range in seconds to look back for events."
+    },
+    {
+      "name": "maxEvents",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "description": "Maximum number of events to return."
+    }
+  ],
+
+  "outputs": [
+    {
+      "name": "eventCount",
+      "type": "number",
+      "description": "Number of delivery status events found."
+    },
+    {
+      "name": "events",
+      "type": "array",
+      "description": "List of delivery status events."
+    },
+    {
+      "name": "processedAt",
+      "type": "string",
+      "description": "Timestamp when events were processed."
+    }
+  ],
+
+  "auth": {
+    "type": "apiKey",
+    "fields": {
+      "apiKey": "NOTIFYX_API_KEY"
+    }
+  },
+
+  "ui": {
+    "color": "#10B981",
+    "iconShape": "hexagon",
+    "group": "NotifyX"
+  },
+
+  "metadata": {
+    "tags": ["notifyx", "trigger", "event", "monitoring"],
+    "documentationUrl": "https://docs.notifyx.dev/on-delivery-status",
+    "createdBy": "NotifyX Team"
+  }
+}

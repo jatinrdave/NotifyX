@@ -1,0 +1,100 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "http.request",
+  "name": "HTTP Request",
+  "version": "1.0.0",
+  "type": "action",
+  "category": "Integration",
+  "description": "Make an HTTP request to any REST API endpoint.",
+  "icon": "https://cdn.notifyx.dev/icons/http.svg",
+
+  "inputs": [
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "description": "The URL to make the request to."
+    },
+    {
+      "name": "method",
+      "type": "string",
+      "required": true,
+      "default": "GET",
+      "description": "HTTP method to use.",
+      "validation": {
+        "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+      }
+    },
+    {
+      "name": "headers",
+      "type": "object",
+      "required": false,
+      "description": "HTTP headers to include in the request."
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "required": false,
+      "description": "Request body (for POST, PUT, PATCH methods)."
+    },
+    {
+      "name": "timeout",
+      "type": "number",
+      "required": false,
+      "default": 30000,
+      "description": "Request timeout in milliseconds."
+    },
+    {
+      "name": "followRedirects",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether to follow HTTP redirects."
+    }
+  ],
+
+  "outputs": [
+    {
+      "name": "statusCode",
+      "type": "number",
+      "description": "HTTP response status code."
+    },
+    {
+      "name": "headers",
+      "type": "object",
+      "description": "HTTP response headers."
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "description": "HTTP response body."
+    },
+    {
+      "name": "success",
+      "type": "boolean",
+      "description": "Whether the request was successful (2xx status code)."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "description": "Request duration in milliseconds."
+    }
+  ],
+
+  "auth": {
+    "type": "none",
+    "fields": {}
+  },
+
+  "ui": {
+    "color": "#F59E0B",
+    "iconShape": "square",
+    "group": "HTTP"
+  },
+
+  "metadata": {
+    "tags": ["http", "rest", "api", "integration"],
+    "documentationUrl": "https://docs.notifyx.dev/http-request",
+    "createdBy": "NotifyX Team"
+  }
+}

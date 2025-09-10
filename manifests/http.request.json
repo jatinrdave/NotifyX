@@ -5,96 +5,99 @@
   "version": "1.0.0",
   "type": "action",
   "category": "Integration",
-  "description": "Make an HTTP request to any REST API endpoint.",
+  "description": "Make HTTP requests to any REST API endpoint with full control over headers, authentication, and request body.",
   "icon": "https://cdn.notifyx.dev/icons/http.svg",
-
   "inputs": [
     {
       "name": "url",
       "type": "string",
       "required": true,
-      "description": "The URL to make the request to."
+      "default": "",
+      "description": "The URL to make the request to"
     },
     {
       "name": "method",
       "type": "string",
       "required": true,
       "default": "GET",
-      "description": "HTTP method to use.",
-      "validation": {
-        "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
-      }
+      "description": "HTTP method to use",
+      "options": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
     },
     {
       "name": "headers",
       "type": "object",
       "required": false,
-      "description": "HTTP headers to include in the request."
+      "default": {},
+      "description": "HTTP headers to send with the request"
     },
     {
       "name": "body",
       "type": "string",
       "required": false,
-      "description": "Request body (for POST, PUT, PATCH methods)."
+      "default": "",
+      "description": "Request body (for POST, PUT, PATCH requests)"
     },
     {
       "name": "timeout",
       "type": "number",
       "required": false,
       "default": 30000,
-      "description": "Request timeout in milliseconds."
+      "description": "Request timeout in milliseconds"
     },
     {
       "name": "followRedirects",
       "type": "boolean",
       "required": false,
       "default": true,
-      "description": "Whether to follow HTTP redirects."
+      "description": "Whether to follow HTTP redirects"
+    },
+    {
+      "name": "ignoreSSL",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Whether to ignore SSL certificate errors"
     }
   ],
-
   "outputs": [
     {
       "name": "statusCode",
       "type": "number",
-      "description": "HTTP response status code."
+      "description": "HTTP status code of the response"
     },
     {
       "name": "headers",
       "type": "object",
-      "description": "HTTP response headers."
+      "description": "Response headers"
     },
     {
       "name": "body",
       "type": "string",
-      "description": "HTTP response body."
+      "description": "Response body"
     },
     {
-      "name": "success",
-      "type": "boolean",
-      "description": "Whether the request was successful (2xx status code)."
+      "name": "json",
+      "type": "object",
+      "description": "Parsed JSON response (if applicable)"
     },
     {
       "name": "duration",
       "type": "number",
-      "description": "Request duration in milliseconds."
+      "description": "Request duration in milliseconds"
     }
   ],
-
   "auth": {
     "type": "none",
     "fields": {}
   },
-
   "ui": {
-    "color": "#F59E0B",
+    "color": "#FF6B6B",
     "iconShape": "square",
     "group": "HTTP"
   },
-
   "metadata": {
-    "tags": ["http", "rest", "api", "integration"],
-    "documentationUrl": "https://docs.notifyx.dev/http-request",
+    "tags": ["http", "api", "rest", "webhook", "integration"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/http-request",
     "createdBy": "NotifyX Team"
   }
 }

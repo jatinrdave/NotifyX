@@ -1,0 +1,117 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "gmail.sendEmail",
+  "name": "Gmail Send Email",
+  "version": "1.0.0",
+  "type": "action",
+  "category": "Communication",
+  "description": "Send emails through Gmail with support for HTML content, attachments, and rich formatting.",
+  "icon": "https://cdn.notifyx.dev/icons/gmail.svg",
+  "inputs": [
+    {
+      "name": "to",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Recipient email address(es), comma-separated for multiple recipients"
+    },
+    {
+      "name": "cc",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "CC email address(es), comma-separated"
+    },
+    {
+      "name": "bcc",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "BCC email address(es), comma-separated"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Email subject line"
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Plain text email body"
+    },
+    {
+      "name": "html",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "HTML email body"
+    },
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "description": "Email attachments (file paths or URLs)"
+    },
+    {
+      "name": "replyTo",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Reply-to email address"
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "required": false,
+      "default": "normal",
+      "description": "Email priority",
+      "options": ["low", "normal", "high"]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "messageId",
+      "type": "string",
+      "description": "Gmail message ID"
+    },
+    {
+      "name": "threadId",
+      "type": "string",
+      "description": "Gmail thread ID"
+    },
+    {
+      "name": "sentAt",
+      "type": "string",
+      "description": "Timestamp when the email was sent"
+    },
+    {
+      "name": "success",
+      "type": "boolean",
+      "description": "Whether the email was sent successfully"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "fields": {
+      "clientId": "GMAIL_CLIENT_ID",
+      "clientSecret": "GMAIL_CLIENT_SECRET",
+      "tokenUrl": "https://oauth2.googleapis.com/token",
+      "scopes": ["https://www.googleapis.com/auth/gmail.send"]
+    }
+  },
+  "ui": {
+    "color": "#EA4335",
+    "iconShape": "circle",
+    "group": "Communication"
+  },
+  "metadata": {
+    "tags": ["gmail", "email", "communication", "google"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/gmail-send-email",
+    "createdBy": "NotifyX Team"
+  }
+}

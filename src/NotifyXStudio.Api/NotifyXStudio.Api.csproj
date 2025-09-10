@@ -10,21 +10,15 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Confluent.Kafka" Version="2.4.0" />
-    <PackageReference Include="StackExchange.Redis" Version="2.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NotifyXStudio.Core\NotifyXStudio.Core.csproj" />
     <ProjectReference Include="..\NotifyXStudio.Connectors\NotifyXStudio.Connectors.csproj" />
-    <ProjectReference Include="..\NotifyXStudio.Runtime\NotifyXStudio.Runtime.csproj" />
     <ProjectReference Include="..\NotifyXStudio.Persistence\NotifyXStudio.Persistence.csproj" />
+    <ProjectReference Include="..\NotifyXStudio.Runtime\NotifyXStudio.Runtime.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "mysql.query",
+  "name": "MySQL Query",
+  "version": "1.0.0",
+  "type": "action",
+  "category": "Database",
+  "description": "Execute SQL queries against MySQL databases with support for SELECT, INSERT, UPDATE, DELETE operations.",
+  "icon": "https://cdn.notifyx.dev/icons/mysql.svg",
+  "inputs": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "SQL query to execute"
+    },
+    {
+      "name": "parameters",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "description": "Query parameters for prepared statements"
+    },
+    {
+      "name": "operation",
+      "type": "string",
+      "required": false,
+      "default": "select",
+      "description": "Type of operation",
+      "options": ["select", "insert", "update", "delete", "raw"]
+    },
+    {
+      "name": "timeout",
+      "type": "number",
+      "required": false,
+      "default": 30000,
+      "description": "Query timeout in milliseconds"
+    },
+    {
+      "name": "returnFields",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "description": "Fields to return (for SELECT operations)"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "rows",
+      "type": "array",
+      "description": "Query result rows"
+    },
+    {
+      "name": "affectedRows",
+      "type": "number",
+      "description": "Number of affected rows (for INSERT, UPDATE, DELETE)"
+    },
+    {
+      "name": "insertId",
+      "type": "number",
+      "description": "Last insert ID (for INSERT operations)"
+    },
+    {
+      "name": "fieldCount",
+      "type": "number",
+      "description": "Number of fields in the result"
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "description": "Query execution time in milliseconds"
+    }
+  ],
+  "auth": {
+    "type": "database",
+    "fields": {
+      "host": "MYSQL_HOST",
+      "port": "MYSQL_PORT",
+      "database": "MYSQL_DATABASE",
+      "username": "MYSQL_USERNAME",
+      "password": "MYSQL_PASSWORD",
+      "ssl": "MYSQL_SSL"
+    }
+  },
+  "ui": {
+    "color": "#4479A1",
+    "iconShape": "square",
+    "group": "Database"
+  },
+  "metadata": {
+    "tags": ["mysql", "database", "sql", "query"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/mysql-query",
+    "createdBy": "NotifyX Team"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "webhook.trigger",
+  "name": "Webhook Trigger",
+  "version": "1.0.0",
+  "type": "trigger",
+  "category": "Trigger",
+  "description": "Trigger workflows when HTTP requests are received at a webhook endpoint.",
+  "icon": "https://cdn.notifyx.dev/icons/webhook.svg",
+  "inputs": [
+    {
+      "name": "httpMethod",
+      "type": "string",
+      "required": true,
+      "default": "POST",
+      "description": "HTTP method to accept",
+      "options": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Custom webhook path (optional)"
+    },
+    {
+      "name": "authentication",
+      "type": "string",
+      "required": false,
+      "default": "none",
+      "description": "Authentication method",
+      "options": ["none", "header", "query", "basic"]
+    },
+    {
+      "name": "authHeader",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Authentication header name (if using header auth)"
+    },
+    {
+      "name": "authValue",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Authentication value"
+    },
+    {
+      "name": "responseMode",
+      "type": "string",
+      "required": false,
+      "default": "onReceived",
+      "description": "When to respond",
+      "options": ["onReceived", "onLastNode", "responseNode"]
+    },
+    {
+      "name": "responseData",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Response data to send back"
+    },
+    {
+      "name": "responseCode",
+      "type": "number",
+      "required": false,
+      "default": 200,
+      "description": "HTTP response code"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "body",
+      "type": "object",
+      "description": "Request body data"
+    },
+    {
+      "name": "headers",
+      "type": "object",
+      "description": "Request headers"
+    },
+    {
+      "name": "query",
+      "type": "object",
+      "description": "Query parameters"
+    },
+    {
+      "name": "method",
+      "type": "string",
+      "description": "HTTP method used"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "description": "Full request URL"
+    },
+    {
+      "name": "ip",
+      "type": "string",
+      "description": "Client IP address"
+    },
+    {
+      "name": "userAgent",
+      "type": "string",
+      "description": "Client user agent"
+    }
+  ],
+  "auth": {
+    "type": "none",
+    "fields": {}
+  },
+  "ui": {
+    "color": "#FF6B6B",
+    "iconShape": "hexagon",
+    "group": "Trigger"
+  },
+  "metadata": {
+    "tags": ["webhook", "trigger", "http", "api"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/webhook-trigger",
+    "createdBy": "NotifyX Team"
+  }
+}

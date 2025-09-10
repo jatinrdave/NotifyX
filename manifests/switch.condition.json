@@ -1,0 +1,103 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "switch.condition",
+  "name": "Switch Condition",
+  "version": "1.0.0",
+  "type": "transform",
+  "category": "Logic",
+  "description": "Route workflow execution to different branches based on multiple conditions.",
+  "icon": "https://cdn.notifyx.dev/icons/switch.svg",
+  "inputs": [
+    {
+      "name": "conditions",
+      "type": "array",
+      "required": true,
+      "default": [],
+      "description": "Array of condition configurations"
+    },
+    {
+      "name": "conditions[].conditions",
+      "type": "object",
+      "required": true,
+      "default": {},
+      "description": "Individual condition configuration"
+    },
+    {
+      "name": "conditions[].conditions.options",
+      "type": "object",
+      "required": false,
+      "default": {},
+      "description": "Condition options"
+    },
+    {
+      "name": "conditions[].conditions.options.caseSensitive",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether string comparisons should be case sensitive"
+    },
+    {
+      "name": "conditions[].conditions.options.leftValue",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Left side value for comparison"
+    },
+    {
+      "name": "conditions[].conditions.options.rightValue",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Right side value for comparison"
+    },
+    {
+      "name": "conditions[].conditions.options.operation",
+      "type": "string",
+      "required": false,
+      "default": "equal",
+      "description": "Comparison operation",
+      "options": ["equal", "notEqual", "contains", "notContains", "startsWith", "endsWith", "regex", "larger", "smaller", "largerEqual", "smallerEqual", "isEmpty", "isNotEmpty"]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "output1",
+      "type": "object",
+      "description": "Output for first matching condition"
+    },
+    {
+      "name": "output2",
+      "type": "object",
+      "description": "Output for second matching condition"
+    },
+    {
+      "name": "output3",
+      "type": "object",
+      "description": "Output for third matching condition"
+    },
+    {
+      "name": "output4",
+      "type": "object",
+      "description": "Output for fourth matching condition"
+    },
+    {
+      "name": "output5",
+      "type": "object",
+      "description": "Output for fifth matching condition"
+    }
+  ],
+  "auth": {
+    "type": "none",
+    "fields": {}
+  },
+  "ui": {
+    "color": "#9C27B0",
+    "iconShape": "diamond",
+    "group": "Logic"
+  },
+  "metadata": {
+    "tags": ["switch", "condition", "logic", "branching"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/switch-condition",
+    "createdBy": "NotifyX Team"
+  }
+}

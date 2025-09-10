@@ -1,0 +1,83 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "schedule.trigger",
+  "name": "Schedule Trigger",
+  "version": "1.0.0",
+  "type": "trigger",
+  "category": "Trigger",
+  "description": "Trigger workflows on a schedule using cron expressions or interval-based timing.",
+  "icon": "https://cdn.notifyx.dev/icons/schedule.svg",
+  "inputs": [
+    {
+      "name": "rule",
+      "type": "object",
+      "required": true,
+      "default": {},
+      "description": "Schedule rule configuration"
+    },
+    {
+      "name": "rule.interval",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "description": "Interval-based schedule [unit, value]"
+    },
+    {
+      "name": "rule.cronExpression",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Cron expression for schedule"
+    },
+    {
+      "name": "rule.timezone",
+      "type": "string",
+      "required": false,
+      "default": "UTC",
+      "description": "Timezone for the schedule"
+    },
+    {
+      "name": "rule.triggerAtStartup",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Whether to trigger immediately on startup"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "timestamp",
+      "type": "string",
+      "description": "Trigger timestamp"
+    },
+    {
+      "name": "timezone",
+      "type": "string",
+      "description": "Timezone used for the trigger"
+    },
+    {
+      "name": "cronExpression",
+      "type": "string",
+      "description": "Cron expression that triggered this execution"
+    },
+    {
+      "name": "interval",
+      "type": "array",
+      "description": "Interval that triggered this execution"
+    }
+  ],
+  "auth": {
+    "type": "none",
+    "fields": {}
+  },
+  "ui": {
+    "color": "#FFA500",
+    "iconShape": "circle",
+    "group": "Trigger"
+  },
+  "metadata": {
+    "tags": ["schedule", "trigger", "cron", "timer"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/schedule-trigger",
+    "createdBy": "NotifyX Team"
+  }
+}

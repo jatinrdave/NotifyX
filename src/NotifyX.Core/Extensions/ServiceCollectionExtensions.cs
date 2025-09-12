@@ -25,9 +25,20 @@ public static class ServiceCollectionExtensions
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IRuleEngine, RuleEngine>();
         services.AddScoped<ITemplateService, TemplateService>();
+        services.AddScoped<IBulkOperationsService, BulkOperationsService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuditService, AuditService>();
+        services.AddScoped<IQueueService, InMemoryQueueService>();
+        services.AddScoped<IPriorityQueueService, InMemoryQueueService>();
+        services.AddScoped<IDeadLetterQueueService, DeadLetterQueueService>();
+        services.AddScoped<IWorkerService, NotificationWorkerService>();
 
         // Register configuration
         services.Configure<NotifyXOptions>(configuration.GetSection("NotifyX"));
+        services.Configure<AuthenticationOptions>(configuration.GetSection("NotifyX:Authentication"));
+        services.Configure<AuditOptions>(configuration.GetSection("NotifyX:Audit"));
+        services.Configure<QueueOptions>(configuration.GetSection("NotifyX:Queue"));
+        services.Configure<WorkerOptions>(configuration.GetSection("NotifyX:Worker"));
 
         // Register health checks
         services.AddHealthChecks()
@@ -50,6 +61,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IRuleEngine, RuleEngine>();
         services.AddScoped<ITemplateService, TemplateService>();
+        services.AddScoped<IBulkOperationsService, BulkOperationsService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuditService, AuditService>();
+        services.AddScoped<IQueueService, InMemoryQueueService>();
+        services.AddScoped<IPriorityQueueService, InMemoryQueueService>();
+        services.AddScoped<IDeadLetterQueueService, DeadLetterQueueService>();
+        services.AddScoped<IWorkerService, NotificationWorkerService>();
 
         // Register configuration
         services.Configure(configureOptions);

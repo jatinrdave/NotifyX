@@ -1,0 +1,99 @@
+<div class="node-palette">
+  <!-- Palette Header -->
+  <div class="palette-header">
+    <h3>Connectors</h3>
+    <div class="palette-stats">
+      <span class="connector-count">{{ getFilteredCount() }} of {{ getTotalConnectors() }}</span>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="palette-filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search connectors</mat-label>
+      <input matInput 
+             [(ngModel)]="searchTerm" 
+             (input)="onSearchChange()"
+             placeholder="Type to search...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="category-field">
+      <mat-label>Category</mat-label>
+      <mat-select [(value)]="selectedCategory" (selectionChange)="onCategorySelect($event.value)">
+        <mat-option [value]="null">All Categories</mat-option>
+        <mat-option *ngFor="let category of categories" [value]="category">
+          {{ category }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button 
+            (click)="clearFilters()" 
+            class="clear-filters"
+            [disabled]="!searchTerm && !selectedCategory">
+      <mat-icon>clear</mat-icon>
+      Clear
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-spinner diameter="32"></mat-spinner>
+    <p>Loading connectors...</p>
+  </div>
+
+  <!-- Connectors List -->
+  <div *ngIf="!isLoading" class="connectors-list">
+    <div *ngIf="filteredConnectors.length === 0" class="no-results">
+      <mat-icon>search_off</mat-icon>
+      <p>No connectors found</p>
+      <button mat-button (click)="clearFilters()">Clear filters</button>
+    </div>
+
+    <div *ngFor="let group of getConnectorsByCategory()" class="connector-group">
+      <div class="group-header">
+        <h4>{{ group.category }}</h4>
+        <span class="group-count">{{ group.connectors.length }}</span>
+      </div>
+
+      <div class="connector-items">
+        <div *ngFor="let connector of group.connectors" 
+             class="connector-item"
+             draggable="true"
+             (dragstart)="onConnectorDragStart(connector, $event)"
+             [style.border-left-color]="getConnectorColor(connector)">
+          
+          <div class="connector-icon" [style.background-color]="getConnectorColor(connector)">
+            <mat-icon>{{ getConnectorIcon(connector) }}</mat-icon>
+          </div>
+
+          <div class="connector-info">
+            <div class="connector-name">{{ connector.name }}</div>
+            <div class="connector-description">{{ connector.description }}</div>
+            <div class="connector-tags">
+              <span *ngFor="let tag of connector.metadata.tags.slice(0, 3)" 
+                    class="tag">{{ tag }}</span>
+              <span *ngIf="connector.metadata.tags.length > 3" 
+                    class="tag-more">+{{ connector.metadata.tags.length - 3 }}</span>
+            </div>
+          </div>
+
+          <div class="connector-type">
+            <span class="type-badge" [class]="'type-' + connector.type">
+              {{ connector.type }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Palette Footer -->
+  <div class="palette-footer">
+    <button mat-button color="primary" class="add-connector">
+      <mat-icon>add</mat-icon>
+      Add Custom Connector
+    </button>
+  </div>
+</div>

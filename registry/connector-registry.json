@@ -1,0 +1,159 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-registry.json",
+  "registryVersion": "1.2.0",
+  "lastUpdated": "2025-01-11T18:00:00Z",
+  "connectors": [
+    {
+      "id": "notifyx.sendNotification",
+      "name": "Send Notification",
+      "description": "Send a notification via SMS, Email, Slack, or Push using NotifyX.",
+      "version": "1.0.0",
+      "category": "Notification",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/sendNotification.json",
+      "icon": "https://cdn.notifyx.dev/icons/send.svg",
+      "tags": ["notifyx", "action", "communication"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "NotifyX.SDK",
+            "version": "^1.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": ["notifyx.legacyEmailConnector@<1.0.0"],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "notifyx.onDeliveryStatus",
+      "name": "On Delivery Status",
+      "description": "Trigger when a notification delivery status changes (success, failed, queued).",
+      "version": "1.0.0",
+      "category": "Trigger",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/onDeliveryStatus.json",
+      "icon": "https://cdn.notifyx.dev/icons/status.svg",
+      "tags": ["notifyx", "trigger", "event"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "NotifyX.SDK",
+            "version": "^1.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "http.request",
+      "name": "HTTP Request",
+      "description": "Make an HTTP request to any REST API endpoint.",
+      "version": "1.0.0",
+      "category": "Integration",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/httpRequest.json",
+      "icon": "https://cdn.notifyx.dev/icons/http.svg",
+      "tags": ["http", "rest", "api", "integration"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "System.Net.Http",
+            "version": "^4.3.4"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "slack.sendMessage",
+      "name": "Send Slack Message",
+      "description": "Send a message to a Slack channel or user.",
+      "version": "1.0.0",
+      "category": "Communication",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/slackSendMessage.json",
+      "icon": "https://cdn.notifyx.dev/icons/slack.svg",
+      "tags": ["slack", "communication", "messaging"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "npm": {
+            "packageName": "@slack/web-api",
+            "version": "^7.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": [
+          {
+            "name": "Slack API",
+            "url": "https://api.slack.com",
+            "authType": "oauth2"
+          }
+        ]
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {
+          "@slack/web-api": "^7.2.0"
+        },
+        "resolutionStrategy": "preferStable"
+      }
+    }
+  ]
+}

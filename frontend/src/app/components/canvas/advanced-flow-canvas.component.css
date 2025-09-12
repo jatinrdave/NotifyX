@@ -1,0 +1,468 @@
+.advanced-flow-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f8f9fa;
+  cursor: grab;
+  user-select: none;
+}
+
+.advanced-flow-canvas:active {
+  cursor: grabbing;
+}
+
+.advanced-flow-canvas:focus {
+  outline: none;
+}
+
+/* Grid Background */
+.grid-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(to right, #e0e0e0 1px, transparent 1px),
+    linear-gradient(to bottom, #e0e0e0 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Workflow Node */
+.workflow-node {
+  position: absolute;
+  min-width: 200px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.workflow-node:hover {
+  border-color: #007acc;
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.2);
+  transform: translateY(-2px);
+}
+
+.workflow-node.selected {
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.workflow-node.connecting {
+  border-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+/* Node Header */
+.node-header {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 6px 6px 0 0;
+}
+
+.node-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #007acc;
+  border-radius: 4px;
+  color: white;
+}
+
+.node-icon i {
+  font-size: 16px;
+}
+
+.node-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.node-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.workflow-node:hover .node-actions {
+  opacity: 1;
+}
+
+.node-action-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.node-action-btn:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.node-action-btn i {
+  font-size: 14px;
+}
+
+/* Node Body */
+.node-body {
+  padding: 12px;
+}
+
+.node-description {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.node-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-indicator.success {
+  background: #28a745;
+}
+
+.status-indicator.failed {
+  background: #dc3545;
+}
+
+.status-indicator.running {
+  background: #007acc;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.pending {
+  background: #ffc107;
+}
+
+/* Node Ports */
+.node-ports {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.input-ports {
+  left: -10px;
+}
+
+.output-ports {
+  right: -10px;
+}
+
+.port {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 20;
+}
+
+.port:hover {
+  border-color: #007acc;
+  background: #007acc;
+  color: white;
+  transform: scale(1.2);
+}
+
+.port i {
+  font-size: 12px;
+}
+
+/* Edges */
+.edges-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.edge-path {
+  stroke: #666;
+  stroke-width: 2;
+  fill: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edge-path:hover {
+  stroke: #007acc;
+  stroke-width: 3;
+}
+
+.edge-path.selected {
+  stroke: #007acc;
+  stroke-width: 3;
+}
+
+.edge-label {
+  font-size: 11px;
+  fill: #666;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* Connection Line */
+.connection-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* Canvas Toolbar */
+.canvas-toolbar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  gap: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  z-index: 100;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.toolbar-group:last-child {
+  border-right: none;
+}
+
+.toolbar-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.toolbar-btn.active {
+  background: #007acc;
+  color: white;
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar-btn i {
+  font-size: 18px;
+}
+
+.zoom-level {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* Canvas Status Bar */
+.canvas-status-bar {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  gap: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 8px 12px;
+  z-index: 100;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.status-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.status-value {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .canvas-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .toolbar-group {
+    padding: 0 4px;
+  }
+  
+  .toolbar-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .toolbar-btn i {
+    font-size: 16px;
+  }
+  
+  .canvas-status-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .workflow-node {
+    min-width: 160px;
+  }
+  
+  .node-header {
+    padding: 8px;
+  }
+  
+  .node-body {
+    padding: 8px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .advanced-flow-canvas {
+    background: #1e1e1e;
+  }
+  
+  .grid-background {
+    background-image: 
+      linear-gradient(to right, #404040 1px, transparent 1px),
+      linear-gradient(to bottom, #404040 1px, transparent 1px);
+  }
+  
+  .workflow-node {
+    background: #2d2d2d;
+    border-color: #404040;
+  }
+  
+  .workflow-node:hover {
+    border-color: #007acc;
+  }
+  
+  .node-header {
+    background: #3d3d3d;
+    border-color: #404040;
+  }
+  
+  .node-title {
+    color: #fff;
+  }
+  
+  .node-description {
+    color: #ccc;
+  }
+  
+  .canvas-toolbar,
+  .canvas-status-bar {
+    background: #2d2d2d;
+    border-color: #404040;
+  }
+  
+  .toolbar-btn {
+    color: #ccc;
+  }
+  
+  .toolbar-btn:hover {
+    background: #404040;
+    color: #fff;
+  }
+  
+  .status-label {
+    color: #ccc;
+  }
+  
+  .status-value {
+    color: #fff;
+  }
+}

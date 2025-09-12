@@ -1,0 +1,376 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using NotifyXStudio.Core.Services;
+
+namespace NotifyXStudio.Api.Controllers
+{
+    /// <summary>
+    /// Controller for workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry operations.
+    /// </summary>
+    [ApiController]
+    [Route("api/[controller]")]
+    public class WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryController : ControllerBase
+    {
+        private readonly ILogger<WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryController> _logger;
+        private readonly IWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService;
+
+        public WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryController(ILogger<WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryController> logger, IWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService = workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService ?? throw new ArgumentNullException(nameof(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService));
+        }
+
+        /// <summary>
+        /// Creates a workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> CreateWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntry([FromBody] CreateWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryRequest request)
+        {
+            try
+            {
+                if (request == null)
+                {
+                    return BadRequest("Workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry request is required");
+                }
+
+                var workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId = await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.CreateWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryAsync(
+                    request.WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+                    request.LogEntryLevel,
+                    request.LogEntryMessage,
+                    request.LogEntryData,
+                    request.LogEntrySource,
+                    request.Metadata);
+
+                return Ok(new
+                {
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+                    message = "Workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry created successfully",
+                    createdAt = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry: {Message}", ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to create workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry",
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Gets workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry information.
+        /// </summary>
+        [HttpGet("{workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}")]
+        public async Task<IActionResult> GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntry(string workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId)
+        {
+            try
+            {
+                var workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntry = await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryAsync(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId);
+
+                if (workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntry == null)
+                {
+                    return NotFound(new
+                    {
+                        error = "Workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry not found",
+                        workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId
+                    });
+                }
+
+                return Ok(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntry);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry {WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}: {Message}", workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId, ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to retrieve workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry",
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Lists workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entries.
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> ListWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntries(
+            [FromQuery] string? workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+            [FromQuery] string? logEntryLevel,
+            [FromQuery] string? logEntrySource,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 50)
+        {
+            try
+            {
+                var workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntries = await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.ListWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntriesAsync(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId, logEntryLevel, logEntrySource, page, pageSize);
+                var totalCount = await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryCountAsync(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId, logEntryLevel, logEntrySource);
+
+                return Ok(new
+                {
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntries,
+                    pagination = new
+                    {
+                        page,
+                        pageSize,
+                        totalCount,
+                        totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to list workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entries: {Message}", ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to list workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entries",
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Updates a workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry.
+        /// </summary>
+        [HttpPut("{workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}")]
+        public async Task<IActionResult> UpdateWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntry(
+            string workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+            [FromBody] UpdateWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryRequest request)
+        {
+            try
+            {
+                if (request == null)
+                {
+                    return BadRequest("Update request is required");
+                }
+
+                await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.UpdateWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryAsync(
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+                    request.LogEntryLevel,
+                    request.LogEntryMessage,
+                    request.LogEntryData,
+                    request.LogEntrySource,
+                    request.Metadata);
+
+                return Ok(new
+                {
+                    message = "Workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry updated successfully",
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+                    updatedAt = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to update workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry {WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}: {Message}", workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId, ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to update workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry",
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Deletes a workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry.
+        /// </summary>
+        [HttpDelete("{workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}")]
+        public async Task<IActionResult> DeleteWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntry(string workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId)
+        {
+            try
+            {
+                await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.DeleteWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryAsync(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId);
+
+                return Ok(new
+                {
+                    message = "Workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry deleted successfully",
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+                    deletedAt = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to delete workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry {WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}: {Message}", workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId, ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to delete workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry",
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Gets workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry status.
+        /// </summary>
+        [HttpGet("{workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}/status")]
+        public async Task<IActionResult> GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryStatus(string workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId)
+        {
+            try
+            {
+                var status = await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryStatusAsync(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId);
+
+                return Ok(new
+                {
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+                    status
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry status for {WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}: {Message}", workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId, ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to retrieve workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry status",
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Gets workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry issues.
+        /// </summary>
+        [HttpGet("{workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}/issues")]
+        public async Task<IActionResult> GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryIssues(string workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId)
+        {
+            try
+            {
+                var issues = await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryIssuesAsync(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId);
+
+                return Ok(new
+                {
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+                    issues
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry issues for {WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}: {Message}", workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId, ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to retrieve workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry issues",
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Gets workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry statistics.
+        /// </summary>
+        [HttpGet("{workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}/stats")]
+        public async Task<IActionResult> GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryStats(string workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId)
+        {
+            try
+            {
+                var stats = await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryStatsAsync(workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId);
+
+                return Ok(new
+                {
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId,
+                    stats
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry stats for {WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId}: {Message}", workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId, ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to retrieve workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry statistics",
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Gets available workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry levels.
+        /// </summary>
+        [HttpGet("levels")]
+        public async Task<IActionResult> GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLevels()
+        {
+            try
+            {
+                var workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLevels = await _workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryService.GetWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLevelsAsync();
+
+                return Ok(new
+                {
+                    workflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLevels
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry levels: {Message}", ex.Message);
+                return StatusCode(500, new
+                {
+                    error = "Failed to retrieve workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry levels",
+                    message = ex.Message
+                });
+            }
+        }
+    }
+
+    /// <summary>
+    /// Create workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry request model.
+    /// </summary>
+    public class CreateWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryRequest
+    {
+        /// <summary>
+        /// Workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry ID.
+        /// </summary>
+        public string WorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Log entry level.
+        /// </summary>
+        public string LogEntryLevel { get; set; } = "info";
+
+        /// <summary>
+        /// Log entry message.
+        /// </summary>
+        public string LogEntryMessage { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Log entry data.
+        /// </summary>
+        public Dictionary<string, object>? LogEntryData { get; set; }
+
+        /// <summary>
+        /// Log entry source.
+        /// </summary>
+        public string LogEntrySource { get; set; } = "trigger";
+
+        /// <summary>
+        /// Additional metadata.
+        /// </summary>
+        public Dictionary<string, object>? Metadata { get; set; }
+    }
+
+    /// <summary>
+    /// Update workflow execution trigger log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry log entry request model.
+    /// </summary>
+    public class UpdateWorkflowExecutionTriggerLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryLogEntryRequest
+    {
+        /// <summary>
+        /// Log entry level.
+        /// </summary>
+        public string? LogEntryLevel { get; set; }
+
+        /// <summary>
+        /// Log entry message.
+        /// </summary>
+        public string? LogEntryMessage { get; set; }
+
+        /// <summary>
+        /// Log entry data.
+        /// </summary>
+        public Dictionary<string, object>? LogEntryData { get; set; }
+
+        /// <summary>
+        /// Log entry source.
+        /// </summary>
+        public string? LogEntrySource { get; set; }
+
+        /// <summary>
+        /// Additional metadata.
+        /// </summary>
+        public Dictionary<string, object>? Metadata { get; set; }
+    }
+}

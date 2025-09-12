@@ -1,0 +1,81 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "if.condition",
+  "name": "IF Condition",
+  "version": "1.0.0",
+  "type": "transform",
+  "category": "Logic",
+  "description": "Conditionally route workflow execution based on data conditions and expressions.",
+  "icon": "https://cdn.notifyx.dev/icons/if.svg",
+  "inputs": [
+    {
+      "name": "conditions",
+      "type": "object",
+      "required": true,
+      "default": {},
+      "description": "Condition configuration"
+    },
+    {
+      "name": "conditions.options",
+      "type": "object",
+      "required": false,
+      "default": {},
+      "description": "Condition options"
+    },
+    {
+      "name": "conditions.options.caseSensitive",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether string comparisons should be case sensitive"
+    },
+    {
+      "name": "conditions.options.leftValue",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Left side value for comparison"
+    },
+    {
+      "name": "conditions.options.rightValue",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Right side value for comparison"
+    },
+    {
+      "name": "conditions.options.operation",
+      "type": "string",
+      "required": false,
+      "default": "equal",
+      "description": "Comparison operation",
+      "options": ["equal", "notEqual", "contains", "notContains", "startsWith", "endsWith", "regex", "larger", "smaller", "largerEqual", "smallerEqual", "isEmpty", "isNotEmpty"]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "true",
+      "type": "object",
+      "description": "Output when condition is true"
+    },
+    {
+      "name": "false",
+      "type": "object",
+      "description": "Output when condition is false"
+    }
+  ],
+  "auth": {
+    "type": "none",
+    "fields": {}
+  },
+  "ui": {
+    "color": "#FF6B6B",
+    "iconShape": "diamond",
+    "group": "Logic"
+  },
+  "metadata": {
+    "tags": ["condition", "logic", "if", "branching"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/if-condition",
+    "createdBy": "NotifyX Team"
+  }
+}

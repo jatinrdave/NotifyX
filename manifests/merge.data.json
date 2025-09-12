@@ -1,0 +1,72 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "merge.data",
+  "name": "Merge Data",
+  "version": "1.0.0",
+  "type": "transform",
+  "category": "Data",
+  "description": "Merge data from multiple input branches into a single output.",
+  "icon": "https://cdn.notifyx.dev/icons/merge.svg",
+  "inputs": [
+    {
+      "name": "mode",
+      "type": "string",
+      "required": true,
+      "default": "multiplex",
+      "description": "Merge mode",
+      "options": ["multiplex", "append", "passThrough", "wait"]
+    },
+    {
+      "name": "options",
+      "type": "object",
+      "required": false,
+      "default": {},
+      "description": "Merge options"
+    },
+    {
+      "name": "options.joinMode",
+      "type": "string",
+      "required": false,
+      "default": "keepEverything",
+      "description": "How to join data",
+      "options": ["keepEverything", "keepKeyMatches", "keepNonMatches"]
+    },
+    {
+      "name": "options.outputDataFrom",
+      "type": "string",
+      "required": false,
+      "default": "input1",
+      "description": "Which input to use as base for output data",
+      "options": ["input1", "input2", "input3", "input4", "input5"]
+    },
+    {
+      "name": "options.outputDataFrom",
+      "type": "string",
+      "required": false,
+      "default": "input1",
+      "description": "Which input to use as base for output data",
+      "options": ["input1", "input2", "input3", "input4", "input5"]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "merged",
+      "type": "array",
+      "description": "Merged data from all inputs"
+    }
+  ],
+  "auth": {
+    "type": "none",
+    "fields": {}
+  },
+  "ui": {
+    "color": "#4CAF50",
+    "iconShape": "square",
+    "group": "Data"
+  },
+  "metadata": {
+    "tags": ["merge", "data", "combine", "join"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/merge-data",
+    "createdBy": "NotifyX Team"
+  }
+}

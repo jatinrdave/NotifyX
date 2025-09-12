@@ -1,0 +1,109 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "slack.sendMessage",
+  "name": "Slack Send Message",
+  "version": "1.0.0",
+  "type": "action",
+  "category": "Communication",
+  "description": "Send messages to Slack channels, direct messages, or threads with rich formatting and attachments.",
+  "icon": "https://cdn.notifyx.dev/icons/slack.svg",
+  "inputs": [
+    {
+      "name": "channel",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Slack channel ID, channel name (e.g., #general), or user ID for DMs"
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Message text content"
+    },
+    {
+      "name": "blocks",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "description": "Slack Block Kit blocks for rich formatting"
+    },
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "description": "Message attachments"
+    },
+    {
+      "name": "threadTs",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Timestamp of the parent message to reply in a thread"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Custom username for the bot"
+    },
+    {
+      "name": "iconEmoji",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Custom emoji icon for the bot (e.g., :robot_face:)"
+    },
+    {
+      "name": "iconUrl",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Custom icon URL for the bot"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "messageTs",
+      "type": "string",
+      "description": "Timestamp of the sent message"
+    },
+    {
+      "name": "channel",
+      "type": "string",
+      "description": "Channel where the message was sent"
+    },
+    {
+      "name": "ok",
+      "type": "boolean",
+      "description": "Whether the message was sent successfully"
+    },
+    {
+      "name": "error",
+      "type": "string",
+      "description": "Error message if the request failed"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "fields": {
+      "clientId": "SLACK_CLIENT_ID",
+      "clientSecret": "SLACK_CLIENT_SECRET",
+      "tokenUrl": "https://slack.com/api/oauth.v2.access",
+      "scopes": ["chat:write", "channels:read", "groups:read", "im:read", "mpim:read"]
+    }
+  },
+  "ui": {
+    "color": "#4A154B",
+    "iconShape": "circle",
+    "group": "Communication"
+  },
+  "metadata": {
+    "tags": ["slack", "messaging", "communication", "team"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/slack-send-message",
+    "createdBy": "NotifyX Team"
+  }
+}

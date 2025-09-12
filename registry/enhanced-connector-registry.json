@@ -1,0 +1,451 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-registry.json",
+  "registryVersion": "1.3.0",
+  "lastUpdated": "2025-01-11T18:00:00Z",
+  "connectors": [
+    {
+      "id": "notifyx.sendNotification",
+      "name": "Send Notification",
+      "description": "Send a notification via SMS, Email, Slack, or Push using NotifyX.",
+      "version": "1.0.0",
+      "category": "Notification",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/sendNotification.json",
+      "icon": "https://cdn.notifyx.dev/icons/send.svg",
+      "tags": ["notifyx", "action", "communication"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "NotifyX.SDK",
+            "version": "^1.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "notifyx.onDeliveryStatus",
+      "name": "On Delivery Status",
+      "description": "Trigger when a notification delivery status changes (success, failed, queued).",
+      "version": "1.0.0",
+      "category": "Trigger",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/onDeliveryStatus.json",
+      "icon": "https://cdn.notifyx.dev/icons/status.svg",
+      "tags": ["notifyx", "trigger", "event"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "NotifyX.SDK",
+            "version": "^1.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "http.request",
+      "name": "HTTP Request",
+      "description": "Make HTTP requests to any REST API endpoint with full control over headers, authentication, and request body.",
+      "version": "1.0.0",
+      "category": "Integration",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/http.request.json",
+      "icon": "https://cdn.notifyx.dev/icons/http.svg",
+      "tags": ["http", "api", "rest", "webhook", "integration"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "System.Net.Http",
+            "version": "^4.3.4"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "slack.sendMessage",
+      "name": "Slack Send Message",
+      "description": "Send messages to Slack channels, direct messages, or threads with rich formatting and attachments.",
+      "version": "1.0.0",
+      "category": "Communication",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/slack.sendMessage.json",
+      "icon": "https://cdn.notifyx.dev/icons/slack.svg",
+      "tags": ["slack", "messaging", "communication", "team"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "Slack.WebApi",
+            "version": "^1.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": [
+          {
+            "name": "Slack API",
+            "url": "https://api.slack.com",
+            "authType": "oauth2"
+          }
+        ]
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "gmail.sendEmail",
+      "name": "Gmail Send Email",
+      "description": "Send emails through Gmail with support for HTML content, attachments, and rich formatting.",
+      "version": "1.0.0",
+      "category": "Communication",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/gmail.sendEmail.json",
+      "icon": "https://cdn.notifyx.dev/icons/gmail.svg",
+      "tags": ["gmail", "email", "communication", "google"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "Google.Apis.Gmail.v1",
+            "version": "^1.65.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": [
+          {
+            "name": "Gmail API",
+            "url": "https://developers.google.com/gmail/api",
+            "authType": "oauth2"
+          }
+        ]
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "mysql.query",
+      "name": "MySQL Query",
+      "description": "Execute SQL queries against MySQL databases with support for SELECT, INSERT, UPDATE, DELETE operations.",
+      "version": "1.0.0",
+      "category": "Database",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/mysql.query.json",
+      "icon": "https://cdn.notifyx.dev/icons/mysql.svg",
+      "tags": ["mysql", "database", "sql", "query"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "MySqlConnector",
+            "version": "^2.3.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "webhook.trigger",
+      "name": "Webhook Trigger",
+      "description": "Trigger workflows when HTTP requests are received at a webhook endpoint.",
+      "version": "1.0.0",
+      "category": "Trigger",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/webhook.trigger.json",
+      "icon": "https://cdn.notifyx.dev/icons/webhook.svg",
+      "tags": ["webhook", "trigger", "http", "api"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "Microsoft.AspNetCore.Http.Abstractions",
+            "version": "^2.2.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "schedule.trigger",
+      "name": "Schedule Trigger",
+      "description": "Trigger workflows on a schedule using cron expressions or interval-based timing.",
+      "version": "1.0.0",
+      "category": "Trigger",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/schedule.trigger.json",
+      "icon": "https://cdn.notifyx.dev/icons/schedule.svg",
+      "tags": ["schedule", "trigger", "cron", "timer"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "Cronos",
+            "version": "^0.7.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "if.condition",
+      "name": "IF Condition",
+      "description": "Conditionally route workflow execution based on data conditions and expressions.",
+      "version": "1.0.0",
+      "category": "Logic",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/if.condition.json",
+      "icon": "https://cdn.notifyx.dev/icons/if.svg",
+      "tags": ["condition", "logic", "if", "branching"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "Jint",
+            "version": "^3.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "switch.condition",
+      "name": "Switch Condition",
+      "description": "Route workflow execution to different branches based on multiple conditions.",
+      "version": "1.0.0",
+      "category": "Logic",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/switch.condition.json",
+      "icon": "https://cdn.notifyx.dev/icons/switch.svg",
+      "tags": ["switch", "condition", "logic", "branching"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "Jint",
+            "version": "^3.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "merge.data",
+      "name": "Merge Data",
+      "description": "Merge data from multiple input branches into a single output.",
+      "version": "1.0.0",
+      "category": "Data",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/merge.data.json",
+      "icon": "https://cdn.notifyx.dev/icons/merge.svg",
+      "tags": ["merge", "data", "combine", "join"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "System.Linq",
+            "version": "^4.3.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    },
+    {
+      "id": "set.data",
+      "name": "Set Data",
+      "description": "Set, modify, or remove data fields in the workflow data.",
+      "version": "1.0.0",
+      "category": "Data",
+      "manifestUrl": "https://cdn.notifyx.dev/manifests/set.data.json",
+      "icon": "https://cdn.notifyx.dev/icons/set.svg",
+      "tags": ["set", "data", "assign", "modify"],
+      "author": {
+        "name": "NotifyX Team",
+        "url": "https://notifyx.dev"
+      },
+      "compatibility": {
+        "frontend": ["angular-18+"],
+        "backend": [".net-9+"],
+        "notifyxCore": ["1.0.0+"]
+      },
+      "dependencies": {
+        "runtime": {
+          "nuget": {
+            "packageName": "System.Text.Json",
+            "version": "^8.0.0"
+          }
+        },
+        "peer": {
+          "connectors": []
+        },
+        "apis": []
+      },
+      "conflictRules": {
+        "incompatibleWith": [],
+        "preferVersion": {},
+        "resolutionStrategy": "highestCompatible"
+      }
+    }
+  ]
+}

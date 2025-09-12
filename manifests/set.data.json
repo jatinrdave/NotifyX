@@ -1,0 +1,77 @@
+{
+  "$schema": "https://notifyx.dev/schemas/connector-manifest.json",
+  "id": "set.data",
+  "name": "Set Data",
+  "version": "1.0.0",
+  "type": "transform",
+  "category": "Data",
+  "description": "Set, modify, or remove data fields in the workflow data.",
+  "icon": "https://cdn.notifyx.dev/icons/set.svg",
+  "inputs": [
+    {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": [],
+      "description": "Data assignments to perform"
+    },
+    {
+      "name": "assignments[].name",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Field name to set"
+    },
+    {
+      "name": "assignments[].value",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Value to assign to the field"
+    },
+    {
+      "name": "assignments[].type",
+      "type": "string",
+      "required": false,
+      "default": "string",
+      "description": "Data type of the value",
+      "options": ["string", "number", "boolean", "object", "array", "date"]
+    },
+    {
+      "name": "options",
+      "type": "object",
+      "required": false,
+      "default": {},
+      "description": "Set data options"
+    },
+    {
+      "name": "options.include",
+      "type": "string",
+      "required": false,
+      "default": "all",
+      "description": "Which data to include",
+      "options": ["all", "assignments", "defined"]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "data",
+      "type": "object",
+      "description": "Modified data object"
+    }
+  ],
+  "auth": {
+    "type": "none",
+    "fields": {}
+  },
+  "ui": {
+    "color": "#FF9800",
+    "iconShape": "square",
+    "group": "Data"
+  },
+  "metadata": {
+    "tags": ["set", "data", "assign", "modify"],
+    "documentationUrl": "https://docs.notifyx.dev/connectors/set-data",
+    "createdBy": "NotifyX Team"
+  }
+}

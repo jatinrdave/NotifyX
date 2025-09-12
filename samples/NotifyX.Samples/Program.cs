@@ -68,6 +68,14 @@ class Program
             await RunTemplateSample(notifyXClient, logger);
             await RunRuleSample(notifyXClient, logger);
             await RunBatchNotificationSample(notifyXClient, logger);
+            
+            // Run bulk operations sample
+            var bulkOperationsSample = host.Services.GetRequiredService<BulkOperationsSample>();
+            await bulkOperationsSample.RunAsync();
+            
+            // Run authentication sample
+            var authenticationSample = host.Services.GetRequiredService<AuthenticationSample>();
+            await authenticationSample.RunAsync();
 
             logger.LogInformation("Sample application completed successfully");
         }

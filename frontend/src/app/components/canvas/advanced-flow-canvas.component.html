@@ -1,0 +1,179 @@
+<div class="advanced-flow-canvas" 
+     #canvas
+     (drop)="onDrop($event)"
+     (dragover)="onDragOver($event)"
+     [style.transform]="getTransform()"
+     tabindex="0">
+  
+  <!-- Grid Background -->
+  <div class="grid-background" *ngIf="showGrid" [style.background-size]="gridSize + 'px ' + gridSize + 'px'"></div>
+  
+  <!-- Selection Box -->
+  <div #selectionBox [ngStyle]="getSelectionBoxStyle()"></div>
+  
+  <!-- Nodes -->
+  <div *ngFor="let node of nodes; trackBy: trackByNodeId" 
+       class="workflow-node"
+       [class.selected]="state.selectedNodes.includes(node.id)"
+       [class.connecting]="isConnecting && connectionStart?.id === node.id"
+       [style.left.px]="node.position.x"
+       [style.top.px]="node.position.y"
+       (mousedown)="onNodeMouseDown(node, $event)"
+       (dblclick)="onNodeDoubleClick(node)">
+    
+    <!-- Node Header -->
+    <div class="node-header">
+      <div class="node-icon">
+        <i class="material-icons">{{ getNodeIcon(node.type) }}</i>
+      </div>
+      <div class="node-title">{{ node.label || node.type }}</div>
+      <div class="node-actions">
+        <button class="node-action-btn" (click)="onNodeDoubleClick(node)" title="Configure">
+          <i class="material-icons">settings</i>
+        </button>
+        <button class="node-action-btn" (click)="deleteNode(node.id)" title="Delete">
+          <i class="material-icons">close</i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Node Body -->
+    <div class="node-body">
+      <div class="node-description">{{ getNodeDescription(node.type) }}</div>
+      <div class="node-status" *ngIf="getNodeStatus(node.id)">
+        <span class="status-indicator" [class]="getNodeStatus(node.id)"></span>
+        {{ getNodeStatus(node.id) }}
+      </div>
+    </div>
+    
+    <!-- Input Ports -->
+    <div class="node-ports input-ports">
+      <div class="port input-port" 
+           (click)="onNodePortClick(node, 'input', $event)"
+           title="Input">
+        <i class="material-icons">arrow_back</i>
+      </div>
+    </div>
+    
+    <!-- Output Ports -->
+    <div class="node-ports output-ports">
+      <div class="port output-port" 
+           (click)="onNodePortClick(node, 'output', $event)"
+           title="Output">
+        <i class="material-icons">arrow_forward</i>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Edges -->
+  <svg class="edges-layer" *ngIf="edges.length > 0">
+    <defs>
+      <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+              refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+      </marker>
+    </defs>
+    
+    <g *ngFor="let edge of edges; trackBy: trackByEdgeId">
+      <path class="edge-path"
+            [class.selected]="state.selectedEdges.includes(edge.id)"
+            [attr.d]="getEdgePath(edge)"
+            marker-end="url(#arrowhead)"
+            (click)="selectEdge(edge.id)">
+      </path>
+      
+      <!-- Edge Label -->
+      <text class="edge-label" 
+            [attr.x]="getEdgeLabelPosition(edge).x"
+            [attr.y]="getEdgeLabelPosition(edge).y"
+            *ngIf="edge.condition">
+        {{ edge.condition }}
+      </text>
+    </g>
+  </svg>
+  
+  <!-- Connection Line (while connecting) -->
+  <svg class="connection-line" *ngIf="isConnecting && connectionStart">
+    <path [attr.d]="getConnectionLinePath()" 
+          stroke="#007acc" 
+          stroke-width="2" 
+          stroke-dasharray="5,5" 
+          fill="none">
+    </path>
+  </svg>
+</div>
+
+<!-- Canvas Toolbar -->
+<div class="canvas-toolbar">
+  <div class="toolbar-group">
+    <button class="toolbar-btn" (click)="fitToScreen()" title="Fit to Screen">
+      <i class="material-icons">fit_screen</i>
+    </button>
+    <button class="toolbar-btn" (click)="centerView()" title="Center View">
+      <i class="material-icons">center_focus_strong</i>
+    </button>
+  </div>
+  
+  <div class="toolbar-group">
+    <button class="toolbar-btn" (click)="zoom(1.2, $event)" title="Zoom In">
+      <i class="material-icons">zoom_in</i>
+    </button>
+    <span class="zoom-level">{{ (state.scale * 100).toFixed(0) }}%</span>
+    <button class="toolbar-btn" (click)="zoom(0.8, $event)" title="Zoom Out">
+      <i class="material-icons">zoom_out</i>
+    </button>
+  </div>
+  
+  <div class="toolbar-group">
+    <button class="toolbar-btn" 
+            [class.active]="showGrid" 
+            (click)="showGrid = !showGrid" 
+            title="Toggle Grid">
+      <i class="material-icons">grid_on</i>
+    </button>
+    <button class="toolbar-btn" 
+            [class.active]="snapToGrid" 
+            (click)="snapToGrid = !snapToGrid" 
+            title="Snap to Grid">
+      <i class="material-icons">grid_4x4</i>
+    </button>
+  </div>
+  
+  <div class="toolbar-group">
+    <button class="toolbar-btn" (click)="undo()" [disabled]="state.historyIndex <= 0" title="Undo">
+      <i class="material-icons">undo</i>
+    </button>
+    <button class="toolbar-btn" (click)="redo()" [disabled]="state.historyIndex >= state.history.length - 1" title="Redo">
+      <i class="material-icons">redo</i>
+    </button>
+  </div>
+  
+  <div class="toolbar-group">
+    <button class="toolbar-btn" (click)="copy()" [disabled]="state.selectedNodes.length === 0" title="Copy">
+      <i class="material-icons">content_copy</i>
+    </button>
+    <button class="toolbar-btn" (click)="paste()" [disabled]="state.clipboard.nodes.length === 0" title="Paste">
+      <i class="material-icons">content_paste</i>
+    </button>
+  </div>
+</div>
+
+<!-- Canvas Status Bar -->
+<div class="canvas-status-bar">
+  <div class="status-item">
+    <span class="status-label">Nodes:</span>
+    <span class="status-value">{{ nodes.length }}</span>
+  </div>
+  <div class="status-item">
+    <span class="status-label">Edges:</span>
+    <span class="status-value">{{ edges.length }}</span>
+  </div>
+  <div class="status-item">
+    <span class="status-label">Selected:</span>
+    <span class="status-value">{{ state.selectedNodes.length }}</span>
+  </div>
+  <div class="status-item">
+    <span class="status-label">Zoom:</span>
+    <span class="status-value">{{ (state.scale * 100).toFixed(0) }}%</span>
+  </div>
+</div>

@@ -34,13 +34,12 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var iterationId = await _iterationService.CreateIterationAsync(
-                    request.ProjectId,
                     request.Title,
                     request.Description,
                     request.StartDate,
                     request.EndDate,
-                    request.IterationType,
-                    request.Metadata);
+                    request.ProjectId,
+                    request.IterationType);
 
                 return Ok(new
                 {
@@ -105,8 +104,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var iterations = await _iterationService.ListIterationsAsync(projectId, iterationType, status, page, pageSize);
-                var totalCount = await _iterationService.GetIterationCountAsync(projectId, iterationType, status);
+                var iterations = await _iterationService.ListIterationsAsync(projectId, status, page, pageSize);
+                var totalCount = await _iterationService.GetIterationCountAsync(projectId);
 
                 return Ok(new
                 {
@@ -152,9 +151,7 @@ namespace NotifyXStudio.Api.Controllers
                     request.Description,
                     request.StartDate,
                     request.EndDate,
-                    request.IterationType,
-                    request.Status,
-                    request.Metadata);
+                    request.Status);
 
                 return Ok(new
                 {

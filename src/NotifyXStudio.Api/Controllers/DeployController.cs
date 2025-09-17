@@ -251,7 +251,7 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var components = await _deployService.GetComponentsAsync();
+                var components = await _deployService.GetComponentsAsync("default");
 
                 return Ok(new
                 {

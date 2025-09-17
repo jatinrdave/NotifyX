@@ -11,37 +11,37 @@ namespace NotifyXStudio.Api.Services
         /// <summary>
         /// Notifies clients about a workflow run status change.
         /// </summary>
-        Task NotifyRunStatusChangeAsync(string runId, RunStatus status, string? errorMessage = null);
+        System.Threading.Tasks.Task NotifyRunStatusChangeAsync(string runId, RunStatus status, string? errorMessage = null);
 
         /// <summary>
         /// Notifies clients about a node execution result.
         /// </summary>
-        Task NotifyNodeExecutionAsync(string runId, NodeExecutionResult nodeResult);
+        System.Threading.Tasks.Task NotifyNodeExecutionAsync(string runId, NodeExecutionResult nodeResult);
 
         /// <summary>
         /// Notifies clients about workflow execution progress.
         /// </summary>
-        Task NotifyExecutionProgressAsync(string runId, ExecutionProgress progress);
+        System.Threading.Tasks.Task NotifyExecutionProgressAsync(string runId, ExecutionProgress progress);
 
         /// <summary>
         /// Notifies clients about workflow execution completion.
         /// </summary>
-        Task NotifyExecutionCompletedAsync(string runId, WorkflowRunResult result);
+        System.Threading.Tasks.Task NotifyExecutionCompletedAsync(string runId, WorkflowRunResult result);
 
         /// <summary>
         /// Notifies clients about workflow execution errors.
         /// </summary>
-        Task NotifyExecutionErrorAsync(string runId, string errorMessage, Exception? exception = null);
+        System.Threading.Tasks.Task NotifyExecutionErrorAsync(string runId, string errorMessage, Exception? exception = null);
 
         /// <summary>
         /// Notifies clients about workflow changes.
         /// </summary>
-        Task NotifyWorkflowChangedAsync(string workflowId, string tenantId, WorkflowChangeType changeType);
+        System.Threading.Tasks.Task NotifyWorkflowChangedAsync(string workflowId, string tenantId, WorkflowChangeType changeType);
 
         /// <summary>
         /// Notifies clients about system-wide events.
         /// </summary>
-        Task NotifySystemEventAsync(string tenantId, SystemEvent systemEvent);
+        System.Threading.Tasks.Task NotifySystemEventAsync(string tenantId, SystemEvent systemEvent);
     }
 
     /// <summary>

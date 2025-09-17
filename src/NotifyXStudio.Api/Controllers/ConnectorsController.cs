@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using NotifyXStudio.Core.Models;
 using NotifyXStudio.Core.Services;
+using NotifyXStudio.Core.Resolvers;
 using System.Text.Json;
 
 namespace NotifyXStudio.Api.Controllers

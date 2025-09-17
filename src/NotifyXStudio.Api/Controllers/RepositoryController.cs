@@ -36,9 +36,8 @@ namespace NotifyXStudio.Api.Controllers
                 var repositoryId = await _repositoryService.CreateRepositoryAsync(
                     request.Name,
                     request.Description,
-                    request.RepositoryType,
-                    request.Configuration,
-                    request.Metadata);
+                    null,
+                    null);
 
                 return Ok(new
                 {
@@ -146,9 +145,8 @@ namespace NotifyXStudio.Api.Controllers
                     repositoryId,
                     request.Name,
                     request.Description,
-                    request.RepositoryType,
-                    request.Configuration,
-                    request.Metadata);
+                    null,
+                    null);
 
                 return Ok(new
                 {

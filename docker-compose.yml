@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
@@ -109,7 +107,6 @@ services:
     build:
       context: .
       dockerfile: src/NotifyXStudio.Runtime/Dockerfile
-    container_name: notifyx-studio-workers
     depends_on:
       postgres:
         condition: service_healthy

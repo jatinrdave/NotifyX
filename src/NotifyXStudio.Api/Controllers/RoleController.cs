@@ -34,11 +34,10 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var roleId = await _roleService.CreateRoleAsync(
-                    request.TenantId,
                     request.Name,
                     request.Description,
-                    request.Permissions,
-                    request.Metadata);
+                    string.Join(",", request.Permissions),
+                    request.TenantId.ToString());
 
                 return Ok(new
                 {
@@ -101,8 +100,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var roles = await _roleService.ListRolesAsync(tenantId, page, pageSize);
-                var totalCount = await _roleService.GetRoleCountAsync(tenantId);
+                var roles = await _roleService.ListRolesAsync(tenantId?.ToString(), page, pageSize);
+                var totalCount = await _roleService.GetRoleCountAsync(tenantId?.ToString());
 
                 return Ok(new
                 {
@@ -146,8 +145,7 @@ namespace NotifyXStudio.Api.Controllers
                     roleId,
                     request.Name,
                     request.Description,
-                    request.Permissions,
-                    request.Metadata);
+                    string.Join(",", request.Permissions));
 
                 return Ok(new
                 {

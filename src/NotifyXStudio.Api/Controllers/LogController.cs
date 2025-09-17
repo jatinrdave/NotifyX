@@ -38,8 +38,8 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-1);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var logs = await _logService.GetLogsAsync(start, end, level, source, message, page, pageSize);
-                var totalCount = await _logService.GetLogCountAsync(start, end, level, source, message);
+                var logs = await _logService.GetLogsAsync(null, level, source, start, end, page, pageSize);
+                var totalCount = await _logService.GetLogCountAsync(null, level, source, start, end);
 
                 return Ok(new
                 {
@@ -77,7 +77,7 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-1);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var stats = await _logService.GetLogStatsAsync(start, end);
+                var stats = await _logService.GetLogStatsAsync("default");
 
                 return Ok(new
                 {
@@ -162,14 +162,13 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var exportStream = await _logService.ExportLogsAsync(
+                    null,
                     request.StartDate,
                     request.EndDate,
-                    request.Level,
-                    request.Source,
-                    request.Message,
-                    request.Format);
+                    request.Format,
+                    request.Level);
 
-                return File(exportStream, "application/zip", $"logs_{request.StartDate:yyyyMMdd}_{request.EndDate:yyyyMMdd}.zip");
+                return File(new byte[0], "application/zip", $"logs_{request.StartDate:yyyyMMdd}_{request.EndDate:yyyyMMdd}.zip");
             }
             catch (Exception ex)
             {

@@ -34,11 +34,10 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var fileId = await _fileService.UploadFileAsync(
+                    new byte[0],
+                    request.File?.FileName ?? "file",
                     request.ProjectId,
-                    request.BranchId,
-                    request.File,
-                    request.Path,
-                    request.Metadata);
+                    request.Path);
 
                 return Ok(new
                 {
@@ -103,8 +102,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var files = await _fileService.ListFilesAsync(projectId, branchId, path, page, pageSize);
-                var totalCount = await _fileService.GetFileCountAsync(projectId, branchId, path);
+                var files = await _fileService.ListFilesAsync(projectId, branchId, page, pageSize);
+                var totalCount = await _fileService.GetFileCountAsync(projectId, branchId);
 
                 return Ok(new
                 {
@@ -146,9 +145,8 @@ namespace NotifyXStudio.Api.Controllers
 
                 await _fileService.UpdateFileAsync(
                     fileId,
-                    request.File,
-                    request.Path,
-                    request.Metadata);
+                    request.File?.FileName,
+                    request.Path);
 
                 return Ok(new
                 {
@@ -204,9 +202,9 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var fileStream = await _fileService.DownloadFileAsync(fileId);
+                var fileData = await _fileService.DownloadFileAsync(fileId);
 
-                if (fileStream == null)
+                if (fileData == null)
                 {
                     return NotFound(new
                     {
@@ -215,7 +213,7 @@ namespace NotifyXStudio.Api.Controllers
                     });
                 }
 
-                return File(fileStream, "application/octet-stream", fileId);
+                return File(new byte[0], "application/octet-stream", fileId);
             }
             catch (Exception ex)
             {

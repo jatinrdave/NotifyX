@@ -1,0 +1,6 @@
+# .NET Core Library
+bin/
+obj/
+*.user
+*.suo
+

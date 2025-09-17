@@ -21,7 +21,7 @@ namespace NotifyXStudio.Api.Hubs
         /// <summary>
         /// Called when a client connects to the hub.
         /// </summary>
-        public override async Task OnConnectedAsync()
+        public override async System.Threading.Tasks.Task OnConnectedAsync()
         {
             var tenantId = GetTenantId();
             var userId = GetUserId();
@@ -41,7 +41,7 @@ namespace NotifyXStudio.Api.Hubs
         /// <summary>
         /// Called when a client disconnects from the hub.
         /// </summary>
-        public override async Task OnDisconnectedAsync(Exception? exception)
+        public override async System.Threading.Tasks.Task OnDisconnectedAsync(Exception? exception)
         {
             var tenantId = GetTenantId();
             var userId = GetUserId();
@@ -55,7 +55,7 @@ namespace NotifyXStudio.Api.Hubs
         /// <summary>
         /// Subscribe to updates for a specific workflow run.
         /// </summary>
-        public async Task SubscribeToRun(string runId)
+        public async System.Threading.Tasks.Task SubscribeToRun(string runId)
         {
             var tenantId = GetTenantId();
             
@@ -68,7 +68,7 @@ namespace NotifyXStudio.Api.Hubs
         /// <summary>
         /// Unsubscribe from updates for a specific workflow run.
         /// </summary>
-        public async Task UnsubscribeFromRun(string runId)
+        public async System.Threading.Tasks.Task UnsubscribeFromRun(string runId)
         {
             _logger.LogDebug("Client {ConnectionId} unsubscribing from run {RunId}", 
                 Context.ConnectionId, runId);
@@ -79,7 +79,7 @@ namespace NotifyXStudio.Api.Hubs
         /// <summary>
         /// Subscribe to updates for a specific workflow.
         /// </summary>
-        public async Task SubscribeToWorkflow(string workflowId)
+        public async System.Threading.Tasks.Task SubscribeToWorkflow(string workflowId)
         {
             var tenantId = GetTenantId();
             
@@ -92,7 +92,7 @@ namespace NotifyXStudio.Api.Hubs
         /// <summary>
         /// Unsubscribe from updates for a specific workflow.
         /// </summary>
-        public async Task UnsubscribeFromWorkflow(string workflowId)
+        public async System.Threading.Tasks.Task UnsubscribeFromWorkflow(string workflowId)
         {
             _logger.LogDebug("Client {ConnectionId} unsubscribing from workflow {WorkflowId}", 
                 Context.ConnectionId, workflowId);

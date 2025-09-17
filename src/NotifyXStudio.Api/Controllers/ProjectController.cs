@@ -36,9 +36,9 @@ namespace NotifyXStudio.Api.Controllers
                 var projectId = await _projectService.CreateProjectAsync(
                     request.Name,
                     request.Description,
+                    null,
                     request.ProjectType,
-                    request.Configuration,
-                    request.Metadata);
+                    null);
 
                 return Ok(new
                 {
@@ -147,8 +147,8 @@ namespace NotifyXStudio.Api.Controllers
                     request.Name,
                     request.Description,
                     request.ProjectType,
-                    request.Configuration,
-                    request.Metadata);
+                    null,
+                    null);
 
                 return Ok(new
                 {

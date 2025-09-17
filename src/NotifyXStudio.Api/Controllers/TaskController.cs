@@ -34,14 +34,13 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var taskId = await _taskService.CreateTaskAsync(
-                    request.ProjectId,
                     request.Title,
                     request.Description,
                     request.TaskType,
                     request.Priority,
-                    request.Estimate,
                     request.AssigneeId,
-                    request.Metadata);
+                    request.ProjectId,
+                    null);
 
                 return Ok(new
                 {
@@ -107,8 +106,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var tasks = await _taskService.ListTasksAsync(projectId, taskType, status, assigneeId, page, pageSize);
-                var totalCount = await _taskService.GetTaskCountAsync(projectId, taskType, status, assigneeId);
+                var tasks = await _taskService.ListTasksAsync(projectId, status, taskType, assigneeId, page, pageSize);
+                var totalCount = await _taskService.GetTaskCountAsync(projectId, status, taskType);
 
                 return Ok(new
                 {
@@ -152,12 +151,11 @@ namespace NotifyXStudio.Api.Controllers
                     taskId,
                     request.Title,
                     request.Description,
-                    request.TaskType,
-                    request.Priority,
-                    request.Estimate,
-                    request.AssigneeId,
                     request.Status,
-                    request.Metadata);
+                    request.Priority,
+                    request.AssigneeId,
+                    null,
+                    null);
 
                 return Ok(new
                 {

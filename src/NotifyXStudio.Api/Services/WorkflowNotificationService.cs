@@ -21,7 +21,7 @@ namespace NotifyXStudio.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task NotifyRunStatusChangeAsync(string runId, RunStatus status, string? errorMessage = null)
+        public async System.Threading.Tasks.Task NotifyRunStatusChangeAsync(string runId, RunStatus status, string? errorMessage = null)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace NotifyXStudio.Api.Services
             }
         }
 
-        public async Task NotifyNodeExecutionAsync(string runId, NodeExecutionResult nodeResult)
+        public async System.Threading.Tasks.Task NotifyNodeExecutionAsync(string runId, NodeExecutionResult nodeResult)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace NotifyXStudio.Api.Services
             }
         }
 
-        public async Task NotifyExecutionProgressAsync(string runId, ExecutionProgress progress)
+        public async System.Threading.Tasks.Task NotifyExecutionProgressAsync(string runId, ExecutionProgress progress)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace NotifyXStudio.Api.Services
             }
         }
 
-        public async Task NotifyExecutionCompletedAsync(string runId, WorkflowRunResult result)
+        public async System.Threading.Tasks.Task NotifyExecutionCompletedAsync(string runId, WorkflowRunResult result)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace NotifyXStudio.Api.Services
             }
         }
 
-        public async Task NotifyExecutionErrorAsync(string runId, string errorMessage, Exception? exception = null)
+        public async System.Threading.Tasks.Task NotifyExecutionErrorAsync(string runId, string errorMessage, Exception? exception = null)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace NotifyXStudio.Api.Services
             }
         }
 
-        public async Task NotifyWorkflowChangedAsync(string workflowId, string tenantId, WorkflowChangeType changeType)
+        public async System.Threading.Tasks.Task NotifyWorkflowChangedAsync(string workflowId, string tenantId, WorkflowChangeType changeType)
         {
             try
             {
@@ -179,7 +179,7 @@ namespace NotifyXStudio.Api.Services
             }
         }
 
-        public async Task NotifySystemEventAsync(string tenantId, SystemEvent systemEvent)
+        public async System.Threading.Tasks.Task NotifySystemEventAsync(string tenantId, SystemEvent systemEvent)
         {
             try
             {

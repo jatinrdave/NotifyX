@@ -1,3 +1,5 @@
+using NotifyXStudio.Core.Models;
+
 namespace NotifyXStudio.Runtime.Services
 {
     /// <summary>

@@ -35,10 +35,9 @@ namespace NotifyXStudio.Api.Controllers
 
                 var releaseId = await _releaseService.CreateReleaseAsync(
                     request.Version,
+                    request.Version,
                     request.Description,
-                    request.ReleaseNotes,
-                    request.Components,
-                    request.Metadata);
+                    null);
 
                 return Ok(new
                 {
@@ -106,8 +105,8 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-30);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var releases = await _releaseService.ListReleasesAsync(status, start, end, page, pageSize);
-                var totalCount = await _releaseService.GetReleaseCountAsync(status, start, end);
+                var releases = await _releaseService.ListReleasesAsync(null, status, page, pageSize);
+                var totalCount = await _releaseService.GetReleaseCountAsync(null, status);
 
                 return Ok(new
                 {
@@ -151,8 +150,7 @@ namespace NotifyXStudio.Api.Controllers
                     releaseId,
                     request.Description,
                     request.ReleaseNotes,
-                    request.Components,
-                    request.Metadata);
+                    null);
 
                 return Ok(new
                 {
@@ -269,7 +267,7 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-30);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var stats = await _releaseService.GetReleaseStatsAsync(start, end);
+                var stats = await _releaseService.GetReleaseStatsAsync("default");
 
                 return Ok(new
                 {

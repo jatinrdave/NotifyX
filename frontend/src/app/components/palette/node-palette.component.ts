@@ -2,11 +2,18 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ConnectorService } from '../../services/connector.service';
 import { ConnectorManifest } from '../../models/node.model';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-node-palette',
   templateUrl: './node-palette.component.html',
-  styleUrls: ['./node-palette.component.css']
+  styleUrls: ['./node-palette.component.css'],
+  standalone: true,
+  imports: [
+    FormsModule,
+    CommonModule
+  ]
 })
 export class NodePaletteComponent implements OnInit, OnDestroy {
   connectors: ConnectorManifest[] = [];

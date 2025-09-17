@@ -34,12 +34,11 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var workflowNodeId = await _workflowNodeService.CreateWorkflowNodeAsync(
-                    request.WorkflowId,
-                    request.NodeType,
                     request.Title,
                     request.Description,
-                    request.NodeConfig,
-                    request.Metadata);
+                    request.NodeType,
+                    request.WorkflowId,
+                    null);
 
                 return Ok(new
                 {
@@ -104,8 +103,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var workflowNodes = await _workflowNodeService.ListWorkflowNodesAsync(workflowId, nodeType, status, page, pageSize);
-                var totalCount = await _workflowNodeService.GetWorkflowNodeCountAsync(workflowId, nodeType, status);
+                var workflowNodes = await _workflowNodeService.ListWorkflowNodesAsync(workflowId, nodeType, page, pageSize);
+                var totalCount = await _workflowNodeService.GetWorkflowNodeCountAsync(workflowId);
 
                 return Ok(new
                 {
@@ -147,12 +146,11 @@ namespace NotifyXStudio.Api.Controllers
 
                 await _workflowNodeService.UpdateWorkflowNodeAsync(
                     workflowNodeId,
-                    request.NodeType,
                     request.Title,
                     request.Description,
-                    request.NodeConfig,
-                    request.Status,
-                    request.Metadata);
+                    request.NodeType,
+                    null,
+                    request.Status);
 
                 return Ok(new
                 {

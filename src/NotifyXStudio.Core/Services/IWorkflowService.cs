@@ -5,7 +5,7 @@ namespace NotifyXStudio.Core.Services
     /// <summary>
     /// Service for managing workflows.
     /// </summary>
-    public interface IWorkflowService
+    public partial interface IWorkflowService
     {
         /// <summary>
         /// Creates a new workflow.
@@ -51,6 +51,21 @@ namespace NotifyXStudio.Core.Services
         /// Duplicates a workflow.
         /// </summary>
         Task<Workflow> DuplicateAsync(string id, string tenantId, string newName);
+
+        // Additional methods required by controllers
+        Task<Workflow> UpdateWorkflowAsync(Workflow workflow, CancellationToken cancellationToken = default);
+        Task<Workflow> DeleteWorkflowAsync(string id, CancellationToken cancellationToken = default);
+        Task<Workflow> GetWorkflowStatusAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Workflow>> GetWorkflowIssuesAsync(string id, CancellationToken cancellationToken = default);
+        Task<Workflow> GetWorkflowStatsAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Workflow>> GetWorkflowTypesAsync(CancellationToken cancellationToken = default);
+        
+        // Methods called by WorkflowController
+        Task<Workflow> CreateWorkflowAsync(Workflow workflow, CancellationToken cancellationToken = default);
+        Task<Workflow> GetWorkflowAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Workflow>> ListWorkflowsAsync(string? tenantId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<int> GetWorkflowCountAsync(string? tenantId = null, CancellationToken cancellationToken = default);
+        Task<Workflow> UpdateWorkflowAsync(Workflow workflow, string? title = null, string? description = null, List<WorkflowNode>? nodes = null, List<WorkflowEdge>? edges = null, List<WorkflowTrigger>? triggers = null, Dictionary<string, object>? globalVariables = null, CancellationToken cancellationToken = default);
     }
 
     /// <summary>
@@ -68,13 +83,4 @@ namespace NotifyXStudio.Core.Services
         public double SuccessRate { get; init; }
     }
 
-    /// <summary>
-    /// Validation result for workflows.
-    /// </summary>
-    public class ValidationResult
-    {
-        public bool IsValid { get; init; }
-        public List<string> Errors { get; init; } = new();
-        public List<string> Warnings { get; init; } = new();
-    }
 }

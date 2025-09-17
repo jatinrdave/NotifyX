@@ -40,12 +40,12 @@ namespace NotifyXStudio.Connectors.Logic
                 var duration = (DateTime.UtcNow - startTime).TotalMilliseconds;
 
                 // Prepare output based on condition result
-                var output = new
+                var output = new Dictionary<string, object>
                 {
-                    condition = conditionResult,
-                    true = conditionResult ? inputs : new Dictionary<string, object>(),
-                    false = !conditionResult ? inputs : new Dictionary<string, object>(),
-                    duration = (long)duration
+                    ["condition"] = conditionResult,
+                    ["true"] = conditionResult ? inputs : new Dictionary<string, object>(),
+                    ["false"] = !conditionResult ? inputs : new Dictionary<string, object>(),
+                    ["duration"] = (long)duration
                 };
 
                 _logger.LogInformation("IF condition evaluated to {Result} in {Duration}ms", conditionResult, duration);

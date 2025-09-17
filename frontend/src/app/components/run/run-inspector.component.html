@@ -1,137 +1,118 @@
 <div class="run-inspector">
   <!-- Header -->
   <div class="inspector-header">
-    <div class="header-info">
-      <h3>Run Inspector</h3>
-      <div class="run-info">
-        <span class="run-id">Run: {{ runId }}</span>
-        <span class="connection-status" [class.connected]="isConnected" [class.disconnected]="!isConnected">
-          <mat-icon>{{ isConnected ? 'wifi' : 'wifi_off' }}</mat-icon>
-          {{ isConnected ? 'Connected' : 'Disconnected' }}
-        </span>
-      </div>
+    <div class="connection-status">
+      <span class="status-icon">{{ isConnected ? '🟢' : '🔴' }}</span>
+      <span class="status-text">{{ isConnected ? 'Connected' : 'Disconnected' }}</span>
     </div>
     
-    <div class="header-actions">
-      <button mat-icon-button (click)="onCancel()" [disabled]="!isRunRunning()" matTooltip="Cancel Run">
-        <mat-icon>stop</mat-icon>
+    <div class="action-buttons">
+      <button 
+        *ngIf="isRunRunning()" 
+        (click)="onCancel()" 
+        class="action-button cancel-button">
+        <span class="icon">⏹</span>
+        Cancel
       </button>
-      <button mat-icon-button (click)="onReplay()" [disabled]="!canReplay()" matTooltip="Replay Run">
-        <mat-icon>replay</mat-icon>
+      <button 
+        *ngIf="canReplay()" 
+        (click)="onReplay()" 
+        class="action-button replay-button">
+        <span class="icon">🔄</span>
+        Replay
       </button>
     </div>
   </div>
 
   <!-- Progress Bar -->
-  <div class="progress-section" *ngIf="executionProgress || nodeResults.length > 0">
-    <div class="progress-info">
-      <span class="progress-text">
-        {{ executionProgress?.completedNodes || 0 }} / {{ executionProgress?.totalNodes || workflow?.nodes?.length || 0 }} nodes
-      </span>
-      <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
+  <div class="progress-section">
+    <div class="progress-bar">
+      <div 
+        class="progress-fill"
+        [style.width.%]="getProgressPercentage()"
+        [class.completed]="isRunComplete()">
+      </div>
     </div>
-    <mat-progress-bar 
-      mode="determinate" 
-      [value]="getProgressPercentage()"
-      [color]="isRunComplete() ? 'primary' : 'accent'">
-    </mat-progress-bar>
+    <span class="progress-text">{{ getProgressPercentage() }}% Complete</span>
   </div>
 
   <!-- Run Status -->
-  <div class="run-status" *ngIf="run">
-    <div class="status-card">
-      <div class="status-header">
-        <mat-icon [style.color]="getStatusColor(run.status)">{{ getStatusIcon(run.status) }}</mat-icon>
-        <span class="status-text">{{ run.status | titlecase }}</span>
-        <span class="run-duration" *ngIf="run.durationMs">
-          {{ formatDuration(run.durationMs) }}
-        </span>
+  <div *ngIf="run" class="run-status">
+    <div class="status-info">
+      <span class="status-icon" [style.color]="getStatusColor(run.status)">{{ getStatusIcon(run.status) }}</span>
+      <span class="status-text">{{ run.status | titlecase }}</span>
+      <span *ngIf="run.durationMs" class="duration">
+        {{ formatDuration(run.durationMs) }}
+      </span>
+    </div>
+    
+    <div class="run-details">
+      <div class="detail-item">
+        <span class="label">Started:</span>
+        <span class="value">{{ formatTimestamp(run.startTime) }}</span>
       </div>
-      
-      <div class="status-details">
-        <div class="detail-item">
-          <span class="label">Started:</span>
-          <span class="value">{{ formatTimestamp(run.startTime) }}</span>
-        </div>
-        <div class="detail-item" *ngIf="run.endTime">
-          <span class="label">Ended:</span>
-          <span class="value">{{ formatTimestamp(run.endTime) }}</span>
-        </div>
-        <div class="detail-item" *ngIf="run.errorMessage">
-          <span class="label">Error:</span>
-          <span class="value error">{{ run.errorMessage }}</span>
-        </div>
+      <div class="detail-item" *ngIf="run.endTime">
+        <span class="label">Ended:</span>
+        <span class="value">{{ formatTimestamp(run.endTime) }}</span>
+      </div>
+      <div class="detail-item" *ngIf="run.errorMessage">
+        <span class="label">Error:</span>
+        <span class="value error">{{ run.errorMessage }}</span>
       </div>
     </div>
   </div>
 
   <!-- Node Execution Results -->
   <div class="node-results">
-    <h4>Node Execution</h4>
+    <h3>Node Execution Results</h3>
     
-    <div class="results-list" *ngIf="nodeResults.length > 0; else noResults">
-      <div 
-        *ngFor="let result of nodeResults; trackBy: trackByNodeId" 
-        class="result-item"
-        [class.success]="result.status === 'success'"
-        [class.failed]="result.status === 'failed'"
-        [class.running]="result.status === 'running'"
-        [class.pending]="result.status === 'pending'">
-        
-        <div class="result-header">
-          <div class="node-info">
-            <mat-icon [style.color]="getStatusColor(result.status)">
-              {{ getStatusIcon(result.status) }}
-            </mat-icon>
-            <div class="node-details">
-              <span class="node-name">{{ getNodeName(result.nodeId) }}</span>
-              <span class="node-type">{{ getNodeType(result.nodeId) }}</span>
-            </div>
-          </div>
-          
-          <div class="result-meta">
-            <span class="duration" *ngIf="result.durationMs">
-              {{ formatDuration(result.durationMs) }}
-            </span>
-            <span class="timestamp">
-              {{ formatTimestamp(result.startTime) }}
-            </span>
+    <div *ngIf="nodeResults.length === 0" class="no-results">
+      <span class="icon">⏳</span>
+      <p>No node executions yet</p>
+    </div>
+    
+    <div *ngFor="let result of nodeResults; trackBy: trackByNodeId" class="node-result">
+      <div class="result-header">
+        <div class="node-info">
+          <span class="node-icon" [style.color]="getStatusColor(result.status)">
+            {{ getStatusIcon(result.status) }}
+          </span>
+          <div class="node-details">
+            <h4 class="node-name">{{ getNodeName(result.nodeId) }}</h4>
+            <span class="node-type">{{ getNodeType(result.nodeId) }}</span>
           </div>
         </div>
-
-        <div class="result-content" *ngIf="result.errorMessage || result.output">
-          <div class="error-message" *ngIf="result.errorMessage">
-            <mat-icon>error</mat-icon>
-            <span>{{ result.errorMessage }}</span>
-          </div>
-          
-          <div class="output-data" *ngIf="result.output">
-            <div class="output-header">
-              <span>Output</span>
-              <button mat-icon-button (click)="toggleOutput(result.nodeId)" class="toggle-button">
-                <mat-icon>{{ isOutputExpanded(result.nodeId) ? 'expand_less' : 'expand_more' }}</mat-icon>
-              </button>
-            </div>
-            <div class="output-content" *ngIf="isOutputExpanded(result.nodeId)">
-              <pre>{{ result.output | json }}</pre>
-            </div>
-          </div>
+        
+        <div class="result-meta">
+          <span class="duration">{{ formatDuration(result.durationMs) }}</span>
+          <span class="timestamp">{{ formatTimestamp(result.startTime) }}</span>
+        </div>
+      </div>
+      
+      <div *ngIf="result.errorMessage" class="error-message">
+        <span class="icon">⚠️</span>
+        <span class="error-text">{{ result.errorMessage }}</span>
+      </div>
+      
+      <div *ngIf="result.output" class="output-section">
+        <button 
+          (click)="toggleOutput(result.nodeId)" 
+          class="toggle-button">
+          <span class="icon">{{ isOutputExpanded(result.nodeId) ? '▼' : '▶' }}</span>
+          Output
+        </button>
+        
+        <div *ngIf="isOutputExpanded(result.nodeId)" class="output-content">
+          <pre>{{ result.output | json }}</pre>
         </div>
       </div>
     </div>
-
-    <ng-template #noResults>
-      <div class="no-results">
-        <mat-icon>schedule</mat-icon>
-        <p>No node executions yet</p>
-        <p class="subtitle">Node execution results will appear here as the workflow runs</p>
-      </div>
-    </ng-template>
   </div>
 
-  <!-- Live Updates Indicator -->
-  <div class="live-indicator" *ngIf="isRunRunning()">
-    <div class="pulse-dot"></div>
-    <span>Live updates</span>
+  <!-- Empty State -->
+  <div *ngIf="!run && !isLoading" class="empty-state">
+    <span class="icon">⏰</span>
+    <p>No run data available</p>
+    <p class="hint">Start a workflow execution to see results here</p>
   </div>
 </div>

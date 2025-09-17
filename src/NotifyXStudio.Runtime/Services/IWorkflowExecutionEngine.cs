@@ -38,21 +38,6 @@ namespace NotifyXStudio.Runtime.Services
         Task<bool> CancelExecutionAsync(string runId, CancellationToken cancellationToken = default);
     }
 
-    /// <summary>
-    /// Result of a workflow run execution.
-    /// </summary>
-    public class WorkflowRunResult
-    {
-        public string RunId { get; init; } = string.Empty;
-        public RunStatus Status { get; init; }
-        public string? ErrorMessage { get; init; }
-        public Dictionary<string, object> Output { get; init; } = new();
-        public List<NodeExecutionResult> NodeResults { get; init; } = new();
-        public DateTime StartTime { get; init; }
-        public DateTime EndTime { get; init; }
-        public long DurationMs { get; init; }
-        public Dictionary<string, object> Metadata { get; init; } = new();
-    }
 
     /// <summary>
     /// Execution plan for a workflow.

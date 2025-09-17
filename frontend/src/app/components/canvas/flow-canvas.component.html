@@ -1,110 +1,63 @@
 <div class="flow-canvas-container">
-  <!-- Canvas Toolbar -->
-  <div class="canvas-toolbar">
-    <div class="toolbar-group">
-      <button mat-icon-button (click)="centerView()" matTooltip="Center View">
-        <mat-icon>center_focus_strong</mat-icon>
-      </button>
-      <button mat-icon-button (click)="fitToView()" matTooltip="Fit to View">
-        <mat-icon>fit_screen</mat-icon>
-      </button>
-    </div>
-    
-    <div class="toolbar-group">
-      <span class="zoom-level">{{ (zoom * 100) | number:'1.0-0' }}%</span>
-    </div>
+  <!-- Canvas Controls -->
+  <div class="canvas-controls">
+    <button (click)="centerView()" class="control-button" title="Center View">
+      <span class="icon">⌂</span>
+    </button>
+    <button (click)="fitToView()" class="control-button" title="Fit to View">
+      <span class="icon">⊞</span>
+    </button>
+    <span class="zoom-level">{{ (zoom * 100) | number:'1.0-0' }}%</span>
   </div>
 
-  <!-- Main Canvas -->
+  <!-- Canvas -->
   <div 
     #canvas
-    class="flow-canvas"
-    (click)="onCanvasClick()"
-    (dragover)="onDragOver($event)"
+    class="canvas"
     (drop)="onDropNode($event)"
+    (dragover)="onDragOver($event)"
+    (click)="onCanvasClick()"
     (mousedown)="onPanStart($event)"
     (mousemove)="onPan($event)"
     (wheel)="onZoom($event)"
     [style.transform]="getCanvasTransform()">
     
-    <!-- Grid Background -->
-    <div class="canvas-grid"></div>
-    
     <!-- Edges -->
     <svg class="edges-layer">
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" 
-                refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
-        </marker>
-      </defs>
-      
-      <g *ngFor="let edge of edges">
-        <path 
-          [attr.d]="getEdgePath(edge)"
-          stroke="#666"
-          stroke-width="2"
-          fill="none"
-          marker-end="url(#arrowhead)"
-          class="edge-path">
-        </path>
-      </g>
+      <path 
+        *ngFor="let edge of edges"
+        [attr.d]="getEdgePath(edge)"
+        class="edge"
+        stroke="#666"
+        stroke-width="2"
+        fill="none">
+      </path>
     </svg>
-    
+
     <!-- Nodes -->
-    <div class="nodes-layer">
-      <div 
-        *ngFor="let node of nodes"
-        class="workflow-node"
-        [class.selected]="selectedNode?.id === node.id"
-        [class.disabled]="!node.isEnabled"
-        [style.transform]="getNodeTransform(node)"
-        (click)="onNodeClick(node, $event)"
-        (dblclick)="onNodeDoubleClick(node, $event)"
-        (mousedown)="onNodeDragStart(node, $event)"
-        (mousemove)="onNodeDrag(node, $event)"
-        (mouseup)="onNodeDragEnd()"
-        (mouseleave)="onNodeDragEnd()">
-        
-        <!-- Node Header -->
-        <div class="node-header" [style.background-color]="getNodeColor(node)">
-          <div class="node-icon">
-            <mat-icon>{{ getNodeIcon(node) }}</mat-icon>
-          </div>
-          <div class="node-label">{{ node.label || node.type }}</div>
-          <div class="node-actions">
-            <button mat-icon-button (click)="removeNode(node.id); $event.stopPropagation()" 
-                    class="remove-button" matTooltip="Remove Node">
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
-        </div>
-        
-        <!-- Node Body -->
-        <div class="node-body">
-          <div class="node-description">{{ getNodeDescription(node) }}</div>
-          
-          <!-- Input Ports -->
-          <div class="input-ports">
-            <div *ngFor="let input of node.inputs" 
-                 class="input-port"
-                 [attr.data-input]="input.name">
-              <div class="port-dot"></div>
-              <span class="port-label">{{ input.name }}</span>
-            </div>
-          </div>
-          
-          <!-- Output Ports -->
-          <div class="output-ports">
-            <div *ngFor="let output of node.outputs" 
-                 class="output-port"
-                 [attr.data-output]="output.name">
-              <span class="port-label">{{ output.name }}</span>
-              <div class="port-dot"></div>
-            </div>
-          </div>
-        </div>
+    <div 
+      *ngFor="let node of nodes"
+      class="node"
+      [class.selected]="selectedNode?.id === node.id"
+      [style.transform]="getNodeTransform(node)"
+      (click)="onNodeClick(node, $event)"
+      (dblclick)="onNodeDoubleClick(node, $event)"
+      (mousedown)="onNodeDragStart(node, $event)"
+      (mousemove)="onNodeDrag(node, $event)"
+      (mouseup)="onNodeDragEnd()">
+      
+      <div class="node-header" [style.background-color]="getNodeColor(node)">
+        <span class="node-icon">{{ getNodeIcon(node) }}</span>
+        <span class="node-title">{{ node.label || node.type }}</span>
+        <button 
+          class="node-close"
+          (click)="removeNode(node.id); $event.stopPropagation()"
+          title="Remove Node">
+          <span class="icon">×</span>
+        </button>
       </div>
+      
+      <div class="node-description">{{ getNodeDescription(node) }}</div>
     </div>
   </div>
 </div>

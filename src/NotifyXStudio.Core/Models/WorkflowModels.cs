@@ -338,4 +338,50 @@ namespace NotifyXStudio.Core.Models
         Skipped,
         Timeout
     }
+
+    /// <summary>
+    /// Result of workflow validation.
+    /// </summary>
+    public class ValidationResult
+    {
+        public bool IsValid { get; init; }
+        public List<string> Errors { get; init; } = new();
+        public List<string> Warnings { get; init; } = new();
+        public Dictionary<string, object> Metadata { get; init; } = new();
+    }
+
+    /// <summary>
+    /// Execution plan for a workflow.
+    /// </summary>
+    public class ExecutionPlan
+    {
+        public string WorkflowId { get; init; } = string.Empty;
+        public List<ExecutionStep> Steps { get; init; } = new();
+        public Dictionary<string, object> Metadata { get; init; } = new();
+    }
+
+    /// <summary>
+    /// A step in the execution plan.
+    /// </summary>
+    public class ExecutionStep
+    {
+        public string NodeId { get; init; } = string.Empty;
+        public int Order { get; init; }
+        public List<string> Dependencies { get; init; } = new();
+        public Dictionary<string, object> Configuration { get; init; } = new();
+    }
+
+    /// <summary>
+    /// Result of a workflow run execution.
+    /// </summary>
+    public class WorkflowRunResult
+    {
+        public string RunId { get; init; } = string.Empty;
+        public RunStatus Status { get; init; }
+        public Dictionary<string, object>? Output { get; init; }
+        public string? ErrorMessage { get; init; }
+        public long DurationMs { get; init; }
+        public List<NodeExecutionResult> NodeResults { get; init; } = new();
+        public Dictionary<string, object> Metadata { get; init; } = new();
+    }
 }

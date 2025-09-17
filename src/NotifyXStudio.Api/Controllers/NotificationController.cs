@@ -34,12 +34,11 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var notificationId = await _notificationService.SendNotificationAsync(
-                    request.TenantId,
+                    request.Message,
+                    request.Message,
                     request.Channel,
                     request.Recipient,
-                    request.Message,
-                    request.Priority,
-                    request.Metadata);
+                    request.TenantId.ToString());
 
                 return Ok(new
                 {
@@ -110,10 +109,10 @@ namespace NotifyXStudio.Api.Controllers
                 var end = endDate ?? DateTime.UtcNow;
 
                 var notifications = await _notificationService.GetNotificationHistoryAsync(
-                    tenantId, channel, status, start, end, page, pageSize);
+                    tenantId?.ToString() ?? "default", channel, status, page, pageSize);
 
                 var totalCount = await _notificationService.GetNotificationCountAsync(
-                    tenantId, channel, status, start, end);
+                    tenantId?.ToString() ?? "default", channel, status);
 
                 return Ok(new
                 {
@@ -152,7 +151,7 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-30);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var stats = await _notificationService.GetNotificationStatsAsync(tenantId, start, end);
+                var stats = await _notificationService.GetNotificationStatsAsync(tenantId?.ToString() ?? "default");
 
                 return Ok(new
                 {

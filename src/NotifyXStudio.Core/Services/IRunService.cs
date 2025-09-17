@@ -60,12 +60,12 @@ namespace NotifyXStudio.Core.Services
         /// <summary>
         /// Updates a node execution result.
         /// </summary>
-        Task UpdateNodeResultAsync(NodeExecutionResult result);
+        System.Threading.Tasks.Task UpdateNodeResultAsync(NodeExecutionResult result);
 
         /// <summary>
         /// Updates a workflow run status.
         /// </summary>
-        Task UpdateRunStatusAsync(string runId, RunStatus status, string? errorMessage = null);
+        System.Threading.Tasks.Task UpdateRunStatusAsync(string runId, RunStatus status, string? errorMessage = null);
     }
 
     /// <summary>

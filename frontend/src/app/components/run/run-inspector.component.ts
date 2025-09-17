@@ -2,11 +2,20 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject, takeUntil, combineLatest } from 'rxjs';
 import { SignalRService, WorkflowRunUpdate, NodeExecutionUpdate, ExecutionProgressUpdate } from '../../services/signalr.service';
 import { WorkflowRun, NodeExecutionResult } from '../../models/node.model';
+import { HubConnectionState } from '@microsoft/signalr';
+import { TitleCasePipe, JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-run-inspector',
   templateUrl: './run-inspector.component.html',
-  styleUrls: ['./run-inspector.component.css']
+  styleUrls: ['./run-inspector.component.css'],
+  standalone: true,
+  imports: [
+    TitleCasePipe,
+    JsonPipe,
+    CommonModule
+  ]
 })
 export class RunInspectorComponent implements OnInit, OnDestroy {
   @Input() runId: string = '';
@@ -42,7 +51,7 @@ export class RunInspectorComponent implements OnInit, OnDestroy {
     this.signalRService.connectionState$
       .pipe(takeUntil(this.destroy$))
       .subscribe(state => {
-        this.isConnected = state === 1; // HubConnectionState.Connected
+        this.isConnected = state === HubConnectionState.Connected;
       });
 
     // Subscribe to run updates
@@ -88,8 +97,8 @@ export class RunInspectorComponent implements OnInit, OnDestroy {
     if (this.run) {
       this.run = {
         ...this.run,
-        status: update.status as any,
-        errorMessage: update.errorMessage
+        status: update['status'] as any,
+        errorMessage: update['errorMessage']
       };
     }
   }
@@ -98,10 +107,10 @@ export class RunInspectorComponent implements OnInit, OnDestroy {
     if (this.run) {
       this.run = {
         ...this.run,
-        status: update.status as any,
-        output: update.output,
+        status: update['status'] as any,
+        output: update['output'],
         endTime: new Date(),
-        durationMs: update.durationMs
+        durationMs: update['durationMs']
       };
     }
   }
@@ -111,7 +120,7 @@ export class RunInspectorComponent implements OnInit, OnDestroy {
       this.run = {
         ...this.run,
         status: 'failed' as any,
-        errorMessage: update.errorMessage,
+        errorMessage: update['errorMessage'],
         endTime: new Date()
       };
     }
@@ -212,7 +221,8 @@ export class RunInspectorComponent implements OnInit, OnDestroy {
     return Math.round((completedNodes / totalNodes) * 100);
   }
 
-  formatDuration(durationMs: number): string {
+  formatDuration(durationMs: number | undefined): string {
+    if (!durationMs) return '0ms';
     if (durationMs < 1000) {
       return `${durationMs}ms`;
     } else if (durationMs < 60000) {
@@ -250,5 +260,28 @@ export class RunInspectorComponent implements OnInit, OnDestroy {
     // Emit cancel event to parent component
     // This would typically call a service to cancel the run
     console.log('Cancel requested for run:', this.runId);
+  }
+
+  /**
+   * Toggles the output display for a node
+   */
+  toggleOutput(nodeId: string): void {
+    // This would typically toggle a state to show/hide output
+    console.log('Toggle output for node:', nodeId);
+  }
+
+  /**
+   * Checks if output is expanded for a node
+   */
+  isOutputExpanded(nodeId: string): boolean {
+    // This would typically check a state to see if output is expanded
+    return false;
+  }
+
+  /**
+   * Track by function for ngFor
+   */
+  trackByNodeId(index: number, result: NodeExecutionResult): string {
+    return result.nodeId;
   }
 }

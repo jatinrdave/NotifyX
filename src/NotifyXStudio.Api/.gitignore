@@ -1,0 +1,8 @@
+# ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+appsettings.Development.json
+appsettings.Local.json
+

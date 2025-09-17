@@ -34,12 +34,12 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var milestoneId = await _milestoneService.CreateMilestoneAsync(
-                    request.ProjectId,
                     request.Title,
                     request.Description,
-                    request.DueDate,
+                    request.DueDate?.ToString("yyyy-MM-dd"),
+                    request.ProjectId,
                     request.MilestoneType,
-                    request.Metadata);
+                    request.Metadata ?? new Dictionary<string, object>());
 
                 return Ok(new
                 {
@@ -104,8 +104,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var milestones = await _milestoneService.ListMilestonesAsync(projectId, milestoneType, status, page, pageSize);
-                var totalCount = await _milestoneService.GetMilestoneCountAsync(projectId, milestoneType, status);
+                var milestones = await _milestoneService.ListMilestonesAsync(projectId, status, page, pageSize);
+                var totalCount = await _milestoneService.GetMilestoneCountAsync(projectId);
 
                 return Ok(new
                 {

@@ -34,12 +34,11 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var permissionId = await _permissionService.CreatePermissionAsync(
-                    request.TenantId,
                     request.Name,
                     request.Description,
                     request.Resource,
                     request.Action,
-                    request.Metadata);
+                    request.TenantId.ToString());
 
                 return Ok(new
                 {
@@ -104,8 +103,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var permissions = await _permissionService.ListPermissionsAsync(tenantId, resource, action, page, pageSize);
-                var totalCount = await _permissionService.GetPermissionCountAsync(tenantId, resource, action);
+                var permissions = await _permissionService.ListPermissionsAsync(tenantId?.ToString(), resource, page, pageSize);
+                var totalCount = await _permissionService.GetPermissionCountAsync(tenantId?.ToString());
 
                 return Ok(new
                 {
@@ -150,8 +149,7 @@ namespace NotifyXStudio.Api.Controllers
                     request.Name,
                     request.Description,
                     request.Resource,
-                    request.Action,
-                    request.Metadata);
+                    request.Action);
 
                 return Ok(new
                 {
@@ -259,7 +257,7 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var matrix = await _permissionService.GetPermissionMatrixAsync(tenantId);
+                var matrix = await _permissionService.GetPermissionMatrixAsync(tenantId?.ToString());
 
                 return Ok(new
                 {

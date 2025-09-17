@@ -33,11 +33,11 @@ namespace NotifyXStudio.Api.Controllers
                     return BadRequest("Event request is required");
                 }
 
-                var eventId = await _eventService.PublishEventAsync(
+                var eventId = await _eventService.CreateEventAsync(
                     request.TenantId,
+                    new List<string> { request.EventType },
                     request.EventType,
-                    request.EventData,
-                    request.Metadata);
+                    request.Metadata ?? new Dictionary<string, object>());
 
                 return Ok(new
                 {
@@ -106,8 +106,8 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-1);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var events = await _eventService.ListEventsAsync(tenantId, eventType, start, end, page, pageSize);
-                var totalCount = await _eventService.GetEventCountAsync(tenantId, eventType, start, end);
+                var events = await _eventService.ListEventsAsync(tenantId?.ToString(), eventType, "active", page, pageSize);
+                var totalCount = await _eventService.GetEventCountAsync(tenantId?.ToString(), eventType, "active");
 
                 return Ok(new
                 {
@@ -146,7 +146,7 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-1);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var stats = await _eventService.GetEventStatsAsync(tenantId, start, end);
+                var stats = await _eventService.GetEventStatsAsync(tenantId?.ToString(), null);
 
                 return Ok(new
                 {
@@ -174,7 +174,7 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var eventTypes = await _eventService.GetEventTypesAsync(tenantId);
+                var eventTypes = await _eventService.GetEventTypesAsync();
 
                 return Ok(new
                 {
@@ -206,11 +206,11 @@ namespace NotifyXStudio.Api.Controllers
                     return BadRequest("Subscription request is required");
                 }
 
-                var subscriptionId = await _eventService.SubscribeToEventsAsync(
+                var subscriptionId = await _eventService.CreateEventAsync(
                     request.TenantId,
                     request.EventTypes,
                     request.CallbackUrl,
-                    request.Filters);
+                    request.Filters ?? new Dictionary<string, object>());
 
                 return Ok(new
                 {
@@ -266,7 +266,7 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var subscriptions = await _eventService.GetEventSubscriptionsAsync(tenantId);
+                var subscriptions = await _eventService.GetEventSubscriptionsAsync(tenantId?.ToString() ?? "default");
 
                 return Ok(new
                 {

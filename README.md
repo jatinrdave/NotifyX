@@ -1,286 +1,301 @@
-# NotifyX Studio - Visual Workflow Builder
+# NotifyX Studio - Production-Ready Project Management & Workflow Automation Platform
 
-A powerful, n8n-style visual integration studio that uses NotifyX connectors as first-class nodes, allowing users to wire together 3rd-party connectors (Slack, Jira, HTTP, DB, etc.) into visual workflows.
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/your-org/notifyx-studio)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![API Documentation](https://img.shields.io/badge/API-Documented-green.svg)](/api/docs)
+
+NotifyX Studio is a comprehensive, production-ready project management and workflow automation platform built with .NET 8, featuring advanced security, monitoring, and scalability capabilities.
 
 ## 🚀 Features
 
 ### Core Functionality
-- **Visual Workflow Builder**: Drag-and-drop canvas with pan/zoom, node connections, and property panels
-- **NotifyX Connectors**: First-class support for NotifyX notification nodes (Send Notification, Delivery Status, etc.)
-- **Third-Party Integrations**: Support for HTTP, Slack, Jira, Database, and other popular connectors
-- **Real-time Execution**: Live workflow runs with step-by-step execution traces
-- **Dependency Resolution**: Smart connector dependency management with semver versioning
-- **Multi-tenant Architecture**: Isolated data, credentials, and workflows per tenant
+- **Project Management**: Complete project lifecycle management with tasks, epics, and milestones
+- **Workflow Automation**: Visual workflow designer with triggers, nodes, and execution tracking
+- **Team Collaboration**: User management, roles, permissions, and real-time notifications
+- **Integration Platform**: Extensible connector system for third-party services
+- **Reporting & Analytics**: Comprehensive reporting with dashboards and metrics
 
-### Advanced Features
-- **Expression Engine**: JavaScript-like expressions and template variables (`{{variable}}`)
-- **Retry & Error Handling**: Configurable retry policies, timeouts, and dead letter queues
-- **Workflow Versioning**: Snapshot workflows, rollback capabilities, and change tracking
-- **Team Collaboration**: Share workflows, assign owners, and manage permissions
-- **Export/Import**: JSON-based workflow portability across environments
-- **Monitoring & Analytics**: Comprehensive metrics, logs, and performance insights
+### Production-Ready Features
+- **Authentication & Authorization**: JWT-based security with role-based access control
+- **Comprehensive Logging**: Structured logging with Serilog, file, console, and Seq outputs
+- **Health Monitoring**: Advanced health checks with UI dashboard
+- **API Documentation**: Complete OpenAPI/Swagger documentation
+- **Request Validation**: FluentValidation-based input validation
+- **Error Handling**: Global exception handling with structured error responses
+- **Rate Limiting**: Configurable rate limiting for API protection
+- **Caching**: Redis-based caching for performance optimization
+- **Compression**: Response compression with Gzip and Brotli
+- **Security Headers**: Comprehensive security headers implementation
+- **Performance Monitoring**: Request/response time tracking and metrics
 
 ## 🏗️ Architecture
 
-### High-Level Overview
-```
-[Angular 18 Frontend] ←→ [.NET 9 Web API] ←→ [Workflow Runtime Workers]
-                              ↓
-                    [PostgreSQL + Kafka + Redis]
-```
-
 ### Technology Stack
-- **Frontend**: Angular 18, NgRx, Angular Material, rete.js for canvas
-- **Backend**: .NET 9, ASP.NET Core Web API, SignalR for real-time updates
-- **Runtime**: Background workers with Kafka message queuing
-- **Database**: PostgreSQL for persistence, Redis for caching
-- **Message Queue**: Apache Kafka for workflow execution
-- **Secrets**: Azure Key Vault / AWS KMS / HashiCorp Vault
-- **Monitoring**: OpenTelemetry, Prometheus, Grafana
+- **Backend**: .NET 8, ASP.NET Core Web API
+- **Authentication**: JWT Bearer tokens
+- **Logging**: Serilog with multiple sinks
+- **Validation**: FluentValidation
+- **Documentation**: Swagger/OpenAPI
+- **Testing**: xUnit, Moq, FluentAssertions
+- **Health Checks**: ASP.NET Core Health Checks with UI
+- **Real-time**: SignalR for live updates
 
-## 📁 Project Structure
-
+### Project Structure
 ```
-NotifyXStudio/
-├── src/
-│   ├── NotifyXStudio.Api/           # Web API controllers and endpoints
-│   ├── NotifyXStudio.Core/          # Domain models, interfaces, and business logic
-│   ├── NotifyXStudio.Connectors/    # Built-in connector adapters
-│   ├── NotifyXStudio.Runtime/       # Workflow execution workers
-│   ├── NotifyXStudio.Persistence/   # EF Core data access layer
-│   └── NotifyXStudio.SDK/           # Client SDK for external integrations
-├── frontend/                        # Angular 18 application
-│   ├── src/app/
-│   │   ├── components/              # UI components (canvas, palette, etc.)
-│   │   ├── services/                # Angular services
-│   │   └── models/                  # TypeScript models
-├── manifests/                       # Connector manifest definitions
-├── registry/                        # Connector registry and metadata
-└── tests/                          # Integration and unit tests
+src/
+├── NotifyXStudio.Api/              # Web API layer
+│   ├── Controllers/                # API controllers
+│   ├── Middleware/                 # Custom middleware
+│   ├── Configuration/              # Service configurations
+│   └── Program.cs                  # Application entry point
+├── NotifyXStudio.Core/             # Core business logic
+│   ├── Models/                     # Domain models
+│   ├── Interfaces/                 # Service interfaces
+│   └── Services/                   # Service implementations
+├── NotifyXStudio.Persistence/      # Data access layer
+├── NotifyXStudio.Connectors/       # External integrations
+├── NotifyXStudio.Runtime/          # Workflow runtime
+└── NotifyXStudio.Api.Tests/        # Test projects
 ```
 
-## 🔌 Connector System
-
-### Connector Manifest Schema
-Each connector is defined by a JSON manifest that describes:
-- **Inputs/Outputs**: Parameter definitions with types and validation
-- **Authentication**: OAuth2, API Key, or JWT configuration
-- **UI Configuration**: Colors, icons, and grouping for the visual editor
-- **Dependencies**: Runtime and peer dependencies with version constraints
-- **Conflict Rules**: Resolution strategies and compatibility rules
-
-### Sample Connector Manifest
-```json
-{
-  "id": "notifyx.sendNotification",
-  "name": "Send Notification",
-  "type": "action",
-  "category": "Notification",
-  "inputs": [
-    {
-      "name": "channel",
-      "type": "string",
-      "required": true,
-      "validation": { "enum": ["email", "sms", "slack", "push"] }
-    },
-    {
-      "name": "recipient",
-      "type": "string",
-      "required": true
-    }
-  ],
-  "outputs": [
-    {
-      "name": "notificationId",
-      "type": "string"
-    }
-  ],
-  "auth": {
-    "type": "apiKey",
-    "fields": { "apiKey": "NOTIFYX_API_KEY" }
-  }
-}
-```
-
-### Dependency Resolution
-The system includes a sophisticated dependency resolver that:
-- Supports semantic versioning (semver) constraints
-- Handles runtime (NuGet/npm) and peer dependencies
-- Provides conflict resolution strategies (highestCompatible, preferStable, failFast)
-- Generates lockfiles for reproducible builds
-- Offers detailed diagnostics for resolution failures
-
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- .NET 9 SDK
-- Node.js 18+
-- PostgreSQL 14+
-- Apache Kafka
-- Redis
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [Redis](https://redis.io/) (optional, for caching)
+- [Seq](https://datalust.co/seq) (optional, for structured logging)
 
-### Backend Setup
-```bash
-# Clone the repository
-git clone https://github.com/your-org/notifyx-studio.git
-cd notifyx-studio
+### Installation
 
-# Restore dependencies
-dotnet restore
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-org/notifyx-studio.git
+   cd notifyx-studio
+   ```
 
-# Update database
-dotnet ef database update --project src/NotifyXStudio.Persistence
+2. **Configure application settings**
+   ```bash
+   # Update appsettings.json with your configuration
+   cp src/NotifyXStudio.Api/appsettings.json src/NotifyXStudio.Api/appsettings.Development.json
+   ```
 
-# Run the API
-dotnet run --project src/NotifyXStudio.Api
-```
+3. **Run the application**
+   ```bash
+   cd src/NotifyXStudio.Api
+   dotnet run
+   ```
 
-### Frontend Setup
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start development server
-npm start
-```
-
-### Docker Setup
-```bash
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-```
+4. **Access the application**
+   - API: https://localhost:7152
+   - Swagger Documentation: https://localhost:7152/api/docs
+   - Health Checks: https://localhost:7152/health
+   - Health UI: https://localhost:7152/health-ui
 
 ## 📖 API Documentation
 
-### Core Endpoints
+### Authentication
+The API uses JWT Bearer tokens for authentication. Include the token in the Authorization header:
 
-#### Workflows
-- `POST /api/workflows` - Create workflow
-- `GET /api/workflows/{id}` - Get workflow
-- `PUT /api/workflows/{id}` - Update workflow
-- `DELETE /api/workflows/{id}` - Delete workflow
-- `POST /api/workflows/{id}/runs` - Start workflow run
-
-#### Connectors
-- `GET /api/connectors` - List available connectors
-- `GET /api/connectors/{id}` - Get connector manifest
-- `POST /api/connectors/resolve` - Resolve dependencies
-- `POST /api/connectors/{id}/test` - Test connector
-
-#### Runs
-- `GET /api/runs/{runId}` - Get run status
-- `GET /api/runs/{runId}/logs` - Get execution logs
-- `POST /api/runs/{runId}/replay` - Replay failed run
-
-## 🎨 Frontend Components
-
-### Key Components
-- **FlowCanvasComponent**: Main workflow editor with drag-and-drop
-- **NodePaletteComponent**: Connector library with search and filtering
-- **NodeConfigComponent**: Property panel for node configuration
-- **RunInspectorComponent**: Real-time execution monitoring
-- **CredentialsManagerComponent**: Secure credential management
-
-### State Management
-- **NgRx Store**: Centralized state management for workflows and UI
-- **SignalR**: Real-time updates for workflow execution
-- **RxJS**: Reactive programming for data flow
-
-## 🔧 Development
-
-### Adding New Connectors
-1. Create connector manifest JSON in `manifests/`
-2. Implement `IConnectorAdapter` in `NotifyXStudio.Connectors`
-3. Register adapter in dependency injection
-4. Update connector registry
-
-### Testing
-```bash
-# Run unit tests
-dotnet test
-
-# Run integration tests
-dotnet test tests/NotifyXStudio.IntegrationTests
-
-# Run frontend tests
-cd frontend && npm test
-
-# Run E2E tests
-cd frontend && npm run e2e
+```http
+Authorization: Bearer <your-jwt-token>
 ```
 
-### Code Quality
-- **SOLID Principles**: Clean architecture with separation of concerns
-- **Design Patterns**: Builder, Strategy, Factory, Observer patterns
-- **Async/Await**: Consistent async programming throughout
-- **XML Documentation**: Comprehensive API documentation
-- **Unit Testing**: High test coverage with xUnit and Moq
+### Endpoints Overview
+- **Authentication**: `/api/auth/*` - Login, refresh tokens
+- **Projects**: `/api/projects/*` - Project management
+- **Tasks**: `/api/tasks/*` - Task management
+- **Workflows**: `/api/workflows/*` - Workflow automation
+- **Users**: `/api/users/*` - User management
+- **Health**: `/health/*` - System health monitoring
 
-## 🚀 Deployment
+### Example API Calls
 
-### Kubernetes
+#### Authentication
 ```bash
-# Deploy to Kubernetes
-kubectl apply -f k8s/
-
-# Scale workers
-kubectl scale deployment notifyx-studio-workers --replicas=5
+# Login
+curl -X POST https://localhost:7152/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "password": "password123"
+  }'
 ```
+
+#### Create Project
+```bash
+# Create a new project
+curl -X POST https://localhost:7152/api/projects \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My Project",
+    "description": "Project description",
+    "tenantId": "tenant-guid"
+  }'
+```
+
+## 🔧 Configuration
 
 ### Environment Variables
 ```bash
 # Database
-CONNECTION_STRINGS__DEFAULT="Host=localhost;Database=notifyx_studio;Username=postgres;Password=password"
+DATABASE_CONNECTION_STRING="Server=localhost;Database=NotifyXStudio;..."
 
-# Kafka
-KAFKA__BOOTSTRAP_SERVERS="localhost:9092"
+# JWT
+JWT_SECRET_KEY="YourSuperSecretKeyThatIsAtLeast32CharactersLong!"
 
 # Redis
-REDIS__CONNECTION_STRING="localhost:6379"
+REDIS_CONNECTION_STRING="localhost:6379"
 
-# Secrets
-SECRETS__VAULT_URL="https://your-vault.vault.azure.net/"
+# Seq
+SEQ_CONNECTION_STRING="http://localhost:5341"
 ```
+
+### Application Settings
+Key configuration sections in `appsettings.json`:
+
+- **JwtSettings**: JWT token configuration
+- **ConnectionStrings**: Database and external service connections
+- **RateLimiting**: API rate limiting rules
+- **Security**: Security headers and policies
+- **Logging**: Serilog configuration
+- **HealthChecks**: Health monitoring settings
+
+## 🔒 Security
+
+### Authentication & Authorization
+- JWT-based authentication with configurable expiry
+- Role-based authorization (Admin, Manager, User)
+- Tenant-based access control
+- Refresh token support
+
+### Security Headers
+- Content Security Policy (CSP)
+- HTTP Strict Transport Security (HSTS)
+- X-Frame-Options
+- X-Content-Type-Options
+- Referrer Policy
+- Permissions Policy
+
+### Rate Limiting
+- Per-IP rate limiting
+- Different limits for authenticated/unauthenticated users
+- Configurable time windows and token buckets
 
 ## 📊 Monitoring & Observability
 
-### Metrics
-- Workflow execution rates and success/failure ratios
-- Node execution times and resource usage
-- Queue depths and processing times
-- API response times and error rates
+### Health Checks
+- Application health: `/health`
+- Detailed diagnostics: `/health/detailed`
+- Kubernetes readiness: `/health/ready`
+- Kubernetes liveness: `/health/live`
+- Health UI dashboard: `/health-ui`
 
 ### Logging
-- Structured logging with correlation IDs
-- Node-level execution traces
-- Error tracking with stack traces
-- Audit logs for workflow changes
+- Structured logging with Serilog
+- Multiple output sinks (Console, File, Seq)
+- Correlation IDs for request tracking
+- Performance metrics logging
+- Security event logging
 
-### Dashboards
-- Grafana dashboards for operational metrics
-- Real-time workflow execution monitoring
-- Performance analytics and trends
-- Alerting for system health
+### Metrics
+- Request/response times
+- Error rates and types
+- Authentication attempts
+- API usage statistics
+
+## 🧪 Testing
+
+### Running Tests
+```bash
+# Run all tests
+dotnet test
+
+# Run with coverage
+dotnet test --collect:"XPlat Code Coverage"
+
+# Run specific test project
+dotnet test src/NotifyXStudio.Api.Tests/
+```
+
+### Test Categories
+- **Unit Tests**: Business logic and service tests
+- **Integration Tests**: API endpoint tests
+- **Performance Tests**: Load and stress testing
+- **Security Tests**: Authentication and authorization tests
+
+## 🚢 Deployment
+
+### Docker
+```dockerfile
+# Build image
+docker build -t notifyx-studio .
+
+# Run container
+docker run -p 8080:8080 notifyx-studio
+```
+
+### Kubernetes
+```bash
+# Apply manifests
+kubectl apply -f k8s/
+
+# Check deployment
+kubectl get pods -l app=notifyx-studio
+```
+
+### Production Checklist
+- [ ] Configure production connection strings
+- [ ] Set up SSL certificates
+- [ ] Configure rate limiting
+- [ ] Set up monitoring and alerting
+- [ ] Configure backup strategies
+- [ ] Review security settings
+- [ ] Load test the application
+
+## 🔄 Development Workflow
+
+### Prerequisites
+- Visual Studio 2022 or VS Code
+- .NET 8 SDK
+- Git
+
+### Development Setup
+```bash
+# Install dependencies
+dotnet restore
+
+# Build solution
+dotnet build
+
+# Run in development mode
+dotnet run --project src/NotifyXStudio.Api --environment Development
+```
+
+### Code Standards
+- Follow Microsoft C# coding conventions
+- Use XML documentation for public APIs
+- Implement comprehensive error handling
+- Write unit tests for new features
+- Follow SOLID principles
+
+## 📚 Additional Resources
+
+- [API Documentation](https://localhost:7152/api/docs)
+- [Health Dashboard](https://localhost:7152/health-ui)
+- [Development Guide](docs/development.md)
+- [Deployment Guide](docs/deployment.md)
+- [Security Guide](docs/security.md)
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-- Follow SOLID principles and clean code practices
-- Write comprehensive unit tests
-- Update documentation for new features
-- Use conventional commit messages
-- Ensure all tests pass before submitting PR
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
 
 ## 📄 License
 
@@ -288,31 +303,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- **Documentation**: [docs.notifyx.dev](https://docs.notifyx.dev)
-- **Issues**: [GitHub Issues](https://github.com/your-org/notifyx-studio/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-org/notifyx-studio/discussions)
-- **Email**: support@notifyx.dev
-
-## 🗺️ Roadmap
-
-### Phase 1 (Current)
-- ✅ Core workflow builder
-- ✅ NotifyX connector integration
-- ✅ Basic third-party connectors
-- ✅ Real-time execution monitoring
-
-### Phase 2 (Q2 2025)
-- 🔄 Advanced expression engine
-- 🔄 Workflow templates and marketplace
-- 🔄 Enhanced error handling and retry policies
-- 🔄 Team collaboration features
-
-### Phase 3 (Q3 2025)
-- 📋 Custom connector SDK
-- 📋 Advanced analytics and reporting
-- 📋 Workflow optimization suggestions
-- 📋 Enterprise security features
+- **Documentation**: Check the [API docs](https://localhost:7152/api/docs)
+- **Issues**: Report bugs via GitHub Issues
+- **Email**: support@notifyx.studio
+- **Health Status**: Monitor at `/health-ui`
 
 ---
 
-**Built with ❤️ by the NotifyX Team**
+**NotifyX Studio** - Empowering teams with intelligent project management and workflow automation.

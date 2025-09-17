@@ -69,22 +69,24 @@ namespace NotifyXStudio.Runtime.Services
                 _logger.LogInformation("Workflow execution completed for run {RunId} in {Duration}ms with status {Status}", 
                     runId, duration, result.Status);
 
-                return result with
+                return new NotifyXStudio.Core.Models.WorkflowRunResult
                 {
-                    StartTime = startTime,
-                    EndTime = endTime,
-                    DurationMs = (long)duration
+                    RunId = result.RunId,
+                    Status = result.Status,
+                    Output = result.Output,
+                    ErrorMessage = result.ErrorMessage,
+                    DurationMs = (long)duration,
+                    NodeResults = result.NodeResults,
+                    Metadata = result.Metadata
                 };
             }
             catch (OperationCanceledException)
             {
                 _logger.LogInformation("Workflow execution cancelled for run {RunId}", runId);
-                return new WorkflowRunResult
+                return new NotifyXStudio.Core.Models.WorkflowRunResult
                 {
                     RunId = runId,
                     Status = RunStatus.Cancelled,
-                    StartTime = startTime,
-                    EndTime = DateTime.UtcNow,
                     DurationMs = (long)(DateTime.UtcNow - startTime).TotalMilliseconds
                 };
             }
@@ -95,13 +97,11 @@ namespace NotifyXStudio.Runtime.Services
 
                 _logger.LogError(ex, "Workflow execution failed for run {RunId} after {Duration}ms", runId, duration);
 
-                return new WorkflowRunResult
+                return new NotifyXStudio.Core.Models.WorkflowRunResult
                 {
                     RunId = runId,
                     Status = RunStatus.Failed,
                     ErrorMessage = ex.Message,
-                    StartTime = startTime,
-                    EndTime = endTime,
                     DurationMs = (long)duration
                 };
             }
@@ -202,7 +202,7 @@ namespace NotifyXStudio.Runtime.Services
             }
         }
 
-        public async Task<ValidationResult> ValidateWorkflowAsync(Workflow workflow)
+        public async Task<NotifyXStudio.Core.Models.ValidationResult> ValidateWorkflowAsync(Workflow workflow)
         {
             var errors = new List<string>();
             var warnings = new List<string>();
@@ -244,7 +244,7 @@ namespace NotifyXStudio.Runtime.Services
                 warnings.AddRange(nodeValidation.Warnings);
             }
 
-            return new ValidationResult
+            return new NotifyXStudio.Core.Models.ValidationResult
             {
                 IsValid = errors.Count == 0,
                 Errors = errors,
@@ -353,7 +353,7 @@ namespace NotifyXStudio.Runtime.Services
                 // Check for failures
                 if (nodeResult.Status == ExecutionStatus.Failed)
                 {
-                    return new WorkflowRunResult
+                    return new NotifyXStudio.Core.Models.WorkflowRunResult
                     {
                         RunId = run.Id,
                         Status = RunStatus.Failed,
@@ -465,7 +465,7 @@ namespace NotifyXStudio.Runtime.Services
                     delay = Math.Min(delay * (int)retryConfig.Multiplier, retryConfig.MaxDelayMs);
                 }
 
-                await Task.Delay(delay, cancellationToken);
+                await System.Threading.Tasks.Task.Delay(delay, cancellationToken);
             }
 
             return new ConnectorExecutionResult
@@ -475,7 +475,7 @@ namespace NotifyXStudio.Runtime.Services
             };
         }
 
-        private async Task<ValidationResult> ValidateNodeAsync(WorkflowNode node)
+        private async Task<NotifyXStudio.Core.Models.ValidationResult> ValidateNodeAsync(WorkflowNode node)
         {
             var errors = new List<string>();
             var warnings = new List<string>();
@@ -494,7 +494,7 @@ namespace NotifyXStudio.Runtime.Services
                 // Implementation depends on credential service
             }
 
-            return new ValidationResult
+            return new NotifyXStudio.Core.Models.ValidationResult
             {
                 IsValid = errors.Count == 0,
                 Errors = errors,

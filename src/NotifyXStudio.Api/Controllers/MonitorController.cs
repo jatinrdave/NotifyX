@@ -61,7 +61,7 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddHours(-1);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var metrics = await _monitorService.GetMonitoringMetricsAsync(start, end, metricType);
+                var metrics = await _monitorService.GetMonitoringMetricsAsync(null, metricType);
 
                 return Ok(new
                 {
@@ -178,7 +178,7 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-7);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var reports = await _monitorService.GetMonitoringReportsAsync(start, end, reportType);
+                var reports = await _monitorService.GetMonitoringReportsAsync(null, reportType);
 
                 return Ok(new
                 {
@@ -211,10 +211,9 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var reportId = await _monitorService.GenerateMonitoringReportAsync(
+                    null,
                     request.StartDate,
-                    request.EndDate,
-                    request.ReportType,
-                    request.Parameters);
+                    request.EndDate);
 
                 return Ok(new
                 {

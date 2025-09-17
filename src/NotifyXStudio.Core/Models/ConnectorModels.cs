@@ -144,6 +144,14 @@ namespace NotifyXStudio.Core.Models
 
         /// <summary>List of available connectors.</summary>
         public List<ConnectorRegistryEntry> Connectors { get; init; } = new();
+
+        /// <summary>
+        /// Gets all connectors in the registry.
+        /// </summary>
+        public List<ConnectorRegistryEntry> GetAllConnectors()
+        {
+            return Connectors;
+        }
     }
 
     /// <summary>
@@ -335,5 +343,23 @@ namespace NotifyXStudio.Core.Models
         HighestCompatible,
         PreferStable,
         FailFast
+    }
+
+    /// <summary>
+    /// Specification for a dependency requirement.
+    /// </summary>
+    public class DependencySpec
+    {
+        /// <summary>Connector identifier.</summary>
+        public string Id { get; init; } = string.Empty;
+
+        /// <summary>Version range requirement.</summary>
+        public string VersionRange { get; init; } = string.Empty;
+
+        /// <summary>Whether this is a required dependency.</summary>
+        public bool Required { get; init; } = true;
+
+        /// <summary>Dependency source (registry, local, etc.).</summary>
+        public string Source { get; init; } = "registry";
     }
 }

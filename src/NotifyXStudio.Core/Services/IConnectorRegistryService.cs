@@ -41,17 +41,17 @@ namespace NotifyXStudio.Core.Services
         /// <summary>
         /// Refreshes the registry from remote sources.
         /// </summary>
-        Task RefreshRegistryAsync();
+        System.Threading.Tasks.Task RefreshRegistryAsync();
 
         /// <summary>
         /// Adds a custom connector to the registry.
         /// </summary>
-        Task AddCustomConnectorAsync(ConnectorManifest manifest, string tenantId);
+        System.Threading.Tasks.Task AddCustomConnectorAsync(ConnectorManifest manifest, string tenantId);
 
         /// <summary>
         /// Removes a custom connector from the registry.
         /// </summary>
-        Task RemoveCustomConnectorAsync(string connectorId, string tenantId);
+        System.Threading.Tasks.Task RemoveCustomConnectorAsync(string connectorId, string tenantId);
 
         /// <summary>
         /// Gets custom connectors for a tenant.

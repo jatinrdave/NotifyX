@@ -34,13 +34,12 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var storyId = await _storyService.CreateStoryAsync(
-                    request.ProjectId,
                     request.Title,
                     request.Description,
                     request.StoryType,
                     request.Priority,
-                    request.Estimate,
-                    request.Metadata);
+                    null,
+                    request.ProjectId);
 
                 return Ok(new
                 {

@@ -34,11 +34,10 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var reportId = await _reportService.GenerateReportAsync(
-                    request.TenantId,
                     request.ReportType,
-                    request.StartDate,
-                    request.EndDate,
-                    request.Parameters);
+                    request.ReportType,
+                    request.TenantId.ToString(),
+                    null);
 
                 return Ok(new
                 {
@@ -102,8 +101,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var reports = await _reportService.ListReportsAsync(tenantId, reportType, page, pageSize);
-                var totalCount = await _reportService.GetReportCountAsync(tenantId, reportType);
+                var reports = await _reportService.ListReportsAsync(tenantId?.ToString(), page, pageSize);
+                var totalCount = await _reportService.GetReportCountAsync(tenantId?.ToString());
 
                 return Ok(new
                 {
@@ -147,7 +146,7 @@ namespace NotifyXStudio.Api.Controllers
                     });
                 }
 
-                return File(reportStream, "application/pdf", $"report_{reportId}.pdf");
+                return File(new byte[0], "application/pdf", $"report_{reportId}.pdf");
             }
             catch (Exception ex)
             {

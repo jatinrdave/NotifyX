@@ -3,11 +3,15 @@ import { WorkflowService } from '../../services/workflow.service';
 import { ConnectorService } from '../../services/connector.service';
 import { NodeModel, EdgeModel } from '../../models/node.model';
 import { Subject, takeUntil } from 'rxjs';
+import { DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-flow-canvas',
   templateUrl: './flow-canvas.component.html',
-  styleUrls: ['./flow-canvas.component.css']
+  styleUrls: ['./flow-canvas.component.css'],
+  standalone: true,
+  imports: [DecimalPipe, CommonModule]
 })
 export class FlowCanvasComponent implements OnInit, OnDestroy {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLElement>;
@@ -280,5 +284,71 @@ export class FlowCanvasComponent implements OnInit, OnDestroy {
    */
   getNodeTransform(node: NodeModel): string {
     return `translate(${node.position.x}px, ${node.position.y}px)`;
+  }
+
+  /**
+   * Gets the path for an edge
+   */
+  getEdgePath(edge: EdgeModel): string {
+    const fromNode = this.nodes.find(n => n.id === edge.from);
+    const toNode = this.nodes.find(n => n.id === edge.to);
+    
+    if (!fromNode || !toNode) return '';
+    
+    const fromX = fromNode.position.x + 100; // Node width / 2
+    const fromY = fromNode.position.y + 50;  // Node height / 2
+    const toX = toNode.position.x + 100;
+    const toY = toNode.position.y + 50;
+    
+    return `M ${fromX} ${fromY} L ${toX} ${toY}`;
+  }
+
+  /**
+   * Gets the color for a node
+   */
+  getNodeColor(node: NodeModel): string {
+    const typeColors: Record<string, string> = {
+      'trigger': '#4CAF50',
+      'action': '#2196F3',
+      'transform': '#FF9800',
+      'condition': '#9C27B0',
+      'notifyx': '#E91E63',
+      'http': '#607D8B',
+      'slack': '#4A148C',
+      'email': '#795548',
+      'sms': '#3F51B5',
+      'database': '#009688',
+      'webhook': '#FF5722'
+    };
+    
+    return typeColors[node.type] || '#757575';
+  }
+
+  /**
+   * Gets the icon for a node
+   */
+  getNodeIcon(node: NodeModel): string {
+    const typeIcons: Record<string, string> = {
+      'trigger': 'play_arrow',
+      'action': 'play_circle',
+      'transform': 'transform',
+      'condition': 'help_outline',
+      'notifyx': 'notifications',
+      'http': 'http',
+      'slack': 'chat',
+      'email': 'email',
+      'sms': 'sms',
+      'database': 'storage',
+      'webhook': 'webhook'
+    };
+    
+    return typeIcons[node.type] || 'extension';
+  }
+
+  /**
+   * Gets the description for a node
+   */
+  getNodeDescription(node: NodeModel): string {
+    return (node as any).description || `${node.type} node`;
   }
 }

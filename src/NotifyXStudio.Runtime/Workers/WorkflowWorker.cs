@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotifyXStudio.Core.Models;
+using NotifyXStudio.Core.Interfaces;
 using NotifyXStudio.Runtime.Services;
 
 namespace NotifyXStudio.Runtime.Workers
@@ -36,7 +37,7 @@ namespace NotifyXStudio.Runtime.Workers
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async System.Threading.Tasks.Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Workflow worker starting...");
 
@@ -58,12 +59,12 @@ namespace NotifyXStudio.Runtime.Workers
                     catch (ConsumeException ex)
                     {
                         _logger.LogError(ex, "Error consuming message from Kafka");
-                        await Task.Delay(1000, stoppingToken); // Brief delay before retry
+                        await System.Threading.Tasks.Task.Delay(1000, stoppingToken); // Brief delay before retry
                     }
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Unexpected error in workflow worker");
-                        await Task.Delay(5000, stoppingToken); // Longer delay for unexpected errors
+                        await System.Threading.Tasks.Task.Delay(5000, stoppingToken); // Longer delay for unexpected errors
                     }
                 }
             }
@@ -78,7 +79,7 @@ namespace NotifyXStudio.Runtime.Workers
             }
         }
 
-        private async Task ProcessWorkflowRunAsync(string messageValue, CancellationToken cancellationToken)
+        private async System.Threading.Tasks.Task ProcessWorkflowRunAsync(string messageValue, CancellationToken cancellationToken)
         {
             try
             {
@@ -134,7 +135,7 @@ namespace NotifyXStudio.Runtime.Workers
             }
         }
 
-        private async Task UpdateRunWithResultsAsync(WorkflowRun run, WorkflowRunResult result)
+        private async System.Threading.Tasks.Task UpdateRunWithResultsAsync(WorkflowRun run, WorkflowRunResult result)
         {
             try
             {
@@ -144,7 +145,7 @@ namespace NotifyXStudio.Runtime.Workers
                 // Update node results
                 foreach (var nodeResult in result.NodeResults)
                 {
-                    await _runService.UpdateNodeResultAsync(nodeResult);
+                    await _runService.UpdateNodeResultAsync(run.Id, nodeResult);
                 }
 
                 // Update final run output if successful

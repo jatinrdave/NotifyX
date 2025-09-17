@@ -24,7 +24,7 @@ namespace NotifyXStudio.Api.Controllers
         /// Creates a workflow.
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> CreateWorkflow([FromBody] CreateWorkflowRequest request)
+        public async Task<IActionResult> CreateWorkflow([FromBody] CreateWorkflowRequestModel request)
         {
             try
             {
@@ -104,8 +104,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var workflows = await _workflowService.ListWorkflowsAsync(projectId, workflowType, status, page, pageSize);
-                var totalCount = await _workflowService.GetWorkflowCountAsync(projectId, workflowType, status);
+                var workflows = await _workflowService.ListWorkflowsAsync(projectId, status, workflowType, page, pageSize);
+                var totalCount = await _workflowService.GetWorkflowCountAsync(projectId);
 
                 return Ok(new
                 {
@@ -136,7 +136,7 @@ namespace NotifyXStudio.Api.Controllers
         [HttpPut("{workflowId}")]
         public async Task<IActionResult> UpdateWorkflow(
             string workflowId,
-            [FromBody] UpdateWorkflowRequest request)
+            [FromBody] UpdateWorkflowRequestModel request)
         {
             try
             {
@@ -149,10 +149,8 @@ namespace NotifyXStudio.Api.Controllers
                     workflowId,
                     request.Title,
                     request.Description,
-                    request.WorkflowType,
-                    request.Priority,
                     request.Status,
-                    request.Metadata);
+                    request.WorkflowType);
 
                 return Ok(new
                 {
@@ -311,7 +309,7 @@ namespace NotifyXStudio.Api.Controllers
     /// <summary>
     /// Create workflow request model.
     /// </summary>
-    public class CreateWorkflowRequest
+    public class CreateWorkflowRequestModel
     {
         /// <summary>
         /// Project ID.
@@ -347,7 +345,7 @@ namespace NotifyXStudio.Api.Controllers
     /// <summary>
     /// Update workflow request model.
     /// </summary>
-    public class UpdateWorkflowRequest
+    public class UpdateWorkflowRequestModel
     {
         /// <summary>
         /// Workflow title.

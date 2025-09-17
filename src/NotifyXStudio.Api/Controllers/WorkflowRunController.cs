@@ -36,8 +36,7 @@ namespace NotifyXStudio.Api.Controllers
                 var workflowRunId = await _workflowRunService.CreateWorkflowRunAsync(
                     request.WorkflowId,
                     request.RunType,
-                    request.Priority,
-                    request.Metadata);
+                    request.Priority);
 
                 return Ok(new
                 {
@@ -102,8 +101,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var workflowRuns = await _workflowRunService.ListWorkflowRunsAsync(workflowId, runType, status, page, pageSize);
-                var totalCount = await _workflowRunService.GetWorkflowRunCountAsync(workflowId, runType, status);
+                var workflowRuns = await _workflowRunService.ListWorkflowRunsAsync(workflowId, status, page, pageSize);
+                var totalCount = await _workflowRunService.GetWorkflowRunCountAsync(workflowId, status);
 
                 return Ok(new
                 {
@@ -148,7 +147,7 @@ namespace NotifyXStudio.Api.Controllers
                     request.RunType,
                     request.Priority,
                     request.Status,
-                    request.Metadata);
+                    request.Metadata ?? new Dictionary<string, object>());
 
                 return Ok(new
                 {

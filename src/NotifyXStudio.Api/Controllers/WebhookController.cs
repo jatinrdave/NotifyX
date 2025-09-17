@@ -102,8 +102,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var webhooks = await _webhookService.ListWebhooksAsync(tenantId, page, pageSize);
-                var totalCount = await _webhookService.GetWebhookCountAsync(tenantId);
+                var webhooks = await _webhookService.ListWebhooksAsync(tenantId?.ToString(), page, pageSize);
+                var totalCount = await _webhookService.GetWebhookCountAsync(tenantId?.ToString());
 
                 return Ok(new
                 {
@@ -242,8 +242,8 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-30);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var logs = await _webhookService.GetWebhookLogsAsync(webhookId, start, end, page, pageSize);
-                var totalCount = await _webhookService.GetWebhookLogCountAsync(webhookId, start, end);
+                var logs = await _webhookService.GetWebhookLogsAsync(webhookId, page, pageSize);
+                var totalCount = await _webhookService.GetWebhookLogCountAsync(webhookId);
 
                 return Ok(new
                 {

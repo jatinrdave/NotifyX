@@ -36,10 +36,7 @@ namespace NotifyXStudio.Api.Controllers
                 var workflowExecutionId = await _workflowExecutionService.CreateWorkflowExecutionAsync(
                     request.WorkflowId,
                     request.ExecutionType,
-                    request.ExecutionConfig,
-                    request.ExecutionName,
-                    request.ExecutionDescription,
-                    request.Metadata);
+                    request.Metadata ?? new Dictionary<string, object>());
 
                 return Ok(new
                 {
@@ -104,8 +101,8 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var workflowExecutions = await _workflowExecutionService.ListWorkflowExecutionsAsync(workflowId, executionType, status, page, pageSize);
-                var totalCount = await _workflowExecutionService.GetWorkflowExecutionCountAsync(workflowId, executionType, status);
+                var workflowExecutions = await _workflowExecutionService.ListWorkflowExecutionsAsync(workflowId, status, page, pageSize);
+                var totalCount = await _workflowExecutionService.GetWorkflowExecutionCountAsync(workflowId);
 
                 return Ok(new
                 {
@@ -147,12 +144,11 @@ namespace NotifyXStudio.Api.Controllers
 
                 await _workflowExecutionService.UpdateWorkflowExecutionAsync(
                     workflowExecutionId,
-                    request.ExecutionType,
-                    request.ExecutionConfig,
-                    request.ExecutionName,
-                    request.ExecutionDescription,
                     request.Status,
-                    request.Metadata);
+                    null,
+                    null,
+                    null,
+                    request.Metadata ?? new Dictionary<string, object>());
 
                 return Ok(new
                 {

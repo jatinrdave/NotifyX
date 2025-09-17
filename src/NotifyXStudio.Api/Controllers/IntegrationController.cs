@@ -34,11 +34,11 @@ namespace NotifyXStudio.Api.Controllers
                 }
 
                 var integrationId = await _integrationService.CreateIntegrationAsync(
-                    request.TenantId,
                     request.Name,
+                    null,
                     request.Type,
-                    request.Configuration,
-                    request.Metadata);
+                    null,
+                    request.TenantId.ToString());
 
                 return Ok(new
                 {
@@ -146,8 +146,9 @@ namespace NotifyXStudio.Api.Controllers
                 await _integrationService.UpdateIntegrationAsync(
                     integrationId,
                     request.Name,
-                    request.Configuration,
-                    request.Metadata);
+                    null,
+                    null,
+                    null);
 
                 return Ok(new
                 {
@@ -240,8 +241,8 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-30);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var logs = await _integrationService.GetIntegrationLogsAsync(integrationId, start, end, page, pageSize);
-                var totalCount = await _integrationService.GetIntegrationLogCountAsync(integrationId, start, end);
+                var logs = await _integrationService.GetIntegrationLogsAsync(integrationId, "info", page, pageSize);
+                var totalCount = await _integrationService.GetIntegrationLogCountAsync(integrationId, "info");
 
                 return Ok(new
                 {
@@ -281,7 +282,7 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-30);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var stats = await _integrationService.GetIntegrationStatsAsync(integrationId, start, end);
+                var stats = await _integrationService.GetIntegrationStatsAsync(integrationId, "default");
 
                 return Ok(new
                 {

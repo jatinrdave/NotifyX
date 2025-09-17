@@ -107,7 +107,7 @@ namespace NotifyXStudio.Connectors.Data
                     // Include only defined fields from inputs
                     foreach (var input in inputs.Where(kvp => kvp.Value != null))
                     {
-                        result[kvp.Key] = kvp.Value;
+                        result[input.Key] = input.Value;
                     }
                     break;
                 case "all":

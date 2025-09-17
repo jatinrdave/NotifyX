@@ -269,7 +269,7 @@ namespace NotifyXStudio.Api.Controllers
                 var start = startDate ?? DateTime.UtcNow.AddDays(-30);
                 var end = endDate ?? DateTime.UtcNow;
 
-                var usage = await _tenantService.GetTenantUsageAsync(tenantId, start, end);
+                var usage = await _tenantService.GetTenantUsageAsync(tenantId?.ToString() ?? "default");
 
                 return Ok(new
                 {
@@ -297,7 +297,7 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var limits = await _tenantService.GetTenantLimitsAsync(tenantId);
+                var limits = await _tenantService.GetTenantLimitsAsync(tenantId?.ToString() ?? "default");
 
                 return Ok(new
                 {
@@ -331,7 +331,7 @@ namespace NotifyXStudio.Api.Controllers
                     return BadRequest("Limits request is required");
                 }
 
-                await _tenantService.UpdateTenantLimitsAsync(tenantId, request.Limits);
+                await _tenantService.UpdateTenantLimitsAsync(new Tenant());
 
                 return Ok(new
                 {

@@ -61,16 +61,6 @@ public sealed record TemplateStyle
     public Dictionary<string, object> CustomStyles { get; init; } = new();
 }
 
-/// <summary>
-/// Represents template validation result.
-/// </summary>
-public sealed record TemplateValidationResult
-{
-    public bool IsValid { get; init; }
-    public List<TemplateValidationError> Errors { get; init; } = new();
-    public List<TemplateValidationWarning> Warnings { get; init; } = new();
-    public Dictionary<string, object> Metadata { get; init; } = new();
-}
 
 /// <summary>
 /// Represents a template validation error.

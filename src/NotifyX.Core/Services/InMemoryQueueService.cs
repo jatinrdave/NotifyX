@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NotifyX.Core.Interfaces;
 using NotifyX.Core.Models;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Collections.Concurrent;
 
 namespace NotifyX.Core.Services;
@@ -81,10 +82,10 @@ public class InMemoryQueueService : IPriorityQueueService
         }
     }
 
-    public Task<NotificationEvent?> DequeueAsync(CancellationToken cancellationToken = default)
+    public async Task<NotificationEvent?> DequeueAsync(CancellationToken cancellationToken = default)
     {
-        var message = DequeueHighestPriorityAsync(cancellationToken).Result;
-        return Task.FromResult(message?.Notification);
+        var message = await DequeueHighestPriorityAsync(cancellationToken);
+        return message?.Notification;
     }
 
     public Task<NotificationEvent?> DequeueHighestPriorityAsync(CancellationToken cancellationToken = default)

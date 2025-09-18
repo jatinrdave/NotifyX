@@ -2,7 +2,7 @@ using NotifyXStudio.Core.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using TaskModel = NotifyXStudio.Core.Models.Task;
+using TaskModel = NotifyXStudio.Core.Models.WorkTask;
 
 namespace NotifyXStudio.Core.Services
 {
@@ -35,8 +35,6 @@ namespace NotifyXStudio.Core.Services
         Task<User> UpdateUserPermissionsAsync(string userId, IEnumerable<string> permissions, CancellationToken cancellationToken = default);
         
         // Additional overloads for controller compatibility
-        Task<IEnumerable<User>> ListUsersAsync(string? tenantId, string? status, int page, int pageSize, CancellationToken cancellationToken = default);
-        Task<int> GetUserCountAsync(string? tenantId, string? status, CancellationToken cancellationToken = default);
         Task<User> UpdateUserAsync(string id, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default);
     }
 

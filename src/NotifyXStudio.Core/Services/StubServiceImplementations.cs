@@ -283,26 +283,26 @@ namespace NotifyXStudio.Core.Services
     }
 
     // Task Service Stub
-    public class StubTaskService : StubServiceBase<NotifyXStudio.Core.Models.Task>, ITaskService
+    public class StubTaskService : StubServiceBase<WorkTask>, ITaskService
     {
         public StubTaskService(ILogger<StubTaskService> logger) : base(logger) { }
 
-        public System.Threading.Tasks.Task<NotifyXStudio.Core.Models.Task> CreateTaskAsync(NotifyXStudio.Core.Models.Task task, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<WorkTask> CreateTaskAsync(WorkTask task, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for CreateTaskAsync - returning input task");
             return System.Threading.Tasks.Task.FromResult(task);
         }
 
-        public System.Threading.Tasks.Task<NotifyXStudio.Core.Models.Task> GetTaskAsync(string id, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<WorkTask> GetTaskAsync(string id, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for GetTaskAsync - returning null");
-            return System.Threading.Tasks.Task.FromResult<NotifyXStudio.Core.Models.Task>(null!);
+            return System.Threading.Tasks.Task.FromResult<WorkTask>(null!);
         }
 
-        public System.Threading.Tasks.Task<IEnumerable<NotifyXStudio.Core.Models.Task>> ListTasksAsync(string? projectId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<IEnumerable<WorkTask>> ListTasksAsync(string? projectId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for ListTasksAsync - returning empty list");
-            return System.Threading.Tasks.Task.FromResult<IEnumerable<NotifyXStudio.Core.Models.Task>>(new List<NotifyXStudio.Core.Models.Task>());
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkTask>>(new List<WorkTask>());
         }
 
         public System.Threading.Tasks.Task<int> GetTaskCountAsync(string? projectId = null, CancellationToken cancellationToken = default)
@@ -311,16 +311,16 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult(0);
         }
 
-        public System.Threading.Tasks.Task<NotifyXStudio.Core.Models.Task> UpdateTaskAsync(NotifyXStudio.Core.Models.Task task, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<WorkTask> UpdateTaskAsync(WorkTask task, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for UpdateTaskAsync - returning input task");
             return System.Threading.Tasks.Task.FromResult(task);
         }
 
-        public System.Threading.Tasks.Task<NotifyXStudio.Core.Models.Task> DeleteTaskAsync(string id, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<WorkTask> DeleteTaskAsync(string id, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for DeleteTaskAsync - returning null");
-            return System.Threading.Tasks.Task.FromResult<NotifyXStudio.Core.Models.Task>(null!);
+            return System.Threading.Tasks.Task.FromResult<WorkTask>(null!);
         }
 
         public async System.Threading.Tasks.Task<Dictionary<string, object>> GetTaskStatusAsync(string id, CancellationToken cancellationToken = default)
@@ -347,10 +347,10 @@ namespace NotifyXStudio.Core.Services
             return new List<string>();
         }
 
-        public System.Threading.Tasks.Task<IEnumerable<NotifyXStudio.Core.Models.Task>> ListTasksAsync(string? projectId = null, string? status = null, string? priority = null, string? assigneeId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<IEnumerable<WorkTask>> ListTasksAsync(string? projectId = null, string? status = null, string? priority = null, string? assigneeId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for ListTasksAsync with filters - returning empty list");
-            return System.Threading.Tasks.Task.FromResult<IEnumerable<NotifyXStudio.Core.Models.Task>>(new List<NotifyXStudio.Core.Models.Task>());
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkTask>>(new List<WorkTask>());
         }
 
         public System.Threading.Tasks.Task<int> GetTaskCountAsync(string? projectId = null, string? status = null, string? priority = null, CancellationToken cancellationToken = default)
@@ -359,16 +359,16 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult(0);
         }
 
-        public System.Threading.Tasks.Task<NotifyXStudio.Core.Models.Task> UpdateTaskAsync(NotifyXStudio.Core.Models.Task task, string? status = null, string? priority = null, string? assigneeId = null, string? description = null, DateTime? dueDate = null, string? tags = null, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<WorkTask> UpdateTaskAsync(WorkTask task, string? status = null, string? priority = null, string? assigneeId = null, string? description = null, DateTime? dueDate = null, string? tags = null, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for UpdateTaskAsync with parameters - returning input task");
             return System.Threading.Tasks.Task.FromResult(task);
         }
 
-        public System.Threading.Tasks.Task<NotifyXStudio.Core.Models.Task> CreateTaskAsync(string title, string? description, string? status, string? assigneeId, string? priority, string? projectId, DateTime? dueDate, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<WorkTask> CreateTaskAsync(string title, string? description, string? status, string? assigneeId, string? priority, string? projectId, DateTime? dueDate, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for CreateTaskAsync with parameters - returning new task");
-            return System.Threading.Tasks.Task.FromResult(new NotifyXStudio.Core.Models.Task 
+            return System.Threading.Tasks.Task.FromResult(new WorkTask 
             { 
                 Id = Guid.NewGuid().ToString(), 
                 Title = title, 
@@ -379,10 +379,10 @@ namespace NotifyXStudio.Core.Services
             });
         }
 
-        public System.Threading.Tasks.Task<NotifyXStudio.Core.Models.Task> UpdateTaskAsync(string id, string? title, string? description, string? status, string? assigneeId, string? priority, string? projectId, DateTime? dueDate, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<WorkTask> UpdateTaskAsync(string id, string? title, string? description, string? status, string? assigneeId, string? priority, string? projectId, DateTime? dueDate, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for UpdateTaskAsync with parameters - returning updated task");
-            return System.Threading.Tasks.Task.FromResult(new NotifyXStudio.Core.Models.Task 
+            return System.Threading.Tasks.Task.FromResult(new WorkTask 
             { 
                 Id = id, 
                 Title = title ?? "Updated Task", 
@@ -2686,10 +2686,10 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult(new BranchStatistics());
         }
 
-        public System.Threading.Tasks.Task<IEnumerable<Branch>> GetBranchTypesAsync(CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<IEnumerable<string>> GetBranchTypesAsync(CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for GetBranchTypesAsync - returning empty list");
-            return System.Threading.Tasks.Task.FromResult<IEnumerable<Branch>>(new List<Branch>());
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<string>>(new List<string>());
         }
 
         public async Task<Branch> CreateBranchAsync(string name, string? description, string? repositoryId, string? parentBranchId, CancellationToken cancellationToken = default)
@@ -2747,10 +2747,6 @@ namespace NotifyXStudio.Core.Services
             return new Dictionary<string, object>();
         }
 
-        public async Task<IEnumerable<string>> GetBranchTypesAsync(CancellationToken cancellationToken = default)
-        {
-            return new List<string>();
-        }
 
 
         public System.Threading.Tasks.Task<IEnumerable<Branch>> ListBranchesAsync(string? repositoryId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
@@ -2765,17 +2761,7 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult(0);
         }
 
-        public System.Threading.Tasks.Task<Branch> UpdateBranchAsync(string id, string? name, string? description, string? status, CancellationToken cancellationToken = default)
-        {
-            _logger.LogWarning("Stub implementation for UpdateBranchAsync - returning null");
-            return System.Threading.Tasks.Task.FromResult<Branch>(null!);
-        }
 
-        public System.Threading.Tasks.Task<Branch> GetBranchStatusAsync(string id, CancellationToken cancellationToken = default)
-        {
-            _logger.LogWarning("Stub implementation for GetBranchStatusAsync - returning null");
-            return System.Threading.Tasks.Task.FromResult<Branch>(null!);
-        }
 
         public System.Threading.Tasks.Task<IEnumerable<Branch>> GetBranchCommitsAsync(string id, CancellationToken cancellationToken = default)
         {
@@ -3184,6 +3170,48 @@ namespace NotifyXStudio.Core.Services
     public class StubBackupService : StubServiceBase<Backup>, IBackupService
     {
         public StubBackupService(ILogger<StubBackupService> logger) : base(logger) { }
+
+        public System.Threading.Tasks.Task<Backup> CreateBackupAsync(CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateBackupAsync - returning new backup");
+            return System.Threading.Tasks.Task.FromResult(new Backup { Id = Guid.NewGuid().ToString(), Name = "Stub Backup" });
+        }
+
+        public System.Threading.Tasks.Task<Backup> GetBackupInfoAsync(string backupId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetBackupInfoAsync - returning null");
+            return System.Threading.Tasks.Task.FromResult<Backup>(null!);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Backup>> ListBackupsAsync(string tenantId, string? status, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListBackupsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Backup>>(new List<Backup>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetBackupCountAsync(string tenantId, string? status, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetBackupCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<Backup> RestoreFromBackupAsync(string backupId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for RestoreFromBackupAsync - returning new backup");
+            return System.Threading.Tasks.Task.FromResult(new Backup { Id = backupId, Name = "Restored Backup" });
+        }
+
+        public System.Threading.Tasks.Task DeleteBackupAsync(string backupId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for DeleteBackupAsync - returning completed task");
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        public System.Threading.Tasks.Task<byte[]> DownloadBackupAsync(string backupId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for DownloadBackupAsync - returning empty array");
+            return System.Threading.Tasks.Task.FromResult(new byte[0]);
+        }
     }
 
     // Compliance Service Stub

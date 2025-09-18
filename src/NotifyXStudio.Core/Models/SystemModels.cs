@@ -29,8 +29,8 @@ namespace NotifyXStudio.Core.Models
         public string UpdatedBy { get; init; } = string.Empty;
     }
 
-    // Task Model
-    public record Task
+    // WorkTask Model
+    public record WorkTask
     {
         public string Id { get; init; } = string.Empty;
         public string Title { get; init; } = string.Empty;
@@ -95,7 +95,7 @@ namespace NotifyXStudio.Core.Models
         public string Id { get; init; } = string.Empty;
         public string Title { get; init; } = string.Empty;
         public string Description { get; init; } = string.Empty;
-        public string? TaskId { get; init; }
+        public string? WorkTaskId { get; init; }
         public string Status { get; init; } = string.Empty;
         public string Priority { get; init; } = string.Empty;
         public DateTime CreatedAt { get; init; }

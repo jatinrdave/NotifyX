@@ -172,7 +172,7 @@ public sealed class AuthenticationService : IAuthenticationService
             }
 
             // Get user from storage
-            var user = await GetUserByIdAsync(userInfo.UserId, cancellationToken);
+            var user = await GetUserByIdAsync(userInfo.Value.UserId, cancellationToken);
             if (user == null)
             {
                 return TokenValidationResult.Failure("User not found", "USER_NOT_FOUND");

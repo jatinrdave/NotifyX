@@ -291,8 +291,8 @@ public class AdvancedTemplateService : IAdvancedTemplateService
             return new TemplateValidationResult
             {
                 IsValid = errors.Count == 0,
-                Errors = errors,
-                Warnings = warnings
+                Errors = errors.Select(e => e.Message).ToList(),
+                Warnings = warnings.Select(w => w.Message).ToList()
             };
         }
         catch (Exception ex)
@@ -301,14 +301,9 @@ public class AdvancedTemplateService : IAdvancedTemplateService
             return new TemplateValidationResult
             {
                 IsValid = false,
-                Errors = new List<TemplateValidationError>
+                Errors = new List<string>
                 {
-                    new TemplateValidationError
-                    {
-                        Type = "ValidationError",
-                        Message = $"Template validation failed: {ex.Message}",
-                        Code = "TEMPLATE_000"
-                    }
+                    $"Template validation failed: {ex.Message}"
                 }
             };
         }
@@ -501,22 +496,28 @@ public class AdvancedTemplateService : IAdvancedTemplateService
 
     private static string ApplyConditionalContent(string content, Dictionary<string, object> conditions)
     {
-        // Simple conditional content replacement
+        // Simple conditional content replacement using string operations
         foreach (var condition in conditions)
         {
-            var pattern = $@"\{\%\s*if\s+{condition.Key}\s*\%\}(.*?)\{\%\s*endif\s*\%\}";
-            var match = Regex.Match(content, pattern, RegexOptions.Singleline);
+            var startTag = "{% if " + condition.Key + " %}";
+            var endTag = "{% endif %}";
             
-            if (match.Success)
+            var startIndex = content.IndexOf(startTag);
+            if (startIndex >= 0)
             {
-                var shouldShow = EvaluateCondition(condition.Key, condition.Value);
-                if (shouldShow)
+                var endIndex = content.IndexOf(endTag, startIndex);
+                if (endIndex >= 0)
                 {
-                    content = content.Replace(match.Value, match.Groups[1].Value);
-                }
-                else
-                {
-                    content = content.Replace(match.Value, string.Empty);
+                    var shouldShow = EvaluateCondition(condition.Key, condition.Value);
+                    if (shouldShow)
+                    {
+                        var innerContent = content.Substring(startIndex + startTag.Length, endIndex - startIndex - startTag.Length);
+                        content = content.Replace(content.Substring(startIndex, endIndex + endTag.Length - startIndex), innerContent);
+                    }
+                    else
+                    {
+                        content = content.Replace(content.Substring(startIndex, endIndex + endTag.Length - startIndex), string.Empty);
+                    }
                 }
             }
         }
@@ -526,11 +527,11 @@ public class AdvancedTemplateService : IAdvancedTemplateService
 
     private static string ApplyDynamicBlocks(string content, Dictionary<string, object> dynamicData)
     {
-        // Replace dynamic block placeholders
+        // Replace dynamic block placeholders using simple string replacement
         foreach (var data in dynamicData)
         {
-            var pattern = $@"\{\{{\s*{data.Key}\s*\}\}}";
-            content = Regex.Replace(content, pattern, data.Value?.ToString() ?? string.Empty);
+            var placeholder = $"{{{{{data.Key}}}}}";
+            content = content.Replace(placeholder, data.Value?.ToString() ?? string.Empty);
         }
 
         return content;

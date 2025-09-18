@@ -407,37 +407,37 @@ public sealed class BulkOperationStatus
     /// <summary>
     /// The operation ID.
     /// </summary>
-    public string OperationId { get; init; } = string.Empty;
+    public string OperationId { get; set; } = string.Empty;
 
     /// <summary>
     /// Current status of the operation.
     /// </summary>
-    public BulkOperationState State { get; init; }
+    public BulkOperationState State { get; set; }
 
     /// <summary>
     /// Progress percentage (0-100).
     /// </summary>
-    public int Progress { get; init; }
+    public int Progress { get; set; }
 
     /// <summary>
     /// Total number of items to process.
     /// </summary>
-    public int TotalItems { get; init; }
+    public int TotalItems { get; set; }
 
     /// <summary>
     /// Number of items processed.
     /// </summary>
-    public int ProcessedItems { get; init; }
+    public int ProcessedItems { get; set; }
 
     /// <summary>
     /// Number of successful items.
     /// </summary>
-    public int SuccessfulItems { get; init; }
+    public int SuccessfulItems { get; set; }
 
     /// <summary>
     /// Number of failed items.
     /// </summary>
-    public int FailedItems { get; init; }
+    public int FailedItems { get; set; }
 
     /// <summary>
     /// Timestamp when the operation was created.
@@ -447,12 +447,12 @@ public sealed class BulkOperationStatus
     /// <summary>
     /// Timestamp when the operation was last updated.
     /// </summary>
-    public DateTime LastUpdatedAt { get; init; } = DateTime.UtcNow;
+    public DateTime LastUpdatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// Timestamp when the operation was completed.
     /// </summary>
-    public DateTime? CompletedAt { get; init; }
+    public DateTime? CompletedAt { get; set; }
 
     /// <summary>
     /// Current error message if any.

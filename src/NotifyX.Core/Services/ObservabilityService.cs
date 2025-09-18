@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NotifyX.Core.Interfaces;
 using NotifyX.Core.Models;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace NotifyX.Core.Services;
 

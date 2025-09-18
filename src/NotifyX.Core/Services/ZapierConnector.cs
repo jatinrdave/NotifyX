@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NotifyX.Core.Interfaces;
 using NotifyX.Core.Models;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text;
 using System.Text.Json;
 
@@ -175,12 +176,12 @@ public class ZapierConnector : IZapierConnector
         {
             if (string.IsNullOrEmpty(webhookConfig.Url))
             {
-                return ValidationResult.Failure("Webhook URL is required");
+                return ValidationResult.Failure(new List<string> { "Webhook URL is required" });
             }
 
             if (!Uri.TryCreate(webhookConfig.Url, UriKind.Absolute, out var uri))
             {
-                return ValidationResult.Failure("Invalid webhook URL format");
+                return ValidationResult.Failure(new List<string> { "Invalid webhook URL format" });
             }
 
             if (uri.Scheme != "https" && uri.Scheme != "http")

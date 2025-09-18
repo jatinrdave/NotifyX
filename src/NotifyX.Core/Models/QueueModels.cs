@@ -68,11 +68,11 @@ public sealed record WorkerStatus
 /// </summary>
 public sealed record WorkerStatistics
 {
-    public long TotalProcessed { get; init; }
-    public long TotalFailed { get; init; }
-    public double AverageProcessingTime { get; init; }
-    public double ThroughputPerSecond { get; init; }
-    public DateTime LastProcessedAt { get; init; }
+    public long TotalProcessed { get; set; }
+    public long TotalFailed { get; set; }
+    public double AverageProcessingTime { get; set; }
+    public double ThroughputPerSecond { get; set; }
+    public DateTime LastProcessedAt { get; set; }
     public Dictionary<string, long> ProcessingTimes { get; init; } = new();
     public Dictionary<string, object> Metadata { get; init; } = new();
 }
@@ -116,7 +116,7 @@ public sealed record QueueOptions
 /// </summary>
 public sealed record WorkerOptions
 {
-    public int WorkerCount { get; init; } = Environment.ProcessorCount;
+    public int WorkerCount { get; set; } = Environment.ProcessorCount;
     public TimeSpan PollingInterval { get; init; } = TimeSpan.FromSeconds(1);
     public TimeSpan ProcessingTimeout { get; init; } = TimeSpan.FromMinutes(5);
     public int MaxConcurrentOperations { get; init; } = 10;

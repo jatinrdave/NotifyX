@@ -94,7 +94,7 @@ public class DeadLetterQueueService : IDeadLetterQueueService
             if (failedNotification.RetryCount >= failedNotification.MaxRetries)
             {
                 _logger.LogWarning("Max retries exceeded for failed notification {FailedNotificationId}", failedNotificationId);
-                Interlocked.Increment(ref _statistics.PermanentlyFailedMessages);
+                _statistics = _statistics with { PermanentlyFailedMessages = _statistics.PermanentlyFailedMessages + 1 };
                 return Task.FromResult(false);
             }
 
@@ -159,10 +159,15 @@ public class DeadLetterQueueService : IDeadLetterQueueService
             _failedNotifications.Clear();
             
             // Reset statistics
-            _statistics.TotalFailedMessages = 0;
-            _statistics.RetryMessages = 0;
-            _statistics.PermanentlyFailedMessages = 0;
-            _statistics.FailureReasons.Clear();
+            _statistics = new DeadLetterQueueStatistics
+            {
+                TotalFailedMessages = 0,
+                RetriedMessages = 0,
+                PermanentlyFailedMessages = 0,
+                LastFailedAt = DateTime.UtcNow,
+                FailureReasons = new Dictionary<string, long>(),
+                Metadata = new Dictionary<string, object>()
+            };
 
             _logger.LogInformation("Purged {Count} failed notifications from DLQ", count);
             return Task.FromResult(true);

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NotifyX.Core.Interfaces;
 using NotifyX.Core.Models;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text;
 using System.Text.Json;
 
@@ -175,17 +176,17 @@ public class MakeConnector : IMakeConnector
         {
             if (string.IsNullOrEmpty(webhookConfig.Url))
             {
-                return ValidationResult.Failure("Webhook URL is required");
+                return ValidationResult.Failure(new List<string> { "Webhook URL is required" });
             }
 
             if (!Uri.TryCreate(webhookConfig.Url, UriKind.Absolute, out var uri))
             {
-                return ValidationResult.Failure("Invalid webhook URL format");
+                return ValidationResult.Failure(new List<string> { "Invalid webhook URL format" });
             }
 
             if (uri.Scheme != "https" && uri.Scheme != "http")
             {
-                return ValidationResult.Failure("Webhook URL must use HTTP or HTTPS scheme");
+                return ValidationResult.Failure(new List<string> { "Webhook URL must use HTTP or HTTPS scheme" });
             }
 
             return ValidationResult.Success();
@@ -193,7 +194,7 @@ public class MakeConnector : IMakeConnector
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to validate webhook configuration");
-            return ValidationResult.Failure($"Validation failed: {ex.Message}");
+            return ValidationResult.Failure(new List<string> { $"Validation failed: {ex.Message}" });
         }
     }
 

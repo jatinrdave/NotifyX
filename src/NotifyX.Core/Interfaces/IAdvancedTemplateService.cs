@@ -1,11 +1,11 @@
 using NotifyX.Core.Models;
 
-namespace NotifyX.Core.Models;
+namespace NotifyX.Core.Interfaces;
 
 /// <summary>
 /// Interface for advanced template service operations.
 /// </summary>
-public interface IAdvancedTemplateService : ITemplateService
+public interface IAdvancedTemplateService
 {
     /// <summary>
     /// Creates a rich template with advanced formatting.

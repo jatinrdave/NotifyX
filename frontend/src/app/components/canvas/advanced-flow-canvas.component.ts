@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild, HostListener, Input, Output, 
 import { WorkflowService } from '../../services/workflow.service';
 import { NodeModel, EdgeModel } from '../../models/node.model';
 import { ConnectorService } from '../../services/connector.service';
-import { ConnectorRegistryEntry } from '../../models/connector.model';
+import { ConnectorManifest } from '../../models/node.model';
 
 interface CanvasState {
   pan: { x: number; y: number };
@@ -76,7 +76,7 @@ export class AdvancedFlowCanvasComponent implements OnInit {
   // Node and edge data
   nodes: NodeModel[] = [];
   edges: EdgeModel[] = [];
-  connectors: ConnectorRegistryEntry[] = [];
+  connectors: ConnectorManifest[] = [];
 
   // UI state
   isPanning = false;

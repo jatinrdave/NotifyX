@@ -138,13 +138,8 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
-    // Map endpoints - only register working controllers for now
+    // Map all controllers
     app.MapControllers();
-    
-    // Map specific working controllers
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "api/v1/{controller=Notification}/{action=Index}/{id?}");
     // TODO: Add WorkflowHub
     // app.MapHub<Hubs.WorkflowHub>("/workflowhub");
 

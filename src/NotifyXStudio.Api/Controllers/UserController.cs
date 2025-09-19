@@ -24,7 +24,7 @@ namespace NotifyXStudio.Api.Controllers
         /// Creates a user.
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -33,16 +33,17 @@ namespace NotifyXStudio.Api.Controllers
                     return BadRequest("User request is required");
                 }
 
-                var userId = await _userService.CreateUserAsync(
-                    request.TenantId,
+                var user = await _userService.CreateUserAsync(
                     request.Email,
-                    request.Name,
-                    request.Role,
-                    request.Metadata);
+                    request.Name, // firstName
+                    "", // lastName - not provided in request
+                    request.TenantId.ToString(),
+                    request.Metadata,
+                    cancellationToken);
 
                 return Ok(new
                 {
-                    userId,
+                    userId = user.Id,
                     message = "User created successfully",
                     createdAt = DateTime.UtcNow
                 });
@@ -98,12 +99,13 @@ namespace NotifyXStudio.Api.Controllers
             [FromQuery] Guid? tenantId,
             [FromQuery] string? role,
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 50)
+            [FromQuery] int pageSize = 50,
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                var users = await _userService.ListUsersAsync(tenantId, role, page, pageSize);
-                var totalCount = await _userService.GetUserCountAsync(tenantId, role);
+                var users = await _userService.ListUsersAsync(tenantId?.ToString(), role, page, pageSize, cancellationToken);
+                var totalCount = await _userService.GetUserCountAsync(tenantId?.ToString(), role, cancellationToken);
 
                 return Ok(new
                 {
@@ -134,7 +136,8 @@ namespace NotifyXStudio.Api.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(
             string userId,
-            [FromBody] UpdateUserRequest request)
+            [FromBody] UpdateUserRequest request,
+            CancellationToken cancellationToken = default)
         {
             try
             {
@@ -145,9 +148,11 @@ namespace NotifyXStudio.Api.Controllers
 
                 await _userService.UpdateUserAsync(
                     userId,
-                    request.Name,
-                    request.Role,
-                    request.Metadata);
+                    request.Name, // firstName
+                    "", // lastName - not provided in request
+                    null, // email - not provided in request
+                    request.Metadata,
+                    cancellationToken);
 
                 return Ok(new
                 {

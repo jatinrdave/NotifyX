@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace NotifyXStudio.Api.Middleware
 {
@@ -12,11 +13,11 @@ namespace NotifyXStudio.Api.Middleware
         private readonly ILogger<SecurityHeadersMiddleware> _logger;
         private readonly SecurityHeadersOptions _options;
 
-        public SecurityHeadersMiddleware(RequestDelegate next, ILogger<SecurityHeadersMiddleware> logger, SecurityHeadersOptions options)
+        public SecurityHeadersMiddleware(RequestDelegate next, ILogger<SecurityHeadersMiddleware> logger, IOptions<SecurityHeadersOptions> options)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task InvokeAsync(HttpContext context)

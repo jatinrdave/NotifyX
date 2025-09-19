@@ -146,10 +146,10 @@ namespace NotifyXStudio.Api.Middleware
         private readonly ILogger<DefaultMetricsCollector> _logger;
         private readonly MetricsOptions _options;
 
-        public DefaultMetricsCollector(ILogger<DefaultMetricsCollector> logger, MetricsOptions options)
+        public DefaultMetricsCollector(ILogger<DefaultMetricsCollector> logger, IOptions<MetricsOptions> options)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task CollectAsync(RequestMetrics metrics)

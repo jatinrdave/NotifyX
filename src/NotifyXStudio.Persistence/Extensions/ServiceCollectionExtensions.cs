@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NotifyXStudio.Persistence.Repositories;
 
 namespace NotifyXStudio.Persistence
 {
@@ -12,10 +13,15 @@ namespace NotifyXStudio.Persistence
             services.AddDbContext<NotifyXStudioDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-            // Add repository services
+            // Add existing repository services
             services.AddScoped<IWorkflowRepository, WorkflowRepository>();
             services.AddScoped<IConnectorRepository, ConnectorRepository>();
             services.AddScoped<IRunRepository, RunRepository>();
+
+            // Add core repository services
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IWorkTaskRepository, WorkTaskRepository>();
 
             return services;
         }

@@ -7,6 +7,7 @@ using NotifyXStudio.Core;
 using NotifyXStudio.Connectors;
 using NotifyXStudio.Persistence;
 using NotifyXStudio.Runtime;
+using NotifyXStudio.Application;
 using Serilog;
 using NotifyX.Core.Interfaces;
 using NotifyX.Providers.Email;
@@ -51,6 +52,7 @@ try
     // Add NotifyX Studio services (includes stubs for API compatibility)
     builder.Services.AddNotifyXStudioCore();
     builder.Services.AddNotifyXStudioPersistence(builder.Configuration);
+    builder.Services.AddNotifyXStudioApplication();
 
     // Providers: Email, SMS, Push, Webhook
     builder.Services.Configure<EmailProviderOptions>(builder.Configuration.GetSection("Providers:Email"));

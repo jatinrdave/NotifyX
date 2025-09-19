@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -14,11 +15,11 @@ namespace NotifyXStudio.Api.Middleware
         private readonly ILogger<PerformanceMiddleware> _logger;
         private readonly PerformanceMiddlewareOptions _options;
 
-        public PerformanceMiddleware(RequestDelegate next, ILogger<PerformanceMiddleware> logger, PerformanceMiddlewareOptions options)
+        public PerformanceMiddleware(RequestDelegate next, ILogger<PerformanceMiddleware> logger, IOptions<PerformanceMiddlewareOptions> options)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task InvokeAsync(HttpContext context)

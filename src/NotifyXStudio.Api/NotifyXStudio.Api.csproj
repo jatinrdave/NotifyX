@@ -33,6 +33,7 @@
     <ProjectReference Include="..\NotifyXStudio.Connectors\NotifyXStudio.Connectors.csproj" />
     <ProjectReference Include="..\NotifyXStudio.Persistence\NotifyXStudio.Persistence.csproj" />
     <ProjectReference Include="..\NotifyXStudio.Runtime\NotifyXStudio.Runtime.csproj" />
+    <ProjectReference Include="..\NotifyXStudio.Application\NotifyXStudio.Application.csproj" />
     <ProjectReference Include="..\NotifyX.Core\NotifyX.Core.csproj" />
     <ProjectReference Include="..\NotifyX.Providers.Email\NotifyX.Providers.Email.csproj" />
     <ProjectReference Include="..\NotifyX.Providers.SMS\NotifyX.Providers.SMS.csproj" />

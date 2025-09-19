@@ -30,12 +30,12 @@ public class AdvancedTemplateService : IAdvancedTemplateService
         return await _baseTemplateService.GetTemplateAsync(templateId, cancellationToken);
     }
 
-    public async Task<IEnumerable<NotificationTemplate>> GetTemplatesAsync(string tenantId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<NotificationTemplate>> GetTemplatesAsync(string tenantId, NotificationChannel channel, CancellationToken cancellationToken = default)
     {
-        return await _baseTemplateService.GetTemplatesAsync(tenantId, cancellationToken);
+        return await _baseTemplateService.GetTemplatesAsync(tenantId, channel, cancellationToken);
     }
 
-    public async Task<NotificationTemplate> UpdateTemplateAsync(NotificationTemplate template, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateTemplateAsync(NotificationTemplate template, CancellationToken cancellationToken = default)
     {
         return await _baseTemplateService.UpdateTemplateAsync(template, cancellationToken);
     }
@@ -45,9 +45,9 @@ public class AdvancedTemplateService : IAdvancedTemplateService
         return await _baseTemplateService.DeleteTemplateAsync(templateId, cancellationToken);
     }
 
-    public async Task<TemplateRenderResult> RenderTemplateAsync(NotificationEvent notification, string templateId, CancellationToken cancellationToken = default)
+    public async Task<TemplateRenderResult> RenderTemplateAsync(string templateId, Dictionary<string, object> data, CancellationToken cancellationToken = default)
     {
-        return await _baseTemplateService.RenderTemplateAsync(notification, templateId, cancellationToken);
+        return await _baseTemplateService.RenderTemplateAsync(templateId, data, cancellationToken);
     }
 
     public async Task<NotificationTemplate> CreateRichTemplateAsync(RichTemplateRequest request, CancellationToken cancellationToken = default)
@@ -65,7 +65,14 @@ public class AdvancedTemplateService : IAdvancedTemplateService
                 Channel = request.Channel,
                 Subject = request.Subject,
                 Content = request.Content,
-                Variables = request.Variables,
+                Variables = request.Variables.ToDictionary(
+                    kvp => kvp.Key, 
+                    kvp => new TemplateVariable 
+                    { 
+                        Name = kvp.Key, 
+                        DefaultValue = kvp.Value,
+                        Type = TemplateVariableType.String
+                    }),
                 Metadata = new Dictionary<string, object>(request.Metadata)
                 {
                     ["isRichTemplate"] = true,
@@ -113,7 +120,7 @@ public class AdvancedTemplateService : IAdvancedTemplateService
                 }
             };
 
-            var result = await RenderTemplateAsync(timezoneAwareNotification, templateId, cancellationToken);
+            var result = await RenderTemplateAsync(templateId, timezoneAwareNotification.TemplateVariables, cancellationToken);
             
             if (result.IsSuccess)
             {
@@ -160,7 +167,7 @@ public class AdvancedTemplateService : IAdvancedTemplateService
                 }
             };
 
-            var result = await RenderTemplateAsync(conditionalNotification, templateId, cancellationToken);
+            var result = await RenderTemplateAsync(templateId, conditionalNotification.TemplateVariables, cancellationToken);
             
             if (result.IsSuccess)
             {
@@ -207,7 +214,7 @@ public class AdvancedTemplateService : IAdvancedTemplateService
                 }
             };
 
-            var result = await RenderTemplateAsync(dynamicNotification, templateId, cancellationToken);
+            var result = await RenderTemplateAsync(templateId, dynamicNotification.TemplateVariables, cancellationToken);
             
             if (result.IsSuccess)
             {
@@ -345,7 +352,7 @@ public class AdvancedTemplateService : IAdvancedTemplateService
                 Metadata = sampleData
             };
 
-            var result = await RenderTemplateAsync(sampleNotification, templateId, cancellationToken);
+            var result = await RenderTemplateAsync(templateId, sampleNotification.TemplateVariables, cancellationToken);
             
             if (result.IsSuccess)
             {

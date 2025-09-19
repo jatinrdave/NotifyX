@@ -42,6 +42,21 @@ public sealed record NotificationEvent
     public string Content { get; init; } = string.Empty;
 
     /// <summary>
+    /// The title of the notification (alias for Subject for compatibility).
+    /// </summary>
+    public string Title => Subject;
+
+    /// <summary>
+    /// Icon URL for the notification.
+    /// </summary>
+    public string? IconUrl { get; init; }
+
+    /// <summary>
+    /// Action URL for the notification.
+    /// </summary>
+    public string? ActionUrl { get; init; }
+
+    /// <summary>
     /// Template ID to use for rendering this notification.
     /// If provided, Content will be used as fallback or for template variables.
     /// </summary>

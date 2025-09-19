@@ -2,6 +2,7 @@ using NotifyXStudio.Core.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace NotifyXStudio.Core.Services
 {
@@ -151,7 +152,7 @@ namespace NotifyXStudio.Core.Services
         }
         
         // Additional overloads for controller compatibility
-        public System.Threading.Tasks.Task<User> CreateUserAsync(string email, string firstName, string lastName, string? tenantId, Dictionary<string, object> metadata, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<User> CreateUserAsync(string email, string firstName, string lastName, string? tenantId, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for CreateUserAsync with metadata - returning new user");
             var user = new User
@@ -180,6 +181,19 @@ namespace NotifyXStudio.Core.Services
         public System.Threading.Tasks.Task<User> UpdateUserAsync(string id, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for UpdateUserAsync with parameters - returning updated user");
+            var user = new User
+            {
+                Id = id,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email
+            };
+            return System.Threading.Tasks.Task.FromResult(user);
+        }
+
+        public System.Threading.Tasks.Task<User> UpdateUserAsync(string id, string? firstName, string? lastName, string? email, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateUserAsync with metadata - returning updated user");
             var user = new User
             {
                 Id = id,
@@ -1179,7 +1193,7 @@ namespace NotifyXStudio.Core.Services
 
         public async Task<Tag> CreateTagAsync(string name, string? description, string? color, string? category, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
         {
-            return new Tag { Id = Guid.NewGuid().ToString(), Name = name, Description = description };
+            return new Tag { Id = Guid.NewGuid().ToString(), Name = name };
         }
 
         public async Task<IEnumerable<Tag>> ListTagsAsync(string? projectId, string? category, string? color, int page, int pageSize, CancellationToken cancellationToken = default)
@@ -1194,7 +1208,7 @@ namespace NotifyXStudio.Core.Services
 
         public async Task<Tag> UpdateTagAsync(string id, string? name, string? description, string? color, string? category, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
         {
-            return new Tag { Id = id, Name = name ?? "Updated Tag", Description = description };
+            return new Tag { Id = id, Name = name ?? "Updated Tag" };
         }
 
         public System.Threading.Tasks.Task<IEnumerable<Tag>> GetTagDeploymentsAsync(string tagId, CancellationToken cancellationToken = default)
@@ -1467,6 +1481,39 @@ namespace NotifyXStudio.Core.Services
         {
             _logger.LogWarning("Stub implementation for GetTenantAsync - returning null");
             return System.Threading.Tasks.Task.FromResult<Tenant>(null!);
+        }
+
+        public System.Threading.Tasks.Task<Tenant> CreateTenantAsync(string name, string? description, string? domain, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateTenantAsync - returning new tenant");
+            return System.Threading.Tasks.Task.FromResult(new Tenant
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = name,
+                Description = description
+            });
+        }
+
+        public System.Threading.Tasks.Task<Tenant> CreateTenantAsync(string name, string? description, Dictionary<string, object>? settings, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateTenantAsync with settings - returning new tenant");
+            return System.Threading.Tasks.Task.FromResult(new Tenant
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = name,
+                Description = description
+            });
+        }
+
+        public System.Threading.Tasks.Task<Tenant> UpdateTenantAsync(string id, string? name, string? description, Dictionary<string, object>? settings, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateTenantAsync - returning updated tenant");
+            return System.Threading.Tasks.Task.FromResult(new Tenant
+            {
+                Id = id,
+                Name = name ?? "Updated Tenant",
+                Description = description
+            });
         }
 
         public System.Threading.Tasks.Task<Tenant> UpdateTenantAsync(Tenant tenant, CancellationToken cancellationToken = default)
@@ -1939,6 +1986,24 @@ namespace NotifyXStudio.Core.Services
     public class StubAuditService : StubServiceBase<Audit>, IAuditService
     {
         public StubAuditService(ILogger<StubAuditService> logger) : base(logger) { }
+
+        public System.Threading.Tasks.Task<IEnumerable<Audit>> GetAuditLogsAsync(string tenantId, string? userId, string? action, DateTime? startDate, DateTime? endDate, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAuditLogsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Audit>>(new List<Audit>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetAuditLogCountAsync(string tenantId, string? userId, string? action, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAuditLogCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetAuditStatsAsync(string tenantId, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAuditStatsAsync - returning empty stats");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
     }
 
     // Config Service Stub
@@ -1960,6 +2025,54 @@ namespace NotifyXStudio.Core.Services
         }
 
         public System.Threading.Tasks.Task<byte[]> ExportConfigAsync(CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ExportConfigAsync - returning empty byte array");
+            return System.Threading.Tasks.Task.FromResult(new byte[0]);
+        }
+
+        // Additional methods required by controllers
+        public System.Threading.Tasks.Task<Config> GetConfigAsync(string key, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetConfigAsync - returning null");
+            return System.Threading.Tasks.Task.FromResult<Config>(null!);
+        }
+
+        public System.Threading.Tasks.Task<Config> SetConfigAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for SetConfigAsync - returning new config");
+            return System.Threading.Tasks.Task.FromResult(new Config
+            {
+                Id = Guid.NewGuid().ToString(),
+                Key = key,
+                Value = value
+            });
+        }
+
+        public System.Threading.Tasks.Task<bool> DeleteConfigAsync(string key, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for DeleteConfigAsync - returning true");
+            return System.Threading.Tasks.Task.FromResult(true);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Config>> ListConfigsAsync(string? tenantId = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListConfigsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Config>>(new List<Config>());
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetConfigSchemaAsync(string? tenantId = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetConfigSchemaAsync - returning empty schema");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> ValidateConfigAsync(Dictionary<string, object> config, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ValidateConfigAsync - returning empty validation");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<byte[]> ExportConfigAsync(string? tenantId = null, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for ExportConfigAsync - returning empty byte array");
             return System.Threading.Tasks.Task.FromResult(new byte[0]);
@@ -1998,6 +2111,18 @@ namespace NotifyXStudio.Core.Services
         {
             _logger.LogWarning("Stub implementation for GetSystemConfigAsync - returning null");
             return System.Threading.Tasks.Task.FromResult<Config>(null!);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Log>> GetSystemLogsAsync(string? level, string? source, string? message, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetSystemLogsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Log>>(new List<Log>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetSystemLogCountAsync(string? level, string? source, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetSystemLogCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
         }
 
         public System.Threading.Tasks.Task<bool> UpdateSystemConfigAsync(Config config, CancellationToken cancellationToken = default)
@@ -2214,10 +2339,106 @@ namespace NotifyXStudio.Core.Services
         public StubAlertService(ILogger<StubAlertService> logger) : base(logger) { }
 
         // Additional methods required by AlertController
-        public System.Threading.Tasks.Task<Alert> GetAlertStatsAsync(CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<int> GetAlertCountAsync(string? projectId = null, CancellationToken cancellationToken = default)
         {
-            _logger.LogWarning("Stub implementation for GetAlertStatsAsync - returning null");
+            _logger.LogWarning("Stub implementation for GetAlertCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<Alert> UpdateAlertAsync(string id, string? name, string? description, string? status, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateAlertAsync - returning null");
             return System.Threading.Tasks.Task.FromResult<Alert>(null!);
+        }
+
+        public System.Threading.Tasks.Task<Alert> DeleteAlertAsync(string id, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for DeleteAlertAsync - returning null");
+            return System.Threading.Tasks.Task.FromResult<Alert>(null!);
+        }
+
+        public System.Threading.Tasks.Task<Alert> TestAlertAsync(string id, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for TestAlertAsync - returning null");
+            return System.Threading.Tasks.Task.FromResult<Alert>(null!);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Alert>> GetAlertHistoryAsync(string id, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAlertHistoryAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Alert>>(new List<Alert>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetAlertHistoryCountAsync(string id, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAlertHistoryCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetAlertStatsAsync(string? projectId = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAlertStatsAsync - returning empty stats");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<Alert> CreateAlertAsync(Alert alert, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateAlertAsync - returning new alert");
+            return System.Threading.Tasks.Task.FromResult(new Alert
+            {
+                Id = Guid.NewGuid().ToString(),
+                Title = alert.Title,
+                Message = alert.Message
+            });
+        }
+
+        public System.Threading.Tasks.Task<Alert> CreateAlertAsync(string tenantId, string name, string description, string severity, Dictionary<string, object> conditions, Dictionary<string, object> actions, bool enabled, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateAlertAsync with parameters - returning new alert");
+            return System.Threading.Tasks.Task.FromResult(new Alert
+            {
+                Id = Guid.NewGuid().ToString(),
+                Title = name,
+                Message = description,
+                Severity = severity,
+                Status = enabled ? "active" : "inactive"
+            });
+        }
+
+        public System.Threading.Tasks.Task<Alert> GetAlertAsync(string id, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAlertAsync - returning null");
+            return System.Threading.Tasks.Task.FromResult<Alert>(null!);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Alert>> ListAlertsAsync(string? projectId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListAlertsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Alert>>(new List<Alert>());
+        }
+
+        public System.Threading.Tasks.Task<Alert> UpdateAlertAsync(string id, string? name, string? description, string? status, string? type, string? severity, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateAlertAsync with 7 parameters - returning null");
+            return System.Threading.Tasks.Task.FromResult<Alert>(null!);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Alert>> GetAlertHistoryAsync(string id, string? filter, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAlertHistoryAsync with filter - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Alert>>(new List<Alert>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetAlertHistoryCountAsync(string id, string? filter, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAlertHistoryCountAsync with filter - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetAlertStatsAsync(string? projectId, string? type, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetAlertStatsAsync with type - returning empty stats");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
         }
     }
 
@@ -2295,6 +2516,39 @@ namespace NotifyXStudio.Core.Services
     public class StubDashboardService : StubServiceBase<Dashboard>, IDashboardService
     {
         public StubDashboardService(ILogger<StubDashboardService> logger) : base(logger) { }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetDashboardDataAsync(string tenantId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetDashboardDataAsync - returning empty data");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Dashboard>> GetDashboardWidgetsAsync(string tenantId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetDashboardWidgetsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Dashboard>>(new List<Dashboard>());
+        }
+
+        public System.Threading.Tasks.Task<Dashboard> UpdateDashboardLayoutAsync(string tenantId, Dictionary<string, object> layout, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateDashboardLayoutAsync - returning new dashboard");
+            return System.Threading.Tasks.Task.FromResult(new Dashboard
+            {
+                Id = Guid.NewGuid().ToString()
+            });
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetDashboardMetricsAsync(string tenantId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetDashboardMetricsAsync - returning empty metrics");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Alert>> GetDashboardAlertsAsync(string tenantId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetDashboardAlertsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Alert>>(new List<Alert>());
+        }
     }
 
     // Integration Service Stub
@@ -2470,6 +2724,12 @@ namespace NotifyXStudio.Core.Services
         public System.Threading.Tasks.Task<Webhook> CreateWebhookAsync(string url, string? secret, string? events, string? projectId, string? description, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for CreateWebhookAsync with parameters - returning null");
+            return System.Threading.Tasks.Task.FromResult<Webhook>(null!);
+        }
+
+        public System.Threading.Tasks.Task<Webhook> CreateWebhookAsync(string url, string? secret, List<string>? events, string? description, Dictionary<string, string>? headers, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWebhookAsync with events and headers - returning null");
             return System.Threading.Tasks.Task.FromResult<Webhook>(null!);
         }
 
@@ -2694,7 +2954,12 @@ namespace NotifyXStudio.Core.Services
 
         public async Task<Branch> CreateBranchAsync(string name, string? description, string? repositoryId, string? parentBranchId, CancellationToken cancellationToken = default)
         {
-            return new Branch { Id = Guid.NewGuid().ToString(), Name = name, Description = description };
+            return new Branch { Id = Guid.NewGuid().ToString(), Name = name };
+        }
+
+        public async Task<Branch> CreateBranchAsync(string name, string? description, string? repositoryId, string? parentBranchId, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            return new Branch { Id = Guid.NewGuid().ToString(), Name = name };
         }
 
         public async Task<Branch> GetBranchAsync(string branchId, CancellationToken cancellationToken = default)
@@ -2714,7 +2979,7 @@ namespace NotifyXStudio.Core.Services
 
         public async Task<Branch> UpdateBranchAsync(string branchId, string? name, string? description, string? status, CancellationToken cancellationToken = default)
         {
-            return new Branch { Id = branchId, Name = name ?? "Updated Branch", Description = description };
+            return new Branch { Id = branchId, Name = name ?? "Updated Branch" };
         }
 
         public async Task DeleteBranchAsync(string branchId, CancellationToken cancellationToken = default)
@@ -2787,6 +3052,62 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult(new CommitStatistics());
         }
 
+        public System.Threading.Tasks.Task<Commit> CreateCommitAsync(string projectId, string message, string? author, string? branch, List<string>? files, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateCommitAsync - returning new commit");
+            return System.Threading.Tasks.Task.FromResult(new Commit
+            {
+                Id = Guid.NewGuid().ToString(),
+                Message = message
+            });
+        }
+
+        public System.Threading.Tasks.Task<Commit> CreateCommitAsync(string repositoryId, string message, string? author, string? branchId, List<string>? files, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateCommitAsync with metadata - returning new commit");
+            return System.Threading.Tasks.Task.FromResult(new Commit
+            {
+                Id = Guid.NewGuid().ToString(),
+                Message = message
+            });
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Commit>> ListCommitsAsync(string projectId, string? branch, string? author, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListCommitsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Commit>>(new List<Commit>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetCommitCountAsync(string projectId, string? branch, string? author, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetCommitCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<NotifyXStudio.Core.Models.File>> GetCommitFilesAsync(string commitId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetCommitFilesAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<NotifyXStudio.Core.Models.File>>(new List<NotifyXStudio.Core.Models.File>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Build>> GetCommitBuildsAsync(string commitId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetCommitBuildsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Build>>(new List<Build>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Deploy>> GetCommitDeploymentsAsync(string commitId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetCommitDeploymentsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Deploy>>(new List<Deploy>());
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetCommitStatsAsync(string commitId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetCommitStatsAsync - returning empty stats");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
         // Additional methods required by CommitController
         public System.Threading.Tasks.Task<Commit> CreateCommitAsync(string message, string author, string hash, string branch, CancellationToken cancellationToken = default)
         {
@@ -2848,6 +3169,69 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult<IEnumerable<Build>>(new List<Build>());
         }
 
+        public System.Threading.Tasks.Task<Build> BuildAsync(string projectId, string? branch, string? commit, Dictionary<string, object>? parameters, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for BuildAsync - returning new build");
+            return System.Threading.Tasks.Task.FromResult(new Build
+            {
+                Id = Guid.NewGuid().ToString()
+            });
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetBuildStatusAsync(string buildId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetBuildStatusAsync - returning empty status");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Build>> ListBuildsAsync(string projectId, string? branch, string? status, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListBuildsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Build>>(new List<Build>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetBuildCountAsync(string projectId, string? branch, string? status, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetBuildCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Log>> GetBuildLogsAsync(string buildId, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetBuildLogsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Log>>(new List<Log>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Build>> GetBuildArtifactsAsync(string buildId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetBuildArtifactsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Build>>(new List<Build>());
+        }
+
+        public System.Threading.Tasks.Task<byte[]> DownloadBuildArtifactAsync(string buildId, string artifactName, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for DownloadBuildArtifactAsync - returning empty byte array");
+            return System.Threading.Tasks.Task.FromResult(new byte[0]);
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetBuildStatsAsync(string projectId, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetBuildStatsAsync - returning empty stats");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Project>> GetProjectsAsync(CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetProjectsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Project>>(new List<Project>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Branch>> GetBranchesAsync(string projectId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetBranchesAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Branch>>(new List<Branch>());
+        }
+
         public System.Threading.Tasks.Task<Build> CancelBuildAsync(string id, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for CancelBuildAsync - returning null");
@@ -2871,6 +3255,21 @@ namespace NotifyXStudio.Core.Services
         {
             _logger.LogWarning("Stub implementation for GetDeploymentStatsAsync - returning null");
             return System.Threading.Tasks.Task.FromResult<Deploy>(null!);
+        }
+
+        public System.Threading.Tasks.Task<Deploy> DeployAsync(string projectId, string? environment, string? version, Dictionary<string, object>? parameters, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for DeployAsync - returning new deployment");
+            return System.Threading.Tasks.Task.FromResult(new Deploy
+            {
+                Id = Guid.NewGuid().ToString()
+            });
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetDeploymentStatusAsync(string deploymentId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetDeploymentStatusAsync - returning empty status");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
         }
         
         public System.Threading.Tasks.Task<IEnumerable<Deploy>> GetEnvironmentsAsync(string id, CancellationToken cancellationToken = default)
@@ -3000,6 +3399,18 @@ namespace NotifyXStudio.Core.Services
             _logger.LogWarning("Stub implementation for UpdateEnvironmentAsync with type - returning null");
             return System.Threading.Tasks.Task.FromResult<NotifyXStudio.Core.Models.Environment>(null!);
         }
+
+        // Additional methods required by controllers
+        public System.Threading.Tasks.Task<NotifyXStudio.Core.Models.Environment> CreateEnvironmentAsync(string name, string? description, string? type, Dictionary<string, object>? config, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateEnvironmentAsync - returning new environment");
+            return System.Threading.Tasks.Task.FromResult(new NotifyXStudio.Core.Models.Environment
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = name,
+                Description = description
+            });
+        }
     }
 
     // Test Service Stub
@@ -3011,6 +3422,30 @@ namespace NotifyXStudio.Core.Services
         {
             _logger.LogWarning("Stub implementation for RunTestsAsync - returning null");
             return System.Threading.Tasks.Task.FromResult<Test>(null!);
+        }
+
+        public System.Threading.Tasks.Task<Test> RunTestsAsync(List<string> testIds, List<string>? categories, List<string>? tags, Dictionary<string, object>? parameters, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for RunTestsAsync - returning null test");
+            return System.Threading.Tasks.Task.FromResult<Test>(null!);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Test>> ListTestRunsAsync(string? projectId, DateTime? startDate, DateTime? endDate, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListTestRunsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Test>>(new List<Test>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetTestRunCountAsync(string? projectId, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetTestRunCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetTestStatsAsync(DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetTestStatsAsync - returning empty stats");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
         }
 
         public System.Threading.Tasks.Task<Test> GetTestRunStatusAsync(string testRunId, CancellationToken cancellationToken = default)
@@ -3212,6 +3647,26 @@ namespace NotifyXStudio.Core.Services
             _logger.LogWarning("Stub implementation for DownloadBackupAsync - returning empty array");
             return System.Threading.Tasks.Task.FromResult(new byte[0]);
         }
+
+        public System.Threading.Tasks.Task<Backup> CreateBackupAsync(string name, string? description, string? type, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateBackupAsync with parameters - returning new backup");
+            return System.Threading.Tasks.Task.FromResult(new Backup 
+            { 
+                Id = Guid.NewGuid().ToString(), 
+                Name = name
+            });
+        }
+
+        public System.Threading.Tasks.Task<Backup> RestoreFromBackupAsync(string backupId, string? targetEnvironment, bool? overwriteExisting, Dictionary<string, object>? options, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for RestoreFromBackupAsync with parameters - returning new backup");
+            return System.Threading.Tasks.Task.FromResult(new Backup 
+            { 
+                Id = Guid.NewGuid().ToString(), 
+                Name = "Restored Backup"
+            });
+        }
     }
 
     // Compliance Service Stub
@@ -3224,6 +3679,48 @@ namespace NotifyXStudio.Core.Services
         {
             _logger.LogWarning("Stub implementation for GetComplianceStatusAsync - returning null");
             return System.Threading.Tasks.Task.FromResult<Compliance>(null!);
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetComplianceStatusAsync(string tenantId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetComplianceStatusAsync - returning empty dictionary");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Compliance>> GetComplianceViolationsAsync(string tenantId, string? type, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetComplianceViolationsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Compliance>>(new List<Compliance>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetComplianceViolationCountAsync(string tenantId, string? type, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetComplianceViolationCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetComplianceMetricsAsync(string tenantId, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetComplianceMetricsAsync - returning empty metrics");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
+        }
+
+        public System.Threading.Tasks.Task<byte[]> GenerateComplianceReportAsync(string tenantId, string format, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GenerateComplianceReportAsync - returning empty byte array");
+            return System.Threading.Tasks.Task.FromResult(new byte[0]);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Compliance>> GetCompliancePoliciesAsync(string tenantId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetCompliancePoliciesAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Compliance>>(new List<Compliance>());
+        }
+
+        public System.Threading.Tasks.Task UpdateCompliancePoliciesAsync(string tenantId, List<Compliance> policies, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateCompliancePoliciesAsync - returning completed task");
+            return System.Threading.Tasks.Task.CompletedTask;
         }
 
         public System.Threading.Tasks.Task<IEnumerable<Compliance>> GetComplianceViolationsAsync(int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
@@ -3267,6 +3764,30 @@ namespace NotifyXStudio.Core.Services
     public class StubCredentialService : StubServiceBase<Credential>, ICredentialService
     {
         public StubCredentialService(ILogger<StubCredentialService> logger) : base(logger) { }
+
+        // Additional methods required by controllers
+        public System.Threading.Tasks.Task<int> GetCredentialCountAsync(string? tenantId = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetCredentialCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<Credential>> GetCredentialsAsync(string? tenantId = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetCredentialsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Credential>>(new List<Credential>());
+        }
+
+        public System.Threading.Tasks.Task<Credential> CreateCredentialAsync(string name, string type, string? description, Dictionary<string, object>? data, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateCredentialAsync - returning new credential");
+            return System.Threading.Tasks.Task.FromResult(new Credential
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = name,
+                Type = type
+            });
+        }
     }
 
     // Workflow Execution Service Stub
@@ -3400,6 +3921,22 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult<WorkflowExecutionNode>(null!);
         }
 
+        public System.Threading.Tasks.Task<WorkflowExecutionNode> CreateWorkflowExecutionNodeAsync(string workflowExecutionId, string nodeId, string? status, string? result, string? error, string? metadata, DateTime? startedAt, DateTime? completedAt, Dictionary<string, object>? data, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowExecutionNodeAsync - returning new node");
+            return System.Threading.Tasks.Task.FromResult(new WorkflowExecutionNode
+            {
+                Id = Guid.NewGuid().ToString(),
+                Status = status ?? "pending"
+            });
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<WorkflowExecutionNode>> ListWorkflowExecutionNodesAsync(string? workflowExecutionId, string? status, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListWorkflowExecutionNodesAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkflowExecutionNode>>(new List<WorkflowExecutionNode>());
+        }
+
         public System.Threading.Tasks.Task<IEnumerable<WorkflowExecutionNode>> GetWorkflowExecutionNodeIssuesAsync(string nodeId, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for GetWorkflowExecutionNodeIssuesAsync - returning empty list");
@@ -3421,6 +3958,12 @@ namespace NotifyXStudio.Core.Services
         public System.Threading.Tasks.Task<WorkflowExecutionNode> CreateWorkflowExecutionNodeAsync(string executionId, string? nodeType, string? status, string? input, string? output, string? errorMessage, DateTime? startedAt, DateTime? completedAt, string? metadata, string? description, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for CreateWorkflowExecutionNodeAsync with parameters - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowExecutionNode>(null!);
+        }
+
+        public System.Threading.Tasks.Task<WorkflowExecutionNode> CreateWorkflowExecutionNodeAsync(string workflowExecutionId, string? nodeId, string? nodeType, string? status, string? input, string? output, DateTime? startedAt, DateTime? completedAt, Dictionary<string, object>? metadata, string? errorMessage, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowExecutionNodeAsync with metadata - returning null");
             return System.Threading.Tasks.Task.FromResult<WorkflowExecutionNode>(null!);
         }
 
@@ -3507,6 +4050,44 @@ namespace NotifyXStudio.Core.Services
         public System.Threading.Tasks.Task<WorkflowExecutionEdge> GetWorkflowExecutionEdgeStatsAsync(string edgeId, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for GetWorkflowExecutionEdgeStatsAsync - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowExecutionEdge>(null!);
+        }
+
+        public System.Threading.Tasks.Task<WorkflowExecutionEdge> CreateWorkflowExecutionEdgeAsync(string workflowExecutionId, string edgeId, string? status, string? result, string? error, string? metadata, DateTime? startedAt, DateTime? completedAt, Dictionary<string, object>? data, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowExecutionEdgeAsync - returning new edge");
+            return System.Threading.Tasks.Task.FromResult(new WorkflowExecutionEdge
+            {
+                Id = Guid.NewGuid().ToString(),
+                Status = status ?? "pending"
+            });
+        }
+
+        public System.Threading.Tasks.Task<WorkflowExecutionEdge> CreateWorkflowExecutionEdgeAsync(string workflowExecutionId, string edgeId, string? sourceNodeId, string? targetNodeId, string? status, string? result, DateTime? startedAt, Dictionary<string, object>? metadata, string? errorMessage, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowExecutionEdgeAsync with metadata - returning new edge");
+            return System.Threading.Tasks.Task.FromResult(new WorkflowExecutionEdge
+            {
+                Id = Guid.NewGuid().ToString(),
+                Status = status ?? "pending"
+            });
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<WorkflowExecutionEdge>> ListWorkflowExecutionEdgesAsync(string? workflowExecutionId, string? sourceNodeId, string? targetNodeId, string? status, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListWorkflowExecutionEdgesAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkflowExecutionEdge>>(new List<WorkflowExecutionEdge>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetWorkflowExecutionEdgeCountAsync(string? workflowExecutionId, string? sourceNodeId, string? targetNodeId, string? status, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetWorkflowExecutionEdgeCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<WorkflowExecutionEdge> UpdateWorkflowExecutionEdgeAsync(string id, string? status, string? result, DateTime? startedAt, DateTime? completedAt, Dictionary<string, object>? data, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateWorkflowExecutionEdgeAsync - returning null");
             return System.Threading.Tasks.Task.FromResult<WorkflowExecutionEdge>(null!);
         }
 
@@ -3626,6 +4207,23 @@ namespace NotifyXStudio.Core.Services
         {
             _logger.LogWarning("Stub implementation for ListWorkflowExecutionLogsAsync - returning empty list");
             return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkflowExecutionLog>>(new List<WorkflowExecutionLog>());
+        }
+
+        public System.Threading.Tasks.Task<WorkflowExecutionLog> CreateWorkflowExecutionLogAsync(string workflowExecutionId, string? level, string? message, string? source, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowExecutionLogAsync - returning new log");
+            return System.Threading.Tasks.Task.FromResult(new WorkflowExecutionLog
+            {
+                Id = Guid.NewGuid().ToString(),
+                Level = level ?? "info",
+                Message = message ?? "Stub log message"
+            });
+        }
+
+        public System.Threading.Tasks.Task<WorkflowExecutionLog> UpdateWorkflowExecutionLogAsync(string id, string? level, string? message, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateWorkflowExecutionLogAsync - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowExecutionLog>(null!);
         }
 
         public System.Threading.Tasks.Task<int> GetWorkflowExecutionLogCountAsync(string? executionId = null, CancellationToken cancellationToken = default)
@@ -3780,6 +4378,12 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult<WorkflowExecutionTrigger>(null!);
         }
 
+        public System.Threading.Tasks.Task<WorkflowExecutionTrigger> CreateWorkflowExecutionTriggerAsync(string workflowExecutionId, string? triggerId, string? triggerType, string? status, string? errorMessage, DateTime? triggeredAt, Dictionary<string, object>? metadata, string? description, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowExecutionTriggerAsync with metadata - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowExecutionTrigger>(null!);
+        }
+
         public System.Threading.Tasks.Task<IEnumerable<WorkflowExecutionTrigger>> ListWorkflowExecutionTriggersAsync(string? executionId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for ListWorkflowExecutionTriggersAsync - returning empty list");
@@ -3893,6 +4497,12 @@ namespace NotifyXStudio.Core.Services
         public System.Threading.Tasks.Task<WorkflowExecutionTriggerLog> CreateWorkflowExecutionTriggerLogAsync(string triggerId, string? status, string? message, string? data, string? timestamp, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for CreateWorkflowExecutionTriggerLogAsync with parameters - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowExecutionTriggerLog>(null!);
+        }
+
+        public System.Threading.Tasks.Task<WorkflowExecutionTriggerLog> CreateWorkflowExecutionTriggerLogAsync(string workflowExecutionId, string? triggerId, string? status, string? message, string? data, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowExecutionTriggerLogAsync with metadata - returning null");
             return System.Threading.Tasks.Task.FromResult<WorkflowExecutionTriggerLog>(null!);
         }
         
@@ -4023,10 +4633,28 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult<WorkflowExecutionTriggerLogEntry>(null!);
         }
 
+        public System.Threading.Tasks.Task<WorkflowExecutionTriggerLogEntry> CreateWorkflowExecutionTriggerLogEntryAsync(string workflowExecutionId, string? triggerId, string? level, string? message, string? data, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowExecutionTriggerLogEntryAsync with metadata - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowExecutionTriggerLogEntry>(null!);
+        }
+
         public System.Threading.Tasks.Task<IEnumerable<WorkflowExecutionTriggerLogEntry>> ListWorkflowExecutionTriggerLogEntriesAsync(string? logId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for ListWorkflowExecutionTriggerLogEntriesAsync - returning empty list");
             return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkflowExecutionTriggerLogEntry>>(new List<WorkflowExecutionTriggerLogEntry>());
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<WorkflowExecutionTriggerLogEntry>> ListWorkflowExecutionTriggerLogEntriesAsync(string? workflowExecutionId, string? triggerId, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListWorkflowExecutionTriggerLogEntriesAsync with parameters - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkflowExecutionTriggerLogEntry>>(new List<WorkflowExecutionTriggerLogEntry>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetWorkflowExecutionTriggerLogEntryCountAsync(string? workflowExecutionId, string? triggerId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetWorkflowExecutionTriggerLogEntryCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
         }
 
         public System.Threading.Tasks.Task<int> GetWorkflowExecutionTriggerLogEntryCountAsync(string? logId = null, CancellationToken cancellationToken = default)
@@ -4165,6 +4793,24 @@ namespace NotifyXStudio.Core.Services
         public System.Threading.Tasks.Task<WorkflowEdge> CreateWorkflowEdgeAsync(string sourceNodeId, string targetNodeId, string? condition, string? workflowId, string? description, CancellationToken cancellationToken = default)
         {
             _logger.LogWarning("Stub implementation for CreateWorkflowEdgeAsync with parameters - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowEdge>(null!);
+        }
+
+        public System.Threading.Tasks.Task<IEnumerable<WorkflowEdge>> ListWorkflowEdgesAsync(string? workflowId, string? sourceNodeId, string? targetNodeId, string? condition, int page, int pageSize, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for ListWorkflowEdgesAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkflowEdge>>(new List<WorkflowEdge>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetWorkflowEdgeCountAsync(string? workflowId, string? sourceNodeId, string? targetNodeId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetWorkflowEdgeCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+
+        public System.Threading.Tasks.Task<WorkflowEdge> UpdateWorkflowEdgeAsync(string id, string? condition, string? description, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateWorkflowEdgeAsync - returning null");
             return System.Threading.Tasks.Task.FromResult<WorkflowEdge>(null!);
         }
 
@@ -4426,6 +5072,19 @@ namespace NotifyXStudio.Core.Services
             _logger.LogWarning("Stub implementation for UpdateWorkflowAsync with workflow components - returning null");
             return System.Threading.Tasks.Task.FromResult<Workflow>(null!);
         }
+
+        // Additional methods required by controllers
+        public System.Threading.Tasks.Task<IEnumerable<Workflow>> GetWorkflowsAsync(string? projectId = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetWorkflowsAsync - returning empty list");
+            return System.Threading.Tasks.Task.FromResult<IEnumerable<Workflow>>(new List<Workflow>());
+        }
+
+        public System.Threading.Tasks.Task<int> GetActiveWorkflowCountAsync(string? projectId = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for GetActiveWorkflowCountAsync - returning 0");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
     }
 
     // Workflow Trigger Service Stub
@@ -4526,10 +5185,10 @@ namespace NotifyXStudio.Core.Services
             return System.Threading.Tasks.Task.FromResult<IEnumerable<WorkflowTrigger>>(new List<WorkflowTrigger>());
         }
 
-        public System.Threading.Tasks.Task<WorkflowTrigger> GetWorkflowTriggerStatsAsync(string id, CancellationToken cancellationToken = default)
+        public System.Threading.Tasks.Task<Dictionary<string, object>> GetWorkflowTriggerStatsAsync(string? workflowId = null, CancellationToken cancellationToken = default)
         {
-            _logger.LogWarning("Stub implementation for GetWorkflowTriggerStatsAsync - returning null");
-            return System.Threading.Tasks.Task.FromResult<WorkflowTrigger>(null!);
+            _logger.LogWarning("Stub implementation for GetWorkflowTriggerStatsAsync - returning empty stats");
+            return System.Threading.Tasks.Task.FromResult(new Dictionary<string, object>());
         }
 
         public System.Threading.Tasks.Task<IEnumerable<WorkflowTrigger>> GetWorkflowTriggerTypesAsync(CancellationToken cancellationToken = default)
@@ -4543,6 +5202,18 @@ namespace NotifyXStudio.Core.Services
         {
             _logger.LogWarning("Stub implementation for CreateWorkflowTriggerAsync - returning input workflowTrigger");
             return System.Threading.Tasks.Task.FromResult(workflowTrigger);
+        }
+
+        public System.Threading.Tasks.Task<WorkflowTrigger> CreateWorkflowTriggerAsync(string workflowId, string triggerType, Dictionary<string, object> triggerConfig, string triggerName, string triggerDescription, Dictionary<string, object> metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for CreateWorkflowTriggerAsync with parameters - returning new trigger");
+            return System.Threading.Tasks.Task.FromResult(new WorkflowTrigger
+            {
+                Type = Enum.TryParse<TriggerType>(triggerType, out var type) ? type : TriggerType.Manual,
+                Config = JsonSerializer.SerializeToElement(triggerConfig),
+                IsActive = true,
+                Metadata = metadata
+            });
         }
 
         public System.Threading.Tasks.Task<IEnumerable<WorkflowTrigger>> ListWorkflowTriggersAsync(string? projectId = null, string? status = null, string? tags = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
@@ -4574,6 +5245,19 @@ namespace NotifyXStudio.Core.Services
             _logger.LogWarning("Stub implementation for UpdateWorkflowTriggerAsync with parameters - returning null");
             return System.Threading.Tasks.Task.FromResult<WorkflowTrigger>(null!);
         }
+
+        public System.Threading.Tasks.Task<WorkflowTrigger> UpdateWorkflowTriggerAsync(string id, string? name, string? description, string? status, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateWorkflowTriggerAsync with 4 parameters - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowTrigger>(null!);
+        }
+
+        public System.Threading.Tasks.Task<WorkflowTrigger> UpdateWorkflowTriggerAsync(string id, string? name, string? description, string? status, string? tags, string? projectId, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default)
+        {
+            _logger.LogWarning("Stub implementation for UpdateWorkflowTriggerAsync with metadata - returning null");
+            return System.Threading.Tasks.Task.FromResult<WorkflowTrigger>(null!);
+        }
+
     }
 
     // Workflow Run Service Stub

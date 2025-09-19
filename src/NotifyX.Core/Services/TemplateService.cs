@@ -838,4 +838,102 @@ public sealed class TemplateService : ITemplateService
             }
         }
     }
+
+    /// <inheritdoc />
+    public async Task<NotificationTemplate> CreateTemplateAsync(NotificationTemplate template, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            _logger.LogDebug("Creating template {TemplateId}", template.Id);
+
+            lock (_templatesLock)
+            {
+                _templates[template.Id] = template;
+            }
+
+            _logger.LogInformation("Successfully created template {TemplateId}", template.Id);
+            return template;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create template {TemplateId}", template.Id);
+            throw;
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> DeleteTemplateAsync(string templateId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            _logger.LogDebug("Deleting template {TemplateId}", templateId);
+
+            lock (_templatesLock)
+            {
+                var removed = _templates.Remove(templateId);
+                if (removed)
+                {
+                    _logger.LogInformation("Successfully deleted template {TemplateId}", templateId);
+                }
+                else
+                {
+                    _logger.LogWarning("Template {TemplateId} not found for deletion", templateId);
+                }
+                return removed;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to delete template {TemplateId}", templateId);
+            throw;
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<TemplateRenderResult> RenderTemplateAsync(string templateId, Dictionary<string, object> data, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            _logger.LogDebug("Rendering template {TemplateId}", templateId);
+
+            var template = await GetTemplateAsync(templateId, cancellationToken);
+            if (template == null)
+            {
+                return new TemplateRenderResult
+                {
+                    IsSuccess = false,
+                    RenderedContent = string.Empty,
+                    ErrorMessage = $"Template {templateId} not found"
+                };
+            }
+
+            // Create a mock notification event for rendering
+            var notification = new NotificationEvent
+            {
+                Id = Guid.NewGuid().ToString(),
+                TenantId = "default",
+                EventType = "template_render",
+                Subject = template.Subject,
+                Content = template.Content,
+                TemplateVariables = data,
+                Recipients = new List<NotificationRecipient>(),
+                PreferredChannels = new List<NotificationChannel>(),
+                Priority = NotificationPriority.Normal,
+                ScheduledFor = null,
+                Metadata = new Dictionary<string, object>()
+            };
+
+            return await RenderAsync(notification, template, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to render template {TemplateId}", templateId);
+            return new TemplateRenderResult
+            {
+                IsSuccess = false,
+                RenderedContent = string.Empty,
+                ErrorMessage = ex.Message
+            };
+        }
+    }
 }

@@ -7,7 +7,14 @@ using NotifyXStudio.Core;
 using NotifyXStudio.Connectors;
 using NotifyXStudio.Persistence;
 using NotifyXStudio.Runtime;
+using NotifyXStudio.Application;
 using Serilog;
+using NotifyX.Core.Interfaces;
+using NotifyX.Providers.Email;
+using NotifyX.Providers.SMS;
+using NotifyX.Providers.Push;
+using NotifyX.Providers.Webhook;
+using NotifyX.Core.Extensions;
 
 // Configure logging first
 var builder = WebApplication.CreateBuilder(args);
@@ -39,14 +46,31 @@ try
     // Add JWT token service
     builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
-    // Add NotifyX Studio services
-    builder.Services.AddNotifyXStudioCore();
-    builder.Services.AddNotifyXStudioConnectors();
+    // Add NotifyX core (real services)
+    builder.Services.AddNotifyX(builder.Configuration);
+    
+    // Add NotifyX Studio services - Application layer first (real services), then Core (remaining stubs)
     builder.Services.AddNotifyXStudioPersistence(builder.Configuration);
-    builder.Services.AddNotifyXStudioRuntime();
+    builder.Services.AddNotifyXStudioApplication(); // Real services first
+    builder.Services.AddNotifyXStudioCore(); // Remaining stub services
+
+    // Providers: Email, SMS, Push, Webhook
+    builder.Services.Configure<EmailProviderOptions>(builder.Configuration.GetSection("Providers:Email"));
+    builder.Services.Configure<SmsProviderOptions>(builder.Configuration.GetSection("Providers:SMS"));
+    builder.Services.Configure<PushProviderOptions>(builder.Configuration.GetSection("Providers:Push"));
+    builder.Services.Configure<WebhookProviderOptions>(builder.Configuration.GetSection("Providers:Webhook"));
+
+    builder.Services.AddHttpClient();
+    builder.Services.AddScoped<INotificationProvider, EmailProvider>();
+    builder.Services.AddScoped<INotificationProvider, SmsProvider>();
+    builder.Services.AddScoped<INotificationProvider, PushProvider>();
+    builder.Services.AddScoped<INotificationProvider, WebhookProvider>();
 
     // Add middleware services
     builder.Services.AddNotifyXStudioMiddleware(builder.Configuration);
+    
+    // Add stub service middleware
+    builder.Services.AddScoped<StubServiceMiddleware>();
 
     // Add SignalR
     builder.Services.AddSignalR();
@@ -106,14 +130,18 @@ try
 
     // Use NotifyX Studio middleware
     app.UseNotifyXStudioMiddleware();
+    
+    // Use stub service middleware (returns 501 for stub endpoints when disabled)
+    app.UseMiddleware<StubServiceMiddleware>();
 
     // Authentication and authorization
     app.UseAuthentication();
     app.UseAuthorization();
 
-    // Map endpoints
+    // Map all controllers
     app.MapControllers();
-    app.MapHub<Hubs.WorkflowHub>("/workflowhub");
+    // TODO: Add WorkflowHub
+    // app.MapHub<Hubs.WorkflowHub>("/workflowhub");
 
     // Add a production-ready welcome endpoint
     app.MapGet("/", () => new

@@ -17,7 +17,7 @@ public class NotificationWorkerService : IWorkerService, IDisposable
     private readonly WorkerOptions _options;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly ConcurrentDictionary<int, Task> _workers = new();
-    private readonly WorkerStatistics _statistics = new()
+    private WorkerStatistics _statistics = new()
     {
         TotalProcessed = 0,
         TotalFailed = 0,
@@ -244,7 +244,7 @@ public class NotificationWorkerService : IWorkerService, IDisposable
 
             if (result.IsSuccess)
             {
-                Interlocked.Increment(ref _statistics.TotalProcessed);
+                _statistics.TotalProcessed++;
                 _statistics.LastProcessedAt = DateTime.UtcNow;
                 
                 // Update average processing time
@@ -285,7 +285,7 @@ public class NotificationWorkerService : IWorkerService, IDisposable
     {
         try
         {
-            Interlocked.Increment(ref _statistics.TotalFailed);
+            _statistics.TotalFailed++;
 
             var failedNotification = new FailedNotification
             {

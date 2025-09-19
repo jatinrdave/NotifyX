@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
 namespace NotifyXStudio.Api.Middleware
@@ -14,11 +15,11 @@ namespace NotifyXStudio.Api.Middleware
         private readonly MetricsOptions _options;
         private readonly IMetricsCollector _metricsCollector;
 
-        public MetricsMiddleware(RequestDelegate next, ILogger<MetricsMiddleware> logger, MetricsOptions options, IMetricsCollector metricsCollector)
+        public MetricsMiddleware(RequestDelegate next, ILogger<MetricsMiddleware> logger, IOptions<MetricsOptions> options, IMetricsCollector metricsCollector)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
             _metricsCollector = metricsCollector ?? throw new ArgumentNullException(nameof(metricsCollector));
         }
 
@@ -145,10 +146,10 @@ namespace NotifyXStudio.Api.Middleware
         private readonly ILogger<DefaultMetricsCollector> _logger;
         private readonly MetricsOptions _options;
 
-        public DefaultMetricsCollector(ILogger<DefaultMetricsCollector> logger, MetricsOptions options)
+        public DefaultMetricsCollector(ILogger<DefaultMetricsCollector> logger, IOptions<MetricsOptions> options)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task CollectAsync(RequestMetrics metrics)

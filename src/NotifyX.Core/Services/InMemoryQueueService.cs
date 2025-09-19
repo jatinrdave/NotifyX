@@ -17,7 +17,7 @@ public class InMemoryQueueService : IPriorityQueueService
     private readonly ConcurrentQueue<QueueMessage> _normalQueue = new();
     private readonly ConcurrentQueue<QueueMessage> _lowQueue = new();
     private readonly ConcurrentDictionary<string, QueueMessage> _processingMessages = new();
-    private readonly QueueStatistics _statistics = new()
+    private QueueStatistics _statistics = new()
     {
         TotalMessages = 0,
         ProcessedMessages = 0,
@@ -54,8 +54,7 @@ public class InMemoryQueueService : IPriorityQueueService
             var queue = GetQueueByPriority(priority);
             queue.Enqueue(message);
 
-            Interlocked.Increment(ref _statistics.TotalMessages);
-            Interlocked.Increment(ref _statistics.PendingMessages);
+            _statistics = _statistics with { TotalMessages = _statistics.TotalMessages + 1, PendingMessages = _statistics.PendingMessages + 1 };
 
             _logger.LogDebug("Enqueued notification {NotificationId} with priority {Priority}", notification.Id, priority);
             return Task.FromResult(true);
@@ -85,7 +84,7 @@ public class InMemoryQueueService : IPriorityQueueService
     public async Task<NotificationEvent?> DequeueAsync(CancellationToken cancellationToken = default)
     {
         var message = await DequeueHighestPriorityAsync(cancellationToken);
-        return message?.Notification;
+        return message;
     }
 
     public Task<NotificationEvent?> DequeueHighestPriorityAsync(CancellationToken cancellationToken = default)
@@ -106,12 +105,12 @@ public class InMemoryQueueService : IPriorityQueueService
                 if (queue.TryDequeue(out var message))
                 {
                     _processingMessages.TryAdd(message.Id, message);
-                    Interlocked.Decrement(ref _statistics.PendingMessages);
+                    _statistics = _statistics with { PendingMessages = _statistics.PendingMessages - 1 };
                     
                     _logger.LogDebug("Dequeued notification {NotificationId} with priority {Priority}", 
                         message.Notification.Id, priority);
                     
-                    return Task.FromResult(message.Notification);
+                    return Task.FromResult<NotificationEvent?>(message.Notification);
                 }
             }
 

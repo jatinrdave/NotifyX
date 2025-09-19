@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Text;
 
 namespace NotifyXStudio.Api.Middleware
@@ -15,12 +16,12 @@ namespace NotifyXStudio.Api.Middleware
         private readonly IMemoryCache _cache;
         private readonly CachingOptions _options;
 
-        public CachingMiddleware(RequestDelegate next, ILogger<CachingMiddleware> logger, IMemoryCache cache, CachingOptions options)
+        public CachingMiddleware(RequestDelegate next, ILogger<CachingMiddleware> logger, IMemoryCache cache, IOptions<CachingOptions> options)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task InvokeAsync(HttpContext context)

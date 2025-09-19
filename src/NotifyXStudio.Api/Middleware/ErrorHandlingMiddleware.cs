@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text.Json;
 
@@ -14,11 +15,11 @@ namespace NotifyXStudio.Api.Middleware
         private readonly ILogger<ErrorHandlingMiddleware> _logger;
         private readonly ErrorHandlingOptions _options;
 
-        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger, ErrorHandlingOptions options)
+        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger, IOptions<ErrorHandlingOptions> options)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -99,8 +100,8 @@ namespace NotifyXStudio.Api.Middleware
         {
             return exception switch
             {
-                ArgumentException => "Invalid request parameters.",
                 ArgumentNullException => "Required parameter is missing.",
+                ArgumentException => "Invalid request parameters.",
                 UnauthorizedAccessException => "Access denied.",
                 NotImplementedException => "Feature not implemented.",
                 TimeoutException => "Request timed out.",
@@ -135,8 +136,8 @@ namespace NotifyXStudio.Api.Middleware
         {
             return exception switch
             {
-                ArgumentException => (int)HttpStatusCode.BadRequest,
                 ArgumentNullException => (int)HttpStatusCode.BadRequest,
+                ArgumentException => (int)HttpStatusCode.BadRequest,
                 UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
                 NotImplementedException => (int)HttpStatusCode.NotImplemented,
                 TimeoutException => (int)HttpStatusCode.RequestTimeout,

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace NotifyXStudio.Api.Middleware
@@ -15,11 +16,11 @@ namespace NotifyXStudio.Api.Middleware
         private readonly HealthCheckOptions _options;
         private readonly IServiceProvider _serviceProvider;
 
-        public HealthCheckMiddleware(RequestDelegate next, ILogger<HealthCheckMiddleware> logger, HealthCheckOptions options, IServiceProvider serviceProvider)
+        public HealthCheckMiddleware(RequestDelegate next, ILogger<HealthCheckMiddleware> logger, IOptions<HealthCheckOptions> options, IServiceProvider serviceProvider)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
@@ -61,7 +62,7 @@ namespace NotifyXStudio.Api.Middleware
                     Status = entry.Value.Status.ToString(),
                     Duration = entry.Value.Duration,
                     Description = entry.Value.Description,
-                    Data = entry.Value.Data,
+                    Data = entry.Value.Data?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
                     Exception = entry.Value.Exception?.Message
                 }).ToList()
             };

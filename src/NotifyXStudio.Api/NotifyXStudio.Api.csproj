@@ -1,23 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="9.0.0" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="8.0.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="8.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.11" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.8.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.8.1" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +33,12 @@
     <ProjectReference Include="..\NotifyXStudio.Connectors\NotifyXStudio.Connectors.csproj" />
     <ProjectReference Include="..\NotifyXStudio.Persistence\NotifyXStudio.Persistence.csproj" />
     <ProjectReference Include="..\NotifyXStudio.Runtime\NotifyXStudio.Runtime.csproj" />
+    <ProjectReference Include="..\NotifyXStudio.Application\NotifyXStudio.Application.csproj" />
+    <ProjectReference Include="..\NotifyX.Core\NotifyX.Core.csproj" />
+    <ProjectReference Include="..\NotifyX.Providers.Email\NotifyX.Providers.Email.csproj" />
+    <ProjectReference Include="..\NotifyX.Providers.SMS\NotifyX.Providers.SMS.csproj" />
+    <ProjectReference Include="..\NotifyX.Providers.Push\NotifyX.Providers.Push.csproj" />
+    <ProjectReference Include="..\NotifyX.Providers.Webhook\NotifyX.Providers.Webhook.csproj" />
   </ItemGroup>
 
 </Project>

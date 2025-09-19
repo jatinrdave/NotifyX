@@ -24,7 +24,7 @@ public sealed record DeadLetterQueueStatistics
     public long TotalFailedMessages { get; init; }
     public long RetriedMessages { get; init; }
     public long PermanentlyFailedMessages { get; init; }
-    public DateTime LastFailedAt { get; init; }
+    public DateTime LastFailedAt { get; set; }
     public Dictionary<string, long> FailureReasons { get; init; } = new();
     public Dictionary<string, object> Metadata { get; init; } = new();
 }

@@ -37,18 +37,18 @@ public class AIService : IAIService
                 Name = $"AI Generated Rule - {DateTime.UtcNow:yyyyMMddHHmmss}",
                 Description = $"Rule generated from: {naturalLanguage}",
                 IsActive = true,
-                Priority = NotificationPriority.Normal,
+                Priority = (int)NotificationPriority.Normal,
                 Condition = new RuleCondition
                 {
-                    ConditionType = ConditionType.EventType,
-                    ConditionOperator = ConditionOperator.Contains,
-                    Value = ExtractEventType(naturalLanguage)
+                    Type = ConditionType.EventType,
+                    Operator = ConditionOperator.Contains,
+                    ExpectedValues = new List<object> { ExtractEventType(naturalLanguage) }
                 },
                 Actions = new List<RuleAction>
                 {
                     new RuleAction
                     {
-                        ActionType = ActionType.SendNotification,
+                        Type = ActionType.SendNotification,
                         Parameters = new Dictionary<string, object>
                         {
                             ["channel"] = ExtractChannel(naturalLanguage),

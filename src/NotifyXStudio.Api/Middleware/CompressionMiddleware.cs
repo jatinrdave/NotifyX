@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.IO.Compression;
 
 namespace NotifyXStudio.Api.Middleware
@@ -13,11 +14,11 @@ namespace NotifyXStudio.Api.Middleware
         private readonly ILogger<CompressionMiddleware> _logger;
         private readonly CompressionOptions _options;
 
-        public CompressionMiddleware(RequestDelegate next, ILogger<CompressionMiddleware> logger, CompressionOptions options)
+        public CompressionMiddleware(RequestDelegate next, ILogger<CompressionMiddleware> logger, IOptions<CompressionOptions> options)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task InvokeAsync(HttpContext context)

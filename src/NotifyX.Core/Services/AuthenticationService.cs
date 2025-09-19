@@ -184,7 +184,7 @@ public sealed class AuthenticationService : IAuthenticationService
                 return TokenValidationResult.Failure("User is inactive", "USER_INACTIVE");
             }
 
-            return TokenValidationResult.Success(user, userInfo.ExpiresAt, userInfo.IssuedAt);
+            return TokenValidationResult.Success(user, userInfo.Value.ExpiresAt, userInfo.Value.IssuedAt);
         }
         catch (Exception ex)
         {

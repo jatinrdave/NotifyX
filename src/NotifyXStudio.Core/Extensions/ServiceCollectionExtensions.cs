@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NotifyXStudio.Core.Services;
+using NotifyXStudio.Core.Interfaces;
 
 namespace NotifyXStudio.Core
 {
@@ -7,10 +8,8 @@ namespace NotifyXStudio.Core
     {
         public static IServiceCollection AddNotifyXStudioCore(this IServiceCollection services)
         {
-            // Register all stub services
-            services.AddScoped<IUserService, StubUserService>();
-            services.AddScoped<IProjectService, StubProjectService>();
-            services.AddScoped<ITaskService, StubTaskService>();
+            // NOTE: User, Project, and Task services are now registered in Application layer
+            // Only register stub services for services that don't have real implementations yet
             services.AddScoped<IIssueService, StubIssueService>();
             services.AddScoped<IStoryService, StubStoryService>();
             services.AddScoped<IEpicService, StubEpicService>();

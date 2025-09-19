@@ -32,6 +32,11 @@
     <ProjectReference Include="..\NotifyXStudio.Connectors\NotifyXStudio.Connectors.csproj" />
     <ProjectReference Include="..\NotifyXStudio.Persistence\NotifyXStudio.Persistence.csproj" />
     <ProjectReference Include="..\NotifyXStudio.Runtime\NotifyXStudio.Runtime.csproj" />
+    <ProjectReference Include="..\NotifyX.Core\NotifyX.Core.csproj" />
+    <ProjectReference Include="..\NotifyX.Providers.Email\NotifyX.Providers.Email.csproj" />
+    <ProjectReference Include="..\NotifyX.Providers.SMS\NotifyX.Providers.SMS.csproj" />
+    <ProjectReference Include="..\NotifyX.Providers.Push\NotifyX.Providers.Push.csproj" />
+    <ProjectReference Include="..\NotifyX.Providers.Webhook\NotifyX.Providers.Webhook.csproj" />
   </ItemGroup>
 
 </Project>

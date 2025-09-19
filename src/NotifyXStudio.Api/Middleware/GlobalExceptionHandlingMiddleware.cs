@@ -40,8 +40,8 @@ public class GlobalExceptionHandlingMiddleware
 
         switch (exception)
         {
-            case ArgumentException:
             case ArgumentNullException:
+            case ArgumentException:
                 problemDetails.Status = (int)HttpStatusCode.BadRequest;
                 problemDetails.Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1";
                 problemDetails.Title = "Bad Request";

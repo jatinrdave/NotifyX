@@ -2,6 +2,8 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace NotifyXStudio.Api.Configuration;
 
@@ -112,7 +114,7 @@ public static class SwaggerConfiguration
                 options.EnableFilter();
                 options.ShowExtensions();
                 options.EnableValidator();
-                options.SupportedSubmitMethods(SubmitMethod.Get, SubmitMethod.Post, SubmitMethod.Put, SubmitMethod.Delete, SubmitMethod.Patch);
+                options.SupportedSubmitMethods(Swashbuckle.AspNetCore.SwaggerUI.SubmitMethod.Get, Swashbuckle.AspNetCore.SwaggerUI.SubmitMethod.Post, Swashbuckle.AspNetCore.SwaggerUI.SubmitMethod.Put, Swashbuckle.AspNetCore.SwaggerUI.SubmitMethod.Delete, Swashbuckle.AspNetCore.SwaggerUI.SubmitMethod.Patch);
 
                 // Custom CSS
                 options.InjectStylesheet("/swagger-ui/custom.css");
@@ -214,10 +216,10 @@ public static class ApiVersioningConfiguration
         {
             options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
             options.AssumeDefaultVersionWhenUnspecified = true;
-            options.ApiVersionReader = Microsoft.AspNetCore.Mvc.ApiVersionReader.Combine(
-                new Microsoft.AspNetCore.Mvc.QueryStringApiVersionReader("version"),
-                new Microsoft.AspNetCore.Mvc.HeaderApiVersionReader("X-API-Version"),
-                new Microsoft.AspNetCore.Mvc.MediaTypeApiVersionReader("ver")
+            options.ApiVersionReader = ApiVersionReader.Combine(
+                new QueryStringApiVersionReader("version"),
+                new HeaderApiVersionReader("X-API-Version"),
+                new MediaTypeApiVersionReader("ver")
             );
         });
 

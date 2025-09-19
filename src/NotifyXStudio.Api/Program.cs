@@ -45,8 +45,11 @@ try
     // Add JWT token service
     builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
-    // Add NotifyX core
+    // Add NotifyX core (real services)
     builder.Services.AddNotifyX(builder.Configuration);
+    
+    // Add NotifyX Studio services (includes stubs for API compatibility)
+    builder.Services.AddNotifyXStudioCore();
     builder.Services.AddNotifyXStudioPersistence(builder.Configuration);
 
     // Providers: Email, SMS, Push, Webhook
@@ -63,6 +66,9 @@ try
 
     // Add middleware services
     builder.Services.AddNotifyXStudioMiddleware(builder.Configuration);
+    
+    // Add stub service middleware
+    builder.Services.AddScoped<StubServiceMiddleware>();
 
     // Add SignalR
     builder.Services.AddSignalR();
@@ -122,13 +128,21 @@ try
 
     // Use NotifyX Studio middleware
     app.UseNotifyXStudioMiddleware();
+    
+    // Use stub service middleware (returns 501 for stub endpoints when disabled)
+    app.UseMiddleware<StubServiceMiddleware>();
 
     // Authentication and authorization
     app.UseAuthentication();
     app.UseAuthorization();
 
-    // Map endpoints
+    // Map endpoints - only register working controllers for now
     app.MapControllers();
+    
+    // Map specific working controllers
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "api/v1/{controller=Notification}/{action=Index}/{id?}");
     // TODO: Add WorkflowHub
     // app.MapHub<Hubs.WorkflowHub>("/workflowhub");
 

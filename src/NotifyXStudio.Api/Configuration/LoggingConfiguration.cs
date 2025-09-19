@@ -42,7 +42,7 @@ public static class LoggingConfiguration
                 retainedFileCountLimit: 7,
                 outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
             .WriteTo.Seq(
-                serverUrl: configuration.GetConnectionString("Seq") ?? "http://localhost:5341",
+                serverUrl: configuration["Logging:Seq:ServerUrl"] ?? "http://localhost:5341",
                 apiKey: configuration["Logging:Seq:ApiKey"])
             .CreateLogger();
 

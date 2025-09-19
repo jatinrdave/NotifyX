@@ -1,266 +1,227 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NotifyXStudio.Core.Services;
+using NotifyX.Core.Interfaces;
+using NotifyX.Core.Models;
+using NotifyXStudio.Api.Filters;
 
-namespace NotifyXStudio.Api.Controllers
+namespace NotifyXStudio.Api.Controllers;
+
+/// <summary>
+/// Controller for notification operations using real services
+/// </summary>
+[ApiController]
+[Route("api/v1/[controller]")]
+[Produces("application/json")]
+public class NotificationController : ControllerBase
 {
-    /// <summary>
-    /// Controller for notification operations.
-    /// </summary>
-    [ApiController]
-    [Route("api/[controller]")]
-    public class NotificationController : ControllerBase
+    private readonly INotificationService _notificationService;
+    private readonly ILogger<NotificationController> _logger;
+
+    public NotificationController(INotificationService notificationService, ILogger<NotificationController> logger)
     {
-        private readonly ILogger<NotificationController> _logger;
-        private readonly INotificationService _notificationService;
+        _notificationService = notificationService;
+        _logger = logger;
+    }
 
-        public NotificationController(ILogger<NotificationController> logger, INotificationService notificationService)
+    /// <summary>
+    /// Send a notification
+    /// </summary>
+    [HttpPost("send")]
+    [ProducesResponseType(typeof(NotificationResult), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> SendNotification([FromBody] NotificationEvent notification, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
-        }
+            _logger.LogInformation("Sending notification {NotificationId} of type {EventType}", 
+                notification.Id, notification.EventType);
 
-        /// <summary>
-        /// Sends a notification.
-        /// </summary>
-        [HttpPost("send")]
-        public async Task<IActionResult> SendNotification([FromBody] SendNotificationRequest request)
-        {
-            try
+            var result = await _notificationService.SendAsync(notification, cancellationToken);
+            
+            if (result.IsSuccess)
             {
-                if (request == null)
-                {
-                    return BadRequest("Notification request is required");
-                }
-
-                var notificationId = await _notificationService.SendNotificationAsync(
-                    request.Message,
-                    request.Message,
-                    request.Channel,
-                    request.Recipient,
-                    request.TenantId.ToString());
-
-                return Ok(new
-                {
-                    notificationId,
-                    message = "Notification sent successfully",
-                    sentAt = DateTime.UtcNow
-                });
+                return Ok(result);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "Failed to send notification: {Message}", ex.Message);
-                return StatusCode(500, new
-                {
-                    error = "Failed to send notification",
-                    message = ex.Message
-                });
+                return BadRequest(new { error = result.ErrorMessage });
             }
         }
-
-        /// <summary>
-        /// Gets notification status.
-        /// </summary>
-        [HttpGet("{notificationId}/status")]
-        public async Task<IActionResult> GetNotificationStatus(string notificationId)
+        catch (Exception ex)
         {
-            try
-            {
-                var status = await _notificationService.GetNotificationStatusAsync(notificationId);
-
-                if (status == null)
-                {
-                    return NotFound(new
-                    {
-                        error = "Notification not found",
-                        notificationId
-                    });
-                }
-
-                return Ok(status);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get notification status for {NotificationId}: {Message}", notificationId, ex.Message);
-                return StatusCode(500, new
-                {
-                    error = "Failed to retrieve notification status",
-                    message = ex.Message
-                });
-            }
-        }
-
-        /// <summary>
-        /// Gets notification history.
-        /// </summary>
-        [HttpGet("history")]
-        public async Task<IActionResult> GetNotificationHistory(
-            [FromQuery] Guid? tenantId,
-            [FromQuery] string? channel,
-            [FromQuery] string? status,
-            [FromQuery] DateTime? startDate,
-            [FromQuery] DateTime? endDate,
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 50)
-        {
-            try
-            {
-                var start = startDate ?? DateTime.UtcNow.AddDays(-30);
-                var end = endDate ?? DateTime.UtcNow;
-
-                var notifications = await _notificationService.GetNotificationHistoryAsync(
-                    tenantId?.ToString() ?? "default", channel, status, page, pageSize);
-
-                var totalCount = await _notificationService.GetNotificationCountAsync(
-                    tenantId?.ToString() ?? "default", channel, status);
-
-                return Ok(new
-                {
-                    notifications,
-                    pagination = new
-                    {
-                        page,
-                        pageSize,
-                        totalCount,
-                        totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get notification history: {Message}", ex.Message);
-                return StatusCode(500, new
-                {
-                    error = "Failed to retrieve notification history",
-                    message = ex.Message
-                });
-            }
-        }
-
-        /// <summary>
-        /// Gets notification statistics.
-        /// </summary>
-        [HttpGet("stats")]
-        public async Task<IActionResult> GetNotificationStats(
-            [FromQuery] Guid? tenantId,
-            [FromQuery] DateTime? startDate,
-            [FromQuery] DateTime? endDate)
-        {
-            try
-            {
-                var start = startDate ?? DateTime.UtcNow.AddDays(-30);
-                var end = endDate ?? DateTime.UtcNow;
-
-                var stats = await _notificationService.GetNotificationStatsAsync(tenantId?.ToString() ?? "default");
-
-                return Ok(new
-                {
-                    tenantId,
-                    dateRange = new { start, end },
-                    stats
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get notification stats: {Message}", ex.Message);
-                return StatusCode(500, new
-                {
-                    error = "Failed to retrieve notification statistics",
-                    message = ex.Message
-                });
-            }
-        }
-
-        /// <summary>
-        /// Cancels a notification.
-        /// </summary>
-        [HttpPost("{notificationId}/cancel")]
-        public async Task<IActionResult> CancelNotification(string notificationId)
-        {
-            try
-            {
-                await _notificationService.CancelNotificationAsync(notificationId);
-
-                return Ok(new
-                {
-                    message = "Notification cancelled successfully",
-                    notificationId,
-                    cancelledAt = DateTime.UtcNow
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to cancel notification {NotificationId}: {Message}", notificationId, ex.Message);
-                return StatusCode(500, new
-                {
-                    error = "Failed to cancel notification",
-                    message = ex.Message
-                });
-            }
-        }
-
-        /// <summary>
-        /// Retries a failed notification.
-        /// </summary>
-        [HttpPost("{notificationId}/retry")]
-        public async Task<IActionResult> RetryNotification(string notificationId)
-        {
-            try
-            {
-                await _notificationService.RetryNotificationAsync(notificationId);
-
-                return Ok(new
-                {
-                    message = "Notification retry initiated successfully",
-                    notificationId,
-                    retriedAt = DateTime.UtcNow
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to retry notification {NotificationId}: {Message}", notificationId, ex.Message);
-                return StatusCode(500, new
-                {
-                    error = "Failed to retry notification",
-                    message = ex.Message
-                });
-            }
+            _logger.LogError(ex, "Error sending notification {NotificationId}", notification.Id);
+            return StatusCode(500, new { error = "Internal server error" });
         }
     }
 
     /// <summary>
-    /// Send notification request model.
+    /// Send a batch of notifications
     /// </summary>
-    public class SendNotificationRequest
+    [HttpPost("send-batch")]
+    [ProducesResponseType(typeof(BatchNotificationResult), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> SendBatchNotifications([FromBody] IEnumerable<NotificationEvent> notifications, CancellationToken cancellationToken = default)
     {
-        /// <summary>
-        /// Tenant ID.
-        /// </summary>
-        public Guid TenantId { get; set; }
+        try
+        {
+            var notificationsList = notifications.ToList();
+            _logger.LogInformation("Sending batch of {Count} notifications", notificationsList.Count);
 
-        /// <summary>
-        /// Notification channel.
-        /// </summary>
-        public string Channel { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Recipient information.
-        /// </summary>
-        public string Recipient { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Notification message.
-        /// </summary>
-        public string Message { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Notification priority.
-        /// </summary>
-        public string Priority { get; set; } = "normal";
-
-        /// <summary>
-        /// Additional metadata.
-        /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+            var result = await _notificationService.SendBatchAsync(notificationsList, cancellationToken);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sending batch notifications");
+            return StatusCode(500, new { error = "Internal server error" });
+        }
     }
+
+    /// <summary>
+    /// Schedule a notification
+    /// </summary>
+    [HttpPost("schedule")]
+    [ProducesResponseType(typeof(NotificationResult), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> ScheduleNotification([FromBody] ScheduleNotificationRequest request, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            _logger.LogInformation("Scheduling notification {NotificationId} for {ScheduledFor}", 
+                request.Notification.Id, request.ScheduledFor);
+
+            var result = await _notificationService.ScheduleAsync(request.Notification, request.ScheduledFor, cancellationToken);
+            
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(new { error = result.ErrorMessage });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error scheduling notification {NotificationId}", request.Notification.Id);
+            return StatusCode(500, new { error = "Internal server error" });
+        }
+    }
+
+    /// <summary>
+    /// Get notification status
+    /// </summary>
+    [HttpGet("{notificationId}/status")]
+    [ProducesResponseType(typeof(NotificationStatus), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> GetNotificationStatus(string notificationId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var status = await _notificationService.GetStatusAsync(notificationId, cancellationToken);
+            
+            if (status == null)
+            {
+                return NotFound(new { error = "Notification not found" });
+            }
+
+            return Ok(status);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting notification status {NotificationId}", notificationId);
+            return StatusCode(500, new { error = "Internal server error" });
+        }
+    }
+
+    /// <summary>
+    /// Cancel a notification
+    /// </summary>
+    [HttpPost("{notificationId}/cancel")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> CancelNotification(string notificationId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await _notificationService.CancelAsync(notificationId, cancellationToken);
+            
+            if (result)
+            {
+                return Ok(new { message = "Notification cancelled successfully" });
+            }
+            else
+            {
+                return BadRequest(new { error = "Failed to cancel notification" });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error cancelling notification {NotificationId}", notificationId);
+            return StatusCode(500, new { error = "Internal server error" });
+        }
+    }
+
+    /// <summary>
+    /// Retry a failed notification
+    /// </summary>
+    [HttpPost("{notificationId}/retry")]
+    [ProducesResponseType(typeof(NotificationResult), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> RetryNotification(string notificationId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await _notificationService.RetryAsync(notificationId, cancellationToken);
+            
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(new { error = result.ErrorMessage });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrying notification {NotificationId}", notificationId);
+            return StatusCode(500, new { error = "Internal server error" });
+        }
+    }
+
+    /// <summary>
+    /// Get delivery history for a notification
+    /// </summary>
+    [HttpGet("{notificationId}/delivery-history")]
+    [ProducesResponseType(typeof(IEnumerable<DeliveryAttempt>), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> GetDeliveryHistory(string notificationId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var history = await _notificationService.GetDeliveryHistoryAsync(notificationId, cancellationToken);
+            return Ok(history);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting delivery history for notification {NotificationId}", notificationId);
+            return StatusCode(500, new { error = "Internal server error" });
+        }
+    }
+}
+
+/// <summary>
+/// Request model for scheduling notifications
+/// </summary>
+public class ScheduleNotificationRequest
+{
+    public NotificationEvent Notification { get; set; } = null!;
+    public DateTime ScheduledFor { get; set; }
 }

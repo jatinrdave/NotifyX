@@ -99,8 +99,8 @@ namespace NotifyXStudio.Api.Middleware
         {
             return exception switch
             {
-                ArgumentException => "Invalid request parameters.",
                 ArgumentNullException => "Required parameter is missing.",
+                ArgumentException => "Invalid request parameters.",
                 UnauthorizedAccessException => "Access denied.",
                 NotImplementedException => "Feature not implemented.",
                 TimeoutException => "Request timed out.",
@@ -135,8 +135,8 @@ namespace NotifyXStudio.Api.Middleware
         {
             return exception switch
             {
-                ArgumentException => (int)HttpStatusCode.BadRequest,
                 ArgumentNullException => (int)HttpStatusCode.BadRequest,
+                ArgumentException => (int)HttpStatusCode.BadRequest,
                 UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
                 NotImplementedException => (int)HttpStatusCode.NotImplemented,
                 TimeoutException => (int)HttpStatusCode.RequestTimeout,

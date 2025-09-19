@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NotifyXStudio.Api.Configuration;
 
@@ -78,7 +79,7 @@ public static class AuthenticationConfiguration
             .AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser())
             .AddPolicy("TenantAccess", policy => policy.RequireClaim("tenant_id"))
             .AddPolicy("ProjectAccess", policy => policy.RequireClaim("project_access"))
-            .AddDefaultPolicy("AuthenticatedUser");
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
     }
 }
 

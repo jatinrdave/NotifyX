@@ -61,7 +61,7 @@ namespace NotifyXStudio.Api.Middleware
                     Status = entry.Value.Status.ToString(),
                     Duration = entry.Value.Duration,
                     Description = entry.Value.Description,
-                    Data = entry.Value.Data,
+                    Data = entry.Value.Data?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
                     Exception = entry.Value.Exception?.Message
                 }).ToList()
             };

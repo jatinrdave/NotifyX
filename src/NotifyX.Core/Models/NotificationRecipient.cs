@@ -33,6 +33,21 @@ public sealed record NotificationRecipient
     public string? PushToken { get; init; }
 
     /// <summary>
+    /// Device ID for push notifications.
+    /// </summary>
+    public string? DeviceId { get; init; }
+
+    /// <summary>
+    /// Webhook URL for webhook notifications.
+    /// </summary>
+    public string? WebhookUrl { get; init; }
+
+    /// <summary>
+    /// Additional metadata for the recipient.
+    /// </summary>
+    public Dictionary<string, object> Metadata { get; init; } = new();
+
+    /// <summary>
     /// User ID in the source system.
     /// </summary>
     public string? UserId { get; init; }
@@ -96,7 +111,8 @@ public sealed record NotificationRecipient
         {
             NotificationChannel.Email => Email,
             NotificationChannel.SMS => PhoneNumber,
-            NotificationChannel.Push => PushToken,
+            NotificationChannel.Push => DeviceId ?? PushToken,
+            NotificationChannel.Webhook => WebhookUrl,
             _ => null
         };
     }

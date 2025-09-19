@@ -8,10 +8,8 @@ namespace NotifyXStudio.Core
     {
         public static IServiceCollection AddNotifyXStudioCore(this IServiceCollection services)
         {
-            // Register stub services for API compatibility - these will be replaced progressively
-            services.AddScoped<IUserService, StubUserService>();
-            services.AddScoped<IProjectService, StubProjectService>();
-            services.AddScoped<ITaskService, StubTaskService>();
+            // NOTE: User, Project, and Task services are now registered in Application layer
+            // Only register stub services for services that don't have real implementations yet
             services.AddScoped<IIssueService, StubIssueService>();
             services.AddScoped<IStoryService, StubStoryService>();
             services.AddScoped<IEpicService, StubEpicService>();

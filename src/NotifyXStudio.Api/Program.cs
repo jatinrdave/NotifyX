@@ -49,10 +49,10 @@ try
     // Add NotifyX core (real services)
     builder.Services.AddNotifyX(builder.Configuration);
     
-    // Add NotifyX Studio services (includes stubs for API compatibility)
-    builder.Services.AddNotifyXStudioCore();
+    // Add NotifyX Studio services - Application layer first (real services), then Core (remaining stubs)
     builder.Services.AddNotifyXStudioPersistence(builder.Configuration);
-    builder.Services.AddNotifyXStudioApplication();
+    builder.Services.AddNotifyXStudioApplication(); // Real services first
+    builder.Services.AddNotifyXStudioCore(); // Remaining stub services
 
     // Providers: Email, SMS, Push, Webhook
     builder.Services.Configure<EmailProviderOptions>(builder.Configuration.GetSection("Providers:Email"));

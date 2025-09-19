@@ -249,23 +249,26 @@ public class AINotificationOptimizer : IAINotificationOptimizer
 
         foreach (var recipient in notification.Recipients)
         {
-            foreach (var channel in recipient.ChannelPreferences)
+            foreach (var channelPreference in recipient.ChannelPreferences)
             {
-                var score = channel switch
+                var channel = channelPreference.Key;
+                var preference = channelPreference.Value;
+                
+                var score = preference switch
                 {
                     ChannelPreference.Preferred => 0.9,
-                    ChannelPreference.Allowed => 0.7,
-                    ChannelPreference.OptOut => 0.0,
+                    ChannelPreference.Enabled => 0.7,
+                    ChannelPreference.Disabled => 0.0,
                     _ => 0.5
                 };
 
-                if (preferences.ContainsKey((NotificationChannel)channel))
+                if (preferences.ContainsKey(channel))
                 {
-                    preferences[(NotificationChannel)channel] = Math.Max(preferences[(NotificationChannel)channel], score);
+                    preferences[channel] = Math.Max(preferences[channel], score);
                 }
                 else
                 {
-                    preferences[(NotificationChannel)channel] = score;
+                    preferences[channel] = score;
                 }
             }
         }

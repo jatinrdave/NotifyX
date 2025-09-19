@@ -186,7 +186,7 @@ public class ZapierConnector : IZapierConnector
 
             if (uri.Scheme != "https" && uri.Scheme != "http")
             {
-                return ValidationResult.Failure("Webhook URL must use HTTP or HTTPS scheme");
+                return ValidationResult.Failure(new List<string> { "Webhook URL must use HTTP or HTTPS scheme" });
             }
 
             return ValidationResult.Success();
@@ -194,7 +194,7 @@ public class ZapierConnector : IZapierConnector
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to validate webhook configuration");
-            return ValidationResult.Failure($"Validation failed: {ex.Message}");
+            return ValidationResult.Failure(new List<string> { $"Validation failed: {ex.Message}" });
         }
     }
 

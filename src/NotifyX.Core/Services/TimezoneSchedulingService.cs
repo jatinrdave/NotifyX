@@ -36,7 +36,7 @@ public class TimezoneSchedulingService : ITimezoneSchedulingService
                 }
             };
 
-            var result = await _notificationService.ScheduleAsync(scheduledNotification, cancellationToken);
+            var result = await _notificationService.ScheduleAsync(scheduledNotification, utcTime, cancellationToken);
             
             _logger.LogInformation("Scheduled notification {NotificationId} for timezone {Timezone} at {UtcTime} UTC", 
                 notification.Id, timezone, utcTime);

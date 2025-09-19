@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NotifyXStudio.Core.Services;
+using NotifyXStudio.Core.Models;
 
 namespace NotifyXStudio.Api.Controllers
 {
@@ -297,7 +298,7 @@ namespace NotifyXStudio.Api.Controllers
         {
             try
             {
-                var limits = await _tenantService.GetTenantLimitsAsync(tenantId?.ToString() ?? "default");
+                var limits = await _tenantService.GetTenantLimitsAsync(tenantId.ToString());
 
                 return Ok(new
                 {

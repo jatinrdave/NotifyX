@@ -53,6 +53,31 @@ public interface ITemplateService
     Task<NotificationTemplate?> GetTemplateAsync(string templateId, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Creates a new template.
+    /// </summary>
+    /// <param name="template">The template to create.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous create operation.</returns>
+    Task<NotificationTemplate> CreateTemplateAsync(NotificationTemplate template, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes a template by ID.
+    /// </summary>
+    /// <param name="templateId">The template ID.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous delete operation.</returns>
+    Task<bool> DeleteTemplateAsync(string templateId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Renders a template with the provided data.
+    /// </summary>
+    /// <param name="templateId">The template ID.</param>
+    /// <param name="data">The data to render with.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous render operation.</returns>
+    Task<TemplateRenderResult> RenderTemplateAsync(string templateId, Dictionary<string, object> data, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets templates for a specific tenant and channel.
     /// </summary>
     /// <param name="tenantId">The tenant ID.</param>
@@ -111,17 +136,17 @@ public sealed class TemplateRenderResult
     /// <summary>
     /// Whether the rendering was successful.
     /// </summary>
-    public bool IsSuccess { get; init; }
+    public bool IsSuccess { get; set; }
 
     /// <summary>
     /// The rendered subject.
     /// </summary>
-    public string? RenderedSubject { get; init; }
+    public string? RenderedSubject { get; set; }
 
     /// <summary>
     /// The rendered content.
     /// </summary>
-    public string RenderedContent { get; init; } = string.Empty;
+    public string RenderedContent { get; set; } = string.Empty;
 
     /// <summary>
     /// The rendered attachments.

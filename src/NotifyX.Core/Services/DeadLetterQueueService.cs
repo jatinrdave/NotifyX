@@ -12,7 +12,7 @@ public class DeadLetterQueueService : IDeadLetterQueueService
 {
     private readonly ILogger<DeadLetterQueueService> _logger;
     private readonly ConcurrentDictionary<string, FailedNotification> _failedNotifications = new();
-    private readonly DeadLetterQueueStatistics _statistics = new()
+    private DeadLetterQueueStatistics _statistics = new()
     {
         TotalFailedMessages = 0,
         RetriedMessages = 0,
@@ -32,7 +32,7 @@ public class DeadLetterQueueService : IDeadLetterQueueService
         {
             _failedNotifications.TryAdd(failedNotification.Id, failedNotification);
             
-            Interlocked.Increment(ref _statistics.TotalFailedMessages);
+            _statistics = _statistics with { TotalFailedMessages = _statistics.TotalFailedMessages + 1 };
             
             // Update failure reasons statistics
             lock (_statistics.FailureReasons)
@@ -106,7 +106,7 @@ public class DeadLetterQueueService : IDeadLetterQueueService
             };
 
             _failedNotifications.TryUpdate(failedNotificationId, updatedFailedNotification, failedNotification);
-            Interlocked.Increment(ref _statistics.RetryMessages);
+            _statistics = _statistics with { RetriedMessages = _statistics.RetriedMessages + 1 };
 
             _logger.LogInformation("Retried failed notification {FailedNotificationId} (attempt {RetryCount}/{MaxRetries})", 
                 failedNotificationId, updatedFailedNotification.RetryCount, failedNotification.MaxRetries);

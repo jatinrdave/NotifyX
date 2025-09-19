@@ -26,6 +26,7 @@ namespace NotifyXStudio.Core.Services
         Task<IEnumerable<User>> ListUsersAsync(string? tenantId, string? role, int page, int pageSize, CancellationToken cancellationToken = default);
         Task<int> GetUserCountAsync(string? tenantId, string? role, CancellationToken cancellationToken = default);
         Task<User> UpdateUserAsync(User user, CancellationToken cancellationToken = default);
+        Task<User> UpdateUserAsync(string id, string? firstName, string? lastName, string? email, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<User> DeleteUserAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<User>> GetUserActivityAsync(string userId, string? filter = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<int> GetUserActivityCountAsync(string userId, string? filter = null, CancellationToken cancellationToken = default);
@@ -351,9 +352,11 @@ namespace NotifyXStudio.Core.Services
         
         // Additional methods needed by controllers
         Task<Tenant> CreateTenantAsync(string name, string description, CancellationToken cancellationToken = default);
+        Task<Tenant> CreateTenantAsync(string name, string? description, Dictionary<string, object>? settings, CancellationToken cancellationToken = default);
         Task<IEnumerable<Tenant>> ListTenantsAsync(int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<int> GetTenantCountAsync(CancellationToken cancellationToken = default);
         Task<Tenant> UpdateTenantAsync(string id, string? name, string? description, string? status, CancellationToken cancellationToken = default);
+        Task<Tenant> UpdateTenantAsync(string id, string? name, string? description, Dictionary<string, object>? settings, CancellationToken cancellationToken = default);
     }
 
     // Notification Services
@@ -476,6 +479,15 @@ namespace NotifyXStudio.Core.Services
         
         // Additional overloads for controller compatibility
         Task<Config> UpdateConfigAsync(string id, string? name, string? value, string? description, Dictionary<string, object> settings, CancellationToken cancellationToken = default);
+        
+        // Additional methods required by controllers
+        Task<Config> GetConfigAsync(string key, CancellationToken cancellationToken = default);
+        Task<Config> SetConfigAsync(string key, string value, CancellationToken cancellationToken = default);
+        Task<bool> DeleteConfigAsync(string key, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Config>> ListConfigsAsync(string? tenantId = null, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetConfigSchemaAsync(string? tenantId = null, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> ValidateConfigAsync(Dictionary<string, object> config, CancellationToken cancellationToken = default);
+        Task<byte[]> ExportConfigAsync(string? tenantId = null, CancellationToken cancellationToken = default);
     }
 
     // System Services
@@ -558,6 +570,23 @@ namespace NotifyXStudio.Core.Services
         Task<Alert> UpdateAsync(Alert alert, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Alert>> ListAsync(string? projectId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        
+        // Additional methods required by controllers
+        Task<Alert> CreateAlertAsync(Alert alert, CancellationToken cancellationToken = default);
+        Task<Alert> CreateAlertAsync(string tenantId, string name, string description, string severity, Dictionary<string, object> conditions, Dictionary<string, object> actions, bool enabled, CancellationToken cancellationToken = default);
+        Task<Alert> GetAlertAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Alert>> ListAlertsAsync(string? projectId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<int> GetAlertCountAsync(string? projectId = null, CancellationToken cancellationToken = default);
+        Task<Alert> UpdateAlertAsync(string id, string? name, string? description, string? status, CancellationToken cancellationToken = default);
+        Task<Alert> UpdateAlertAsync(string id, string? name, string? description, string? status, string? type, string? severity, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
+        Task<Alert> DeleteAlertAsync(string id, CancellationToken cancellationToken = default);
+        Task<Alert> TestAlertAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Alert>> GetAlertHistoryAsync(string id, int page, int pageSize, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Alert>> GetAlertHistoryAsync(string id, string? filter, int page, int pageSize, CancellationToken cancellationToken = default);
+        Task<int> GetAlertHistoryCountAsync(string id, CancellationToken cancellationToken = default);
+        Task<int> GetAlertHistoryCountAsync(string id, string? filter, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetAlertStatsAsync(string? projectId = null, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetAlertStatsAsync(string? projectId, string? type, CancellationToken cancellationToken = default);
     }
 
     // Report Services
@@ -634,6 +663,7 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Webhook>> ListAsync(string? projectId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<Webhook> CreateWebhookAsync(string url, string? secret, string? events, string? projectId, string? description, CancellationToken cancellationToken = default);
+        Task<Webhook> CreateWebhookAsync(string url, string? secret, List<string>? events, string? description, Dictionary<string, string>? headers, CancellationToken cancellationToken = default);
         Task<Webhook> UpdateWebhookAsync(string id, string? url, string? secret, string? events, string? description, CancellationToken cancellationToken = default);
         Task<Webhook> UpdateWebhookAsync(string id, string? url, string? secret, List<string> events, string? description, Dictionary<string, string> headers, CancellationToken cancellationToken = default);
         Task<IEnumerable<Webhook>> GetWebhookLogsAsync(string id, int page, int pageSize, CancellationToken cancellationToken = default);
@@ -704,6 +734,7 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Branch>> ListAsync(string? repositoryId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<Branch> CreateBranchAsync(string name, string? description, string? repositoryId, string? parentBranchId, CancellationToken cancellationToken = default);
+        Task<Branch> CreateBranchAsync(string name, string? description, string? repositoryId, string? parentBranchId, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<Branch> GetBranchAsync(string branchId, CancellationToken cancellationToken = default);
         Task<IEnumerable<Branch>> ListBranchesAsync(string repositoryId, string? branchType, int page, int pageSize, CancellationToken cancellationToken = default);
         Task<int> GetBranchCountAsync(string repositoryId, string? branchType, CancellationToken cancellationToken = default);
@@ -726,6 +757,7 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Commit>> ListAsync(string? repositoryId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<Commit> CreateCommitAsync(string repositoryId, string message, string? author, string? branchId, List<string>? files, CancellationToken cancellationToken = default);
+        Task<Commit> CreateCommitAsync(string repositoryId, string message, string? author, string? branchId, List<string>? files, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<Commit> GetCommitAsync(string commitId, CancellationToken cancellationToken = default);
         Task<IEnumerable<Commit>> ListCommitsAsync(string repositoryId, string? branchId, string? author, int page, int pageSize, CancellationToken cancellationToken = default);
         Task<int> GetCommitCountAsync(string repositoryId, string? branchId, string? author, CancellationToken cancellationToken = default);
@@ -809,6 +841,9 @@ namespace NotifyXStudio.Core.Services
         Task<IEnumerable<NotifyXStudio.Core.Models.Environment>> GetEnvironmentDeploymentsAsync(string id, CancellationToken cancellationToken = default);
         Task<NotifyXStudio.Core.Models.Environment> GetEnvironmentStatsAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<NotifyXStudio.Core.Models.Environment>> GetEnvironmentTypesAsync(CancellationToken cancellationToken = default);
+        
+        // Additional methods required by controllers
+        Task<NotifyXStudio.Core.Models.Environment> CreateEnvironmentAsync(string name, string? description, string? type, Dictionary<string, object>? config, CancellationToken cancellationToken = default);
     }
 
     // Test Services
@@ -873,10 +908,12 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Backup>> ListAsync(string? projectId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<Backup> CreateBackupAsync(CancellationToken cancellationToken = default);
+        Task<Backup> CreateBackupAsync(string name, string? description, string? type, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<Backup> GetBackupInfoAsync(string backupId, CancellationToken cancellationToken = default);
         Task<IEnumerable<Backup>> ListBackupsAsync(string tenantId, string? backupType, int page, int pageSize, CancellationToken cancellationToken = default);
         Task<int> GetBackupCountAsync(string tenantId, string? backupType, CancellationToken cancellationToken = default);
         Task<Backup> RestoreFromBackupAsync(string backupId, CancellationToken cancellationToken = default);
+        Task<Backup> RestoreFromBackupAsync(string backupId, string? targetEnvironment, bool? overwriteExisting, Dictionary<string, object>? options, CancellationToken cancellationToken = default);
         Task DeleteBackupAsync(string backupId, CancellationToken cancellationToken = default);
         Task<byte[]> DownloadBackupAsync(string backupId, CancellationToken cancellationToken = default);
     }
@@ -906,6 +943,11 @@ namespace NotifyXStudio.Core.Services
         Task<Credential> UpdateAsync(Credential credential, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Credential>> ListAsync(string? tenantId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        
+        // Additional methods required by controllers
+        Task<int> GetCredentialCountAsync(string? tenantId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Credential>> GetCredentialsAsync(string? tenantId = null, CancellationToken cancellationToken = default);
+        Task<Credential> CreateCredentialAsync(string name, string type, string? description, Dictionary<string, object>? data, CancellationToken cancellationToken = default);
     }
 
     // Workflow Execution Services
@@ -941,6 +983,7 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionNode>> ListAsync(string? executionId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionNode> CreateWorkflowExecutionNodeAsync(string executionId, string? nodeType, string? status, string? input, string? output, string? errorMessage, DateTime? startedAt, DateTime? completedAt, string? metadata, string? description, CancellationToken cancellationToken = default);
+        Task<WorkflowExecutionNode> CreateWorkflowExecutionNodeAsync(string executionId, string? nodeType, string? status, string? input, string? output, string? errorMessage, DateTime? startedAt, DateTime? completedAt, Dictionary<string, object>? metadata, string? description, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionNode>> ListWorkflowExecutionNodesAsync(string? executionId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<int> GetWorkflowExecutionNodeCountAsync(string? executionId = null, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionNode> UpdateWorkflowExecutionNodeAsync(WorkflowExecutionNode node, CancellationToken cancellationToken = default);
@@ -961,6 +1004,7 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionEdge>> ListAsync(string? executionId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionEdge> CreateWorkflowExecutionEdgeAsync(string sourceNodeId, string targetNodeId, string? condition, string? executionId, string? status, string? errorMessage, DateTime? executedAt, string? metadata, string? description, CancellationToken cancellationToken = default);
+        Task<WorkflowExecutionEdge> CreateWorkflowExecutionEdgeAsync(string sourceNodeId, string targetNodeId, string? condition, string? executionId, string? status, string? errorMessage, DateTime? executedAt, Dictionary<string, object>? metadata, string? description, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionEdge> CreateWorkflowExecutionEdgeAsync(string sourceNodeId, string targetNodeId, string? condition, string? executionId, string? status, string? errorMessage, DateTime? executedAt, DateTime? completedAt, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionEdge>> ListWorkflowExecutionEdgesAsync(string? executionId, string? status, int page, int pageSize, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionEdge>> ListWorkflowExecutionEdgesAsync(string? executionId, string? sourceNodeId, string? targetNodeId, string? status, int page, int pageSize, CancellationToken cancellationToken = default);
@@ -995,7 +1039,7 @@ namespace NotifyXStudio.Core.Services
         
         // Additional methods needed by controllers
         Task<WorkflowExecutionLog> CreateWorkflowExecutionLogAsync(string executionId, string? level, string? message, string? data, string? timestamp, CancellationToken cancellationToken = default);
-        Task<WorkflowExecutionLog> CreateWorkflowExecutionLogAsync(string executionId, string? level, string? message, string? data, string? timestamp, Dictionary<string, object> metadata, CancellationToken cancellationToken = default);
+        Task<WorkflowExecutionLog> CreateWorkflowExecutionLogAsync(string executionId, string? level, string? message, string? data, string? timestamp, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionLog> UpdateWorkflowExecutionLogAsync(string id, string? level, string? message, string? data, string? timestamp, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionLog> UpdateWorkflowExecutionLogAsync(string id, string? level, string? message, string? data, string? timestamp, Dictionary<string, object> metadata, CancellationToken cancellationToken = default);
     }
@@ -1009,6 +1053,7 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionTrigger>> ListAsync(string? executionId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionTrigger> CreateWorkflowExecutionTriggerAsync(string executionId, string? triggerType, string? triggerData, string? status, string? errorMessage, DateTime? triggeredAt, string? metadata, string? description, CancellationToken cancellationToken = default);
+        Task<WorkflowExecutionTrigger> CreateWorkflowExecutionTriggerAsync(string executionId, string? triggerType, string? triggerData, string? status, string? errorMessage, DateTime? triggeredAt, Dictionary<string, object>? metadata, string? description, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionTrigger>> ListWorkflowExecutionTriggersAsync(string? executionId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionTrigger>> ListWorkflowExecutionTriggersAsync(string? executionId, string? triggerType, int page, int pageSize, CancellationToken cancellationToken = default);
         Task<int> GetWorkflowExecutionTriggerCountAsync(string? executionId = null, CancellationToken cancellationToken = default);
@@ -1038,6 +1083,7 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionTriggerLog>> ListAsync(string? triggerId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionTriggerLog> CreateWorkflowExecutionTriggerLogAsync(string triggerId, string? status, string? message, string? data, string? timestamp, CancellationToken cancellationToken = default);
+        Task<WorkflowExecutionTriggerLog> CreateWorkflowExecutionTriggerLogAsync(string triggerId, string? status, string? message, string? data, string? timestamp, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionTriggerLog>> ListWorkflowExecutionTriggerLogsAsync(string? triggerId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<int> GetWorkflowExecutionTriggerLogCountAsync(string? triggerId = null, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionTriggerLog> UpdateWorkflowExecutionTriggerLogAsync(WorkflowExecutionTriggerLog log, CancellationToken cancellationToken = default);
@@ -1068,8 +1114,11 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionTriggerLogEntry>> ListAsync(string? logId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionTriggerLogEntry> CreateWorkflowExecutionTriggerLogEntryAsync(string logId, string? level, string? message, string? data, string? timestamp, CancellationToken cancellationToken = default);
+        Task<WorkflowExecutionTriggerLogEntry> CreateWorkflowExecutionTriggerLogEntryAsync(string logId, string? level, string? message, string? data, string? timestamp, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowExecutionTriggerLogEntry>> ListWorkflowExecutionTriggerLogEntriesAsync(string? logId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowExecutionTriggerLogEntry>> ListWorkflowExecutionTriggerLogEntriesAsync(string? logId, string? level, int page, int pageSize, CancellationToken cancellationToken = default);
         Task<int> GetWorkflowExecutionTriggerLogEntryCountAsync(string? logId = null, CancellationToken cancellationToken = default);
+        Task<int> GetWorkflowExecutionTriggerLogEntryCountAsync(string? logId, string? level, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionTriggerLogEntry> UpdateWorkflowExecutionTriggerLogEntryAsync(WorkflowExecutionTriggerLogEntry entry, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionTriggerLogEntry> UpdateWorkflowExecutionTriggerLogEntryAsync(string id, string? level, string? message, string? data, string? timestamp, Dictionary<string, object> metadata, CancellationToken cancellationToken = default);
         Task<WorkflowExecutionTriggerLogEntry> UpdateWorkflowExecutionTriggerLogEntryAsync(string id, string? level, string? message, string? data, string? timestamp, string? metadata, CancellationToken cancellationToken = default);
@@ -1115,6 +1164,7 @@ namespace NotifyXStudio.Core.Services
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowEdge>> ListAsync(string? workflowId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<WorkflowEdge> CreateWorkflowEdgeAsync(string sourceNodeId, string targetNodeId, string? condition, string? workflowId, string? description, CancellationToken cancellationToken = default);
+        Task<WorkflowEdge> CreateWorkflowEdgeAsync(string sourceNodeId, string targetNodeId, string? condition, string? workflowId, string? description, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowEdge>> ListWorkflowEdgesAsync(string? workflowId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
         Task<int> GetWorkflowEdgeCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
         Task<WorkflowEdge> UpdateWorkflowEdgeAsync(WorkflowEdge edge, CancellationToken cancellationToken = default);
@@ -1138,6 +1188,123 @@ namespace NotifyXStudio.Core.Services
         Task<WorkflowTrigger> UpdateAsync(WorkflowTrigger trigger, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowTrigger>> ListAsync(string? workflowId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        
+        // Additional methods required by controllers
+        Task<WorkflowTrigger> CreateWorkflowTriggerAsync(WorkflowTrigger trigger, CancellationToken cancellationToken = default);
+        Task<WorkflowTrigger> CreateWorkflowTriggerAsync(string workflowId, string triggerType, Dictionary<string, object> triggerConfig, string triggerName, string triggerDescription, Dictionary<string, object> metadata, CancellationToken cancellationToken = default);
+        Task<WorkflowTrigger> GetWorkflowTriggerAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowTrigger>> ListWorkflowTriggersAsync(string? workflowId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<int> GetWorkflowTriggerCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowTrigger> UpdateWorkflowTriggerAsync(string id, string? name, string? description, string? status, CancellationToken cancellationToken = default);
+        Task<WorkflowTrigger> UpdateWorkflowTriggerAsync(string id, string? name, string? description, string? status, string? type, string? condition, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
+        Task<WorkflowTrigger> DeleteWorkflowTriggerAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowTrigger> GetWorkflowTriggerStatusAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowTrigger>> GetWorkflowTriggerIssuesAsync(string id, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowTriggerStatsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowTrigger>> GetWorkflowTriggerTypesAsync(CancellationToken cancellationToken = default);
+    }
+
+    // Run Services (alias for WorkflowRunService)
+    public interface IRunService
+    {
+        Task<WorkflowRun> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> CreateAsync(WorkflowRun run, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> UpdateAsync(WorkflowRun run, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> ListAsync(string? workflowId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        
+        // Additional methods required by controllers
+        Task<WorkflowRun> CreateWorkflowRunAsync(WorkflowRun workflowRun, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> CreateWorkflowRunAsync(string workflowId, string? name, string? description, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> GetWorkflowRunAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> ListWorkflowRunsAsync(string? workflowId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<int> GetWorkflowRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> UpdateWorkflowRunAsync(WorkflowRun workflowRun, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> UpdateWorkflowRunAsync(string id, string? name, string? description, string? status, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> DeleteWorkflowRunAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunHistoryAsync(string id, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<int> GetWorkflowRunHistoryCountAsync(string id, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunStatsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> StartWorkflowRunAsync(string workflowId, Dictionary<string, object>? parameters = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> StopWorkflowRunAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> RestartWorkflowRunAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunLogsAsync(string id, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<int> GetWorkflowRunLogCountAsync(string id, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunMetricsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunErrorsAsync(string? workflowId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<int> GetWorkflowRunErrorCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> RetryWorkflowRunAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunArtifactsAsync(string id, CancellationToken cancellationToken = default);
+        Task<byte[]> DownloadWorkflowRunArtifactAsync(string id, string artifactName, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> UploadWorkflowRunArtifactAsync(string id, string artifactName, byte[] data, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunPerformanceAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunDependenciesAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> SetWorkflowRunDependencyAsync(string id, string dependencyId, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> RemoveWorkflowRunDependencyAsync(string id, string dependencyId, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunConfigurationAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> UpdateWorkflowRunConfigurationAsync(string id, Dictionary<string, object> configuration, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunNotificationsAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> SendWorkflowRunNotificationAsync(string id, string type, string message, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunSecurityAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> UpdateWorkflowRunSecurityAsync(string id, Dictionary<string, object> security, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunComplianceAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> UpdateWorkflowRunComplianceAsync(string id, Dictionary<string, object> compliance, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunAuditAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunBackupsAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> CreateWorkflowRunBackupAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> RestoreWorkflowRunFromBackupAsync(string id, string backupId, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunHealthAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> UpdateWorkflowRunHealthAsync(string id, Dictionary<string, object> health, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunAlertsAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> CreateWorkflowRunAlertAsync(string id, string type, string message, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunTrendsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunComparisonsAsync(string id, string compareId, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunOptimizationAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> OptimizeWorkflowRunAsync(string id, Dictionary<string, object> optimization, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunRecommendationsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> ApplyWorkflowRunRecommendationAsync(string id, string recommendationId, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunInsightsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunPredictionsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunForecastingAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunAnomaliesAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> InvestigateWorkflowRunAnomalyAsync(string id, string anomalyId, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunRootCauseAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunImpactAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> MitigateWorkflowRunImpactAsync(string id, Dictionary<string, object> mitigation, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunRecoveryAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> ExecuteWorkflowRunRecoveryAsync(string id, Dictionary<string, object> recovery, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunLessonsAsync(string id, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> LearnWorkflowRunLessonAsync(string id, string lessonId, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunKnowledgeAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunBestPracticesAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> ApplyWorkflowRunBestPracticeAsync(string id, string practiceId, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunInnovationAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunExperimentsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> RunWorkflowRunExperimentAsync(string id, Dictionary<string, object> experiment, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunResultsAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunVariationsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> CreateWorkflowRunVariationAsync(string id, Dictionary<string, object> variation, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunEvolutionAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunMutationsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> MutateWorkflowRunAsync(string id, Dictionary<string, object> mutation, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunAdaptationAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunTransformationsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> TransformWorkflowRunAsync(string id, Dictionary<string, object> transformation, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunRevolutionAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunRevolutionsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> RevolutionizeWorkflowRunAsync(string id, Dictionary<string, object> revolution, CancellationToken cancellationToken = default);
+        Task<Dictionary<string, object>> GetWorkflowRunTranscendenceAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetWorkflowRunTranscendencesAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<WorkflowRun> TranscendWorkflowRunAsync(string id, Dictionary<string, object> transcendence, CancellationToken cancellationToken = default);
+        
+        // Methods called by AdminController
+        Task<int> GetRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<int> GetActiveRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<int> GetCompletedRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<int> GetFailedRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task DeleteOldRunsAsync(int daysOld, CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task DeleteOldLogsAsync(int daysOld, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetRunsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
     }
 
     // Workflow Run Services
@@ -1193,7 +1360,6 @@ namespace NotifyXStudio.Core.Services
         Task<Tenant> CreateTenantAsync(string name, string? description, string? plan, CancellationToken cancellationToken = default);
         Task<Tenant> GetTenantAsync(string id, CancellationToken cancellationToken = default);
         Task<Tenant> UpdateTenantAsync(Tenant tenant, CancellationToken cancellationToken = default);
-        Task<Tenant> UpdateTenantAsync(string id, string? name, string? description, Dictionary<string, object>? settings, CancellationToken cancellationToken = default);
         Task<bool> DeleteTenantAsync(string id, CancellationToken cancellationToken = default);
         Task<Tenant> GetTenantSettingsAsync(string tenantId, CancellationToken cancellationToken = default);
         Task<Tenant> UpdateTenantSettingsAsync(Tenant tenant, CancellationToken cancellationToken = default);
@@ -1205,22 +1371,21 @@ namespace NotifyXStudio.Core.Services
     public partial interface IWorkflowService
     {
         // Additional workflow-specific methods
-        Task<Workflow> CreateWorkflowAsync(Workflow workflow, string? description = null, string? status = null, string? tags = null, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Workflow>> ListWorkflowsAsync(string? projectId = null, string? status = null, string? tags = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
-        Task<int> GetWorkflowCountAsync(string? projectId = null, string? status = null, CancellationToken cancellationToken = default);
-        Task<Workflow> UpdateWorkflowAsync(Workflow workflow, string? description = null, string? status = null, string? tags = null, CancellationToken cancellationToken = default);
-        Task<Workflow> CreateWorkflowAsync(string name, string? description, string? status, string? tags, string? projectId, CancellationToken cancellationToken = default);
-        
-        // Additional overloads for controller compatibility
+        Task<Workflow> CreateWorkflowAsync(Workflow workflow, CancellationToken cancellationToken = default);
         Task<Workflow> CreateWorkflowAsync(string name, string? description, string? status, string? tags, string? projectId, Dictionary<string, object> metadata, CancellationToken cancellationToken = default);
-        Task<Workflow> UpdateWorkflowAsync(string id, string? name, string? description, string? status, string? tags, List<WorkflowNode>? nodes, List<WorkflowEdge>? edges, List<WorkflowTrigger>? triggers, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Workflow>> ListWorkflowsAsync(string? projectId = null, string? status = null, string? tags = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+        Task<int> GetWorkflowCountAsync(string? projectId = null, CancellationToken cancellationToken = default);
+        Task<Workflow> UpdateWorkflowAsync(Workflow workflow, CancellationToken cancellationToken = default);
         Task<Workflow> UpdateWorkflowAsync(string id, string? name, string? description, string? status, string? tags, CancellationToken cancellationToken = default);
+        
+        // Additional methods required by controllers
+        Task<IEnumerable<Workflow>> GetWorkflowsAsync(string? projectId = null, CancellationToken cancellationToken = default);
+        Task<int> GetActiveWorkflowCountAsync(string? projectId = null, CancellationToken cancellationToken = default);
     }
 
     public partial interface IWorkflowEdgeService
     {
         Task<WorkflowEdge> CreateWorkflowEdgeAsync(WorkflowEdge edge, CancellationToken cancellationToken = default);
-        Task<WorkflowEdge> CreateWorkflowEdgeAsync(string sourceNodeId, string targetNodeId, string? condition, string? workflowId, string? description, Dictionary<string, object>? metadata, CancellationToken cancellationToken = default);
         Task<WorkflowEdge> GetWorkflowEdgeAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<WorkflowEdge>> ListWorkflowEdgesAsync(string? workflowId, string? sourceNodeId, string? targetNodeId, string? condition, int page, int pageSize, CancellationToken cancellationToken = default);
         Task<int> GetWorkflowEdgeCountAsync(string? workflowId, string? sourceNodeId, string? targetNodeId, CancellationToken cancellationToken = default);

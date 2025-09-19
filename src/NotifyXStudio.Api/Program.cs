@@ -41,9 +41,10 @@ try
 
     // Add NotifyX Studio services
     builder.Services.AddNotifyXStudioCore();
-    builder.Services.AddNotifyXStudioConnectors();
+    // TODO: Add extension methods for these services
+    // builder.Services.AddNotifyXStudioConnectors();
     builder.Services.AddNotifyXStudioPersistence(builder.Configuration);
-    builder.Services.AddNotifyXStudioRuntime();
+    // builder.Services.AddNotifyXStudioRuntime();
 
     // Add middleware services
     builder.Services.AddNotifyXStudioMiddleware(builder.Configuration);
@@ -113,7 +114,8 @@ try
 
     // Map endpoints
     app.MapControllers();
-    app.MapHub<Hubs.WorkflowHub>("/workflowhub");
+    // TODO: Add WorkflowHub
+    // app.MapHub<Hubs.WorkflowHub>("/workflowhub");
 
     // Add a production-ready welcome endpoint
     app.MapGet("/", () => new

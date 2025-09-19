@@ -77,8 +77,8 @@ public sealed class BulkOperationsService : IBulkOperationsService
                         Interlocked.Increment(ref failureCount);
 
                     // Update progress
-                    var currentProcessed = Interlocked.Increment(ref status.ProcessedItems);
-                    status.Progress = (int)((double)currentProcessed / status.TotalItems * 100);
+                    status.ProcessedItems++;
+                    status.Progress = (int)((double)status.ProcessedItems / status.TotalItems * 100);
                     status.LastUpdatedAt = DateTime.UtcNow;
                 }
                 finally
@@ -161,8 +161,8 @@ public sealed class BulkOperationsService : IBulkOperationsService
                         Interlocked.Increment(ref failureCount);
 
                     // Update progress
-                    var currentProcessed = Interlocked.Increment(ref status.ProcessedItems);
-                    status.Progress = (int)((double)currentProcessed / status.TotalItems * 100);
+                    status.ProcessedItems++;
+                    status.Progress = (int)((double)status.ProcessedItems / status.TotalItems * 100);
                     status.LastUpdatedAt = DateTime.UtcNow;
                 }
                 finally
@@ -243,8 +243,8 @@ public sealed class BulkOperationsService : IBulkOperationsService
                         Interlocked.Increment(ref failureCount);
 
                     // Update progress
-                    var currentProcessed = Interlocked.Increment(ref status.ProcessedItems);
-                    status.Progress = (int)((double)currentProcessed / status.TotalItems * 100);
+                    status.ProcessedItems++;
+                    status.Progress = (int)((double)status.ProcessedItems / status.TotalItems * 100);
                     status.LastUpdatedAt = DateTime.UtcNow;
                 }
                 finally
@@ -415,8 +415,8 @@ public sealed class BulkOperationsService : IBulkOperationsService
                         Interlocked.Increment(ref failureCount);
 
                     // Update progress
-                    var currentProcessed = Interlocked.Increment(ref status.ProcessedItems);
-                    status.Progress = (int)((double)currentProcessed / status.TotalItems * 100);
+                    status.ProcessedItems++;
+                    status.Progress = (int)((double)status.ProcessedItems / status.TotalItems * 100);
                     status.LastUpdatedAt = DateTime.UtcNow;
                 }
                 finally
@@ -499,8 +499,8 @@ public sealed class BulkOperationsService : IBulkOperationsService
                         Interlocked.Increment(ref failureCount);
 
                     // Update progress
-                    var currentProcessed = Interlocked.Increment(ref status.ProcessedItems);
-                    status.Progress = (int)((double)currentProcessed / status.TotalItems * 100);
+                    status.ProcessedItems++;
+                    status.Progress = (int)((double)status.ProcessedItems / status.TotalItems * 100);
                     status.LastUpdatedAt = DateTime.UtcNow;
                 }
                 finally
@@ -581,8 +581,8 @@ public sealed class BulkOperationsService : IBulkOperationsService
                         Interlocked.Increment(ref failureCount);
 
                     // Update progress
-                    var currentProcessed = Interlocked.Increment(ref status.ProcessedItems);
-                    status.Progress = (int)((double)currentProcessed / status.TotalItems * 100);
+                    status.ProcessedItems++;
+                    status.Progress = (int)((double)status.ProcessedItems / status.TotalItems * 100);
                     status.LastUpdatedAt = DateTime.UtcNow;
                 }
                 finally
@@ -753,8 +753,8 @@ public sealed class BulkOperationsService : IBulkOperationsService
                         Interlocked.Increment(ref failureCount);
 
                     // Update progress
-                    var currentProcessed = Interlocked.Increment(ref status.ProcessedItems);
-                    status.Progress = (int)((double)currentProcessed / status.TotalItems * 100);
+                    status.ProcessedItems++;
+                    status.Progress = (int)((double)status.ProcessedItems / status.TotalItems * 100);
                     status.LastUpdatedAt = DateTime.UtcNow;
                 }
                 finally

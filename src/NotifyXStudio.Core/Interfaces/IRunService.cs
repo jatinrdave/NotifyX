@@ -51,5 +51,14 @@ namespace NotifyXStudio.Core.Interfaces
         /// Updates a node execution result.
         /// </summary>
         System.Threading.Tasks.Task UpdateNodeResultAsync(string runId, NodeExecutionResult result, CancellationToken cancellationToken = default);
+        
+        // Additional methods required by controllers
+        Task<int> GetRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<int> GetActiveRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<int> GetCompletedRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<int> GetFailedRunCountAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<WorkflowRun>> GetRunsAsync(string? workflowId = null, CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task DeleteOldRunsAsync(int daysOld, CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task DeleteOldLogsAsync(int daysOld, CancellationToken cancellationToken = default);
     }
 }

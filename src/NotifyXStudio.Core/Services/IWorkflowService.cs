@@ -53,7 +53,6 @@ namespace NotifyXStudio.Core.Services
         Task<Workflow> DuplicateAsync(string id, string tenantId, string newName);
 
         // Additional methods required by controllers
-        Task<Workflow> UpdateWorkflowAsync(Workflow workflow, CancellationToken cancellationToken = default);
         Task<Workflow> DeleteWorkflowAsync(string id, CancellationToken cancellationToken = default);
         Task<Workflow> GetWorkflowStatusAsync(string id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Workflow>> GetWorkflowIssuesAsync(string id, CancellationToken cancellationToken = default);
@@ -61,11 +60,7 @@ namespace NotifyXStudio.Core.Services
         Task<IEnumerable<Workflow>> GetWorkflowTypesAsync(CancellationToken cancellationToken = default);
         
         // Methods called by WorkflowController
-        Task<Workflow> CreateWorkflowAsync(Workflow workflow, CancellationToken cancellationToken = default);
         Task<Workflow> GetWorkflowAsync(string id, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Workflow>> ListWorkflowsAsync(string? tenantId = null, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
-        Task<int> GetWorkflowCountAsync(string? tenantId = null, CancellationToken cancellationToken = default);
-        Task<Workflow> UpdateWorkflowAsync(Workflow workflow, string? title = null, string? description = null, List<WorkflowNode>? nodes = null, List<WorkflowEdge>? edges = null, List<WorkflowTrigger>? triggers = null, Dictionary<string, object>? globalVariables = null, CancellationToken cancellationToken = default);
     }
 
     /// <summary>
